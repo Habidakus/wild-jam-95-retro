@@ -1,0 +1,43 @@
+
+
+Colors:
+  enemy: 
+    Emerald:        50c878
+    Orchid:         c850A0
+    classic purple: 6e50c8
+  hero/base:
+    c85a50
+    a0c850
+    c89c50
+
+  enemy: 
+    Emerald:        50c878
+    Orchid:         c850A0
+    c89c50
+  hero/base:
+    aec850
+    c86250
+
+
+  Maybe:
+    Emerald:        50c878
+    Orchid:         c850A0
+    blueish:        5064c8
+
+    goldish:        c8b450
+    green:          a0c850
+    brick:          c87850
+
+
+Isolate Your Vector Graphics
+  Because vector graphics turn into standard textures upon import, Godot will treat them like pixel art unless you tell it otherwise. To keep your vector graphics smooth:
+  - Select your vector files (like SVG) in the FileSystem dock.
+  - Go to the Import tab (next to the Scene tab in the top-left).
+  - Change the Texture Filter option specifically for these files from Nearest to Linear.
+  - Click Reimport.
+
+Scale Your Vectors Before Filtering
+  Because Godot rasterizes vectors on load, a small SVG scaled up inside a 2D scene will look blurry.
+  - In the Import tab for your SVG files, find the Scale option.
+  - Increase this scale (e.g., 2.0 or 4.0) so the vector imports at a massive, high-quality base size.
+  - Scale it down inside your 2D scene. It will now look beautifully smooth next to your crisp pixel art.

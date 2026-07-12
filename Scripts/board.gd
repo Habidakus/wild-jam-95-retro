@@ -3,13 +3,17 @@ class_name Board extends Control
 const BUNKER_SCENE = preload("res://Scenes/bunker_wide.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
 const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
+const PLAYER = preload("res://Scenes/player.tscn")
 const ALIEN_SPEED: float = 40
 const ALIEN_DROP_DISTANCE: float = 40
+const STAR_ROTATION_AMOUNT: float = 0.0 # 0.0125
+const STAR_SCROLL_AMOUNT: float = 0.03
 
 
 enum AlienMovement { RIGHT, DOWN, LEFT }
 
 
+var _player: Player
 var _bunker_count: int = 7
 var _rnd: RandomNumberGenerator = RandomNumberGenerator.new()
 #var _wait: float = 1
@@ -36,7 +40,7 @@ func _ready() -> void:
 			_create_alien((x + 0.5) * placement_width, (y + 0.5) * placement_height, x)
 	for alien: AlienShip in _bottom_alien_in_each_column:
 		alien.power_up_weapon(_rnd.randf())
-	var starfield_image: Image = Image.create_empty(size.x * 2, size.y, false, Image.FORMAT_RGB8)
+	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)
 	starfield_image.fill(Color.BLACK)
 	for i: int in range(7):
 		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true)
@@ -44,6 +48,7 @@ func _ready() -> void:
 	var starfield_texture: Texture = ImageTexture.create_from_image(starfield_image)
 	%StarfieldImage.texture = starfield_texture
 	%Parallax2D.repeat_size = starfield_image.get_size()
+	_create_player()
 
 
 func _add_stars(image: Image, count: int, center_x: float, center_y: float, force: bool) -> void:
@@ -72,20 +77,57 @@ func _add_stars(image: Image, count: int, center_x: float, center_y: float, forc
 			sy -= isize.y
 		elif sy < 0:
 			sy += isize.y
-		var lx: int = int(sx)
-		var ly: int = int(sy)
-		var hx: int = (lx + 1) % int(isize.x)
-		var hy: int = (ly + 1) % int(isize.y)
-		var ax: float = (sx - float(lx))
-		var ay: float = (sy - float(ly))
-		var ll: float = max((1.0 - ax) * (1.0 - ay), image.get_pixel(lx, ly).get_luminance())
-		var lh: float = max((1.0 - ax) * ay, image.get_pixel(lx, hy).get_luminance())
-		var hl: float = max(ax * (1.0 - ay), image.get_pixel(hx, ly).get_luminance())
-		var hh: float = max(ax * ay, image.get_pixel(hx, hy).get_luminance())
-		image.set_pixel(lx, ly, Color(ll, ll, ll))
-		image.set_pixel(lx, hy, Color(lh, lh, lh))
-		image.set_pixel(hx, ly, Color(hl, hl, hl))
-		image.set_pixel(hx, hy, Color(hh, hh, hh))
+		if count % 10 == 1:
+			_add_large_star(image, sx, sy)
+		else:
+			_add_small_star(image, sx, sy)
+
+
+func _add_small_star(image: Image, sx: float, sy: float) -> void:
+	var isize: Vector2 = image.get_size()
+	var lx: int = int(sx)
+	var ly: int = int(sy)
+	var hx: int = (lx + 1) % int(isize.x)
+	var hy: int = (ly + 1) % int(isize.y)
+	var ax: float = (sx - float(lx))
+	var ay: float = (sy - float(ly))
+	var ll: float = max((1.0 - ax) * (1.0 - ay), image.get_pixel(lx, ly).get_luminance())
+	var lh: float = max((1.0 - ax) * ay, image.get_pixel(lx, hy).get_luminance())
+	var hl: float = max(ax * (1.0 - ay), image.get_pixel(hx, ly).get_luminance())
+	var hh: float = max(ax * ay, image.get_pixel(hx, hy).get_luminance())
+	image.set_pixel(lx, ly, Color(ll, ll, ll))
+	image.set_pixel(lx, hy, Color(lh, lh, lh))
+	image.set_pixel(hx, ly, Color(hl, hl, hl))
+	image.set_pixel(hx, hy, Color(hh, hh, hh))
+
+
+func _add_large_star(image: Image, sx: float, sy: float) -> void:
+	var isize: Vector2 = image.get_size()
+	var lx: int = int(sx)
+	var ly: int = int(sy)
+	var mx: int = (lx + 1) % int(isize.x)
+	var my: int = (ly + 1) % int(isize.y)
+	var hx: int = (lx + 2) % int(isize.x)
+	var hy: int = (ly + 2) % int(isize.y)
+	var ax: float = (sx - float(lx))
+	var ay: float = (sy - float(ly))
+	var ll: float = max((1.0 - ax) * (1.0 - ay), image.get_pixel(lx, ly).get_luminance())
+	var lm: float = max((1.0 - ax), image.get_pixel(lx, my).get_luminance())
+	var lh: float = max((1.0 - ax) * ay, image.get_pixel(lx, hy).get_luminance())
+	var ml: float = max((1.0 - ay), image.get_pixel(mx, ly).get_luminance())
+	var mh: float = max(ay, image.get_pixel(mx, hy).get_luminance())
+	var hl: float = max(ax * (1.0 - ay), image.get_pixel(hx, ly).get_luminance())
+	var hm: float = max(ax, image.get_pixel(hx, my).get_luminance())
+	var hh: float = max(ax * ay, image.get_pixel(hx, hy).get_luminance())
+	image.set_pixel(lx, ly, Color(ll, ll, ll))
+	image.set_pixel(lx, my, Color(lm, lm, lm))
+	image.set_pixel(lx, hy, Color(lh, lh, lh))
+	image.set_pixel(mx, ly, Color(ml, ml, ml))
+	image.set_pixel(mx, my, Color(1.0, 1.0, 1.0))
+	image.set_pixel(mx, hy, Color(mh, mh, mh))
+	image.set_pixel(hx, ly, Color(hl, hl, hl))
+	image.set_pixel(hx, my, Color(hm, hm, hm))
+	image.set_pixel(hx, hy, Color(hh, hh, hh))
 
 
 func _create_alien(x: float, y: float, row: int) -> void:
@@ -98,6 +140,14 @@ func _create_alien(x: float, y: float, row: int) -> void:
 		_bottom_alien_in_each_column.append(alien)
 	else:
 		_bottom_alien_in_each_column[row] = alien
+
+
+func _create_player() -> void:
+	_player = PLAYER.instantiate()
+	_player.initialize(self)
+	add_child(_player)
+	_player.position = Vector2(size.x / 2.0, size.y - 40)
+	
 
 
 func get_time_dilation() -> float:
@@ -127,8 +177,9 @@ func _process(delta: float) -> void:
 			continue
 		new_td.append([tuple[0], remaining, tuple[2]])
 	_time_dilation_array = new_td
-	%Parallax2D.scroll_scale = Vector2(0.03 * _time_dilation, 0.0)
-	$Background.rotation += delta * _time_dilation / 70.0
+	%Parallax2D.scroll_scale = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
+	$Background.rotation += delta * _time_dilation * STAR_ROTATION_AMOUNT
+
 
 func _physics_process(delta: float) -> void:
 	var tdd: float = delta * _time_dilation

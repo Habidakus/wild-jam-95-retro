@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://drrytv1o8bk02"]
+
+[ext_resource type="Script" uid="uid://dk1awqli7ep7k" path="res://Scripts/player.gd" id="1_cvnsp"]
+[ext_resource type="Texture2D" uid="uid://cgxds45qgkyma" path="res://Images/test_gun.png" id="1_v0iea"]
+
+[node name="Area2D" type="Area2D" unique_id=1311917480]
+collision_layer = 16
+collision_mask = 10
+script = ExtResource("1_cvnsp")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=247363101]
+texture = ExtResource("1_v0iea")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1589019798]
+unique_name_in_owner = true
+polygon = PackedVector2Array(-13, 13, 13, 13, 13, 2, 9, -3, 3, -3, 3, -6, -3, -6, -3, -3, -9, -3, -13, 2)

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cd0ww31ijayuy" path="res://Scripts/alien_bullet.gd" id="1_m1n1j"]
 [ext_resource type="Texture2D" uid="uid://cggwk678pbwv8" path="res://Images/test_alien_bullet.png" id="1_p1rpp"]
+[ext_resource type="AudioStream" uid="uid://8wpiruni27eo" path="res://Sounds/Pew001.wav" id="3_gbjqb"]
 
 [node name="AlienBullet" type="AnimatableBody2D" unique_id=1325468317]
 collision_layer = 2
@@ -13,3 +14,8 @@ texture = ExtResource("1_p1rpp")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=733089978]
 polygon = PackedVector2Array(0, 12, 1, 8, 1, -9, 0, -12, -1, -11, -1, 10)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1111519160]
+stream = ExtResource("3_gbjqb")
+volume_db = -20.0
+max_polyphony = 5

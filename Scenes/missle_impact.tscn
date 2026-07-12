@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dhdtmiku6h714"]
 
 [ext_resource type="Script" uid="uid://jl43332vpspo" path="res://Scripts/missle_impact.gd" id="1_seeyh"]
+[ext_resource type="AudioStream" uid="uid://hh00p2bdqixu" path="res://Sounds/Explosion004.wav" id="2_uysud"]
 
 [sub_resource type="Curve" id="Curve_tpxde"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -22,5 +23,9 @@ initial_velocity_max = 50.0
 scale_amount_curve = SubResource("Curve_tpxde")
 color_ramp = SubResource("Gradient_seeyh")
 script = ExtResource("1_seeyh")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=2126452346]
+stream = ExtResource("2_uysud")
+max_polyphony = 4
 
 [connection signal="finished" from="." to="." method="_on_finished"]

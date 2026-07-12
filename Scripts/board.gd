@@ -122,5 +122,5 @@ func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x
 func spawn_alien_bullet(pos: Vector2) -> void:
 	var bullet: AlienBullet = ALIEN_BULLET.instantiate()
 	bullet.position = pos
-	bullet.initialize(size.y + 30, self)
+	bullet.initialize(size.y + 30, self, _rnd)
 	add_child(bullet)

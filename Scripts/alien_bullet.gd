@@ -12,11 +12,14 @@ var _board: Board
 func _ready() -> void:
 	_cached_shape = ConvexPolygonShape2D.new()
 	_cached_shape.points = _collision_poly.polygon
+	$AudioStreamPlayer2D.play()
 
 
-func initialize(flr: float, board: Board) -> void:
+func initialize(flr: float, board: Board, rnd: RandomNumberGenerator) -> void:
 	_floor = flr
 	_board = board
+	$AudioStreamPlayer2D.volume_db += rnd.randf() * 2 - 1.0
+	$AudioStreamPlayer2D.pitch_scale *= (0.85 + rnd.randf() * 0.3)
 
 
 func die(bunker: Bunker, hit_offset: Vector2) -> void:

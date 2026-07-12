@@ -4,37 +4,40 @@ var _bitmap: BitMap
 var _sprite: Sprite2D
 var _image: Image
 var _texture: Texture2D
-#var _polygon_2d: Polygon2D
-var _delay: float = 2
+#var _delay: float = 2
 var _rnd: RandomNumberGenerator
-
 
 func _ready() -> void:
 	_bitmap = BitMap.new()
 	_rnd = RandomNumberGenerator.new()
-	call_deferred("_deferred_ready")
-
-
-func _deferred_ready() -> void:
 	_sprite = $Sprite2D
 	_texture = _sprite.texture
 	_image = _texture.get_image()
 	_bitmap.create_from_image_alpha(_image)
 	_calculate_image_and_collision()
+	var image_rect: Rect2 = Rect2(Vector2.ZERO, _image.get_size())
+	var polygons: Array[PackedVector2Array] = _bitmap.opaque_to_polygons(image_rect, 0.75)
+	if not polygons.is_empty():
+		$CollisionPolygon2D.polygon = polygons[0]
+		$CollisionPolygon2D.position = _image.get_size() / -2.0
 
 
-func _process(delta: float) -> void:
-	_delay -= delta
-	if _delay > 0:
-		return
-	_delay = 0.5
-	_apply_damage(_rnd.randi() % _bitmap.get_size().x)
+func on_bullet_impact(bullet: AlienBullet, point: Vector2) -> void:
+	var s: Vector2 = _bitmap.get_size()
+	var dx: int = int(s.x / 2.0 + point.x - position.x)
+	var dy: int = int(s.y / 2.0 + point.y - position.y)
+	var r: int = min(dy, s.y)
+	for y in range(r):
+		var bit_set: bool = _bitmap.get_bitv(Vector2i(dx, dy))
+		if bit_set:
+			_apply_damage(dx, y)
+			bullet.die()
 
 
-func _apply_damage(x: int) -> void:
+func _apply_damage(x: int, start_y: int) -> void:
 	var height: int = _bitmap.get_size().y
 	var width: int = _bitmap.get_size().x
-	for y in range(height):
+	for y in range(start_y, height):
 		var bit_set: bool = _bitmap.get_bitv(Vector2i(x, y))
 		if not bit_set:
 			continue
@@ -50,11 +53,6 @@ func _apply_damage(x: int) -> void:
 
 
 func _calculate_image_and_collision() -> void:
-	var image_rect: Rect2 = Rect2(Vector2.ZERO, _image.get_size())
-	var polygons: Array[PackedVector2Array] = _bitmap.opaque_to_polygons(image_rect)
-	if not polygons.is_empty():
-		#_polygon_2d.polygon = polygons[0]
-		$CollisionPolygon2D.polygon = polygons[0]
 	var width: int = _bitmap.get_size().x
 	var height: int = _bitmap.get_size().y
 	for x in range(width):

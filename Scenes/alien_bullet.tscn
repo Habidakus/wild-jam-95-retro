@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d1icpqd13hy6a"]
+
+[ext_resource type="Script" uid="uid://cd0ww31ijayuy" path="res://Scripts/alien_bullet.gd" id="1_m1n1j"]
+[ext_resource type="Texture2D" uid="uid://cggwk678pbwv8" path="res://Images/test_alien_bullet.png" id="1_p1rpp"]
+
+[node name="AlienBullet" type="AnimatableBody2D" unique_id=1325468317]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_m1n1j")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1304755846]
+texture = ExtResource("1_p1rpp")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=733089978]
+polygon = PackedVector2Array(0, 12, 1, 8, 1, -9, 0, -12, -1, -11, -1, 10)

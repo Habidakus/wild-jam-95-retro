@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://de0c261djrols"]
 
-[ext_resource type="PackedScene" uid="uid://njqqfqyx41f3" path="res://Scenes/bunker_wide.tscn" id="1_tnbny"]
+[ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
 
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
@@ -9,6 +9,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="StaticBody2D" parent="." unique_id=680075904 instance=ExtResource("1_tnbny")]
-position = Vector2(603, 306)
+script = ExtResource("1_2wvcj")

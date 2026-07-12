@@ -4,14 +4,11 @@
 [ext_resource type="Script" uid="uid://dmx13wldmkx52" path="res://Scripts/bunker_wide.gd" id="1_lh3gj"]
 
 [node name="StaticBody2D" type="StaticBody2D" unique_id=680075904]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_lh3gj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2047313165]
-texture = ExtResource("1_2l1iw")
-
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=463335842]
-unique_name_in_owner = true
-visible = false
 texture = ExtResource("1_2l1iw")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=637367270]

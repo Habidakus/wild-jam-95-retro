@@ -2,12 +2,25 @@ class_name Board extends Control
 
 const BUNKER_SCENE = preload("res://Scenes/bunker_wide.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
+const ALIEN_SHIP = preload("res://Scenes/area_ship.tscn")
+const ALIEN_SPEED: float = 40
+const ALIEN_DROP_DISTANCE: float = 40
+
+
+enum AlienMovement { RIGHT, DOWN, LEFT }
+
 
 var _bunker_count: int = 7
 var _rnd: RandomNumberGenerator = RandomNumberGenerator.new()
-var _wait: float = 1
+#var _wait: float = 1
 var _time_dilation: float = 1.0
 var _time_dilation_array: Array[Array] = []
+var _alien_rows: int = 5
+var _alien_cols: int = 11
+var _aliens: Array[AlienShip] = []
+var _alien_dir: AlienMovement = AlienMovement.RIGHT
+var _bottom_alien_in_each_column: Array[AlienShip] = []
+var _alien_downward_goal: float = 0
 
 
 func _ready() -> void:
@@ -16,6 +29,25 @@ func _ready() -> void:
 		var bunker: Bunker = BUNKER_SCENE.instantiate()
 		add_child(bunker)
 		bunker.position = Vector2((i + 0.5) * placement_width, 4 * size.y / 5)
+	placement_width = int(size.x / float(_alien_cols + 5))
+	var placement_height = int(size.y / float(_alien_rows + 5))
+	for x: int in range(_alien_cols):
+		for y: int in range(_alien_rows):
+			_create_alien((x + 0.5) * placement_width, (y + 0.5) * placement_height, x)
+	for alien: AlienShip in _bottom_alien_in_each_column:
+		alien.power_up_weapon(_rnd.randf())
+
+
+func _create_alien(x: float, y: float, row: int) -> void:
+	var alien: AlienShip = ALIEN_SHIP.instantiate()
+	alien.position = Vector2(x, y)
+	add_child(alien)
+	_aliens.append(alien)
+	alien.initialize(self)
+	if _bottom_alien_in_each_column.size() <= row:
+		_bottom_alien_in_each_column.append(alien)
+	else:
+		_bottom_alien_in_each_column[row] = alien
 
 
 func get_time_dilation() -> float:
@@ -45,13 +77,50 @@ func _process(delta: float) -> void:
 			continue
 		new_td.append([tuple[0], remaining, tuple[2]])
 	_time_dilation_array = new_td
-	_wait -= delta * _time_dilation
-	if _wait > 0:
-		return
+
+
+func _physics_process(delta: float) -> void:
+	var tdd: float = delta * _time_dilation
+	var min_x: float = 27 #* 3 / 4.0
+	var max_x: float = size.x - min_x
+	var max_alien_y: float = 0
+	var min_d: float = size.x * 2
+	var max_d: float = size.x * 2
+	for alien: AlienShip in _aliens:
+		min_d = min(min_d, alien.position.x - min_x)
+		max_d = min(max_d, max_x - alien.position.x)
+		max_alien_y = max(max_alien_y, alien.position.y)
+	if _alien_dir == AlienMovement.DOWN:
+		if max_alien_y < _alien_downward_goal:
+			_move_all_aliens(tdd * Vector2.DOWN, false, min_x, max_x, max_alien_y)
+			return
+		if min_d < max_d:
+			_alien_dir = AlienMovement.RIGHT
+		else:
+			_alien_dir = AlienMovement.LEFT
 	
-	_wait = 0.1
+	if _alien_dir == AlienMovement.RIGHT:
+		_move_all_aliens(tdd * Vector2.RIGHT, true, min_x, max_x, max_alien_y)
+	elif _alien_dir == AlienMovement.LEFT:
+		_move_all_aliens(tdd * Vector2.LEFT, true, min_x, max_x, max_alien_y)
+
+
+func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x: float, max_alien_y: float) -> void:
+	for alien: AlienShip in _aliens:
+		alien.position += velocity * ALIEN_SPEED
+		if watch_margin:
+			if alien.position.x < min_x:
+				_alien_dir = AlienMovement.DOWN
+				_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
+				watch_margin = false
+			elif alien.position.x > max_x:
+				_alien_dir = AlienMovement.DOWN
+				_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
+				watch_margin = false
+
+
+func spawn_alien_bullet(pos: Vector2) -> void:
 	var bullet: AlienBullet = ALIEN_BULLET.instantiate()
-	var x: float = _rnd.randf() * (size.x - 10.0) + 5.0
-	bullet.position = Vector2(x, 0)
+	bullet.position = pos
 	bullet.initialize(size.y + 30, self)
 	add_child(bullet)

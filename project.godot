@@ -23,6 +23,7 @@ window/stretch/mode="canvas_items"
 
 2d_physics/layer_2="AlienBullet"
 2d_physics/layer_3="Bunker"
+2d_physics/layer_4="Aliens"
 
 [physics]
 

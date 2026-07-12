@@ -42,8 +42,8 @@ func _ready() -> void:
 		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true)
 	_add_stars(starfield_image, 1000, 0, 0, false)
 	var starfield_texture: Texture = ImageTexture.create_from_image(starfield_image)
-	$Parallax2D/Starfield.texture = starfield_texture
-	$Parallax2D.repeat_size = starfield_image.get_size()
+	%StarfieldImage.texture = starfield_texture
+	%Parallax2D.repeat_size = starfield_image.get_size()
 
 
 func _add_stars(image: Image, count: int, center_x: float, center_y: float, force: bool) -> void:
@@ -127,7 +127,8 @@ func _process(delta: float) -> void:
 			continue
 		new_td.append([tuple[0], remaining, tuple[2]])
 	_time_dilation_array = new_td
-
+	%Parallax2D.scroll_scale = Vector2(0.03 * _time_dilation, 0.0)
+	$Background.rotation += delta * _time_dilation / 70.0
 
 func _physics_process(delta: float) -> void:
 	var tdd: float = delta * _time_dilation

@@ -12,12 +12,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2wvcj")
 
-[node name="Parallax2D" type="Parallax2D" parent="." unique_id=1779360628]
-scroll_scale = Vector2(-0.1, 0)
+[node name="Background" type="Node2D" parent="." unique_id=547521004]
+
+[node name="Parallax2D" type="Parallax2D" parent="Background" unique_id=1779360628]
+unique_name_in_owner = true
+scroll_scale = Vector2(-0.03, 0)
 repeat_size = Vector2(54, 54)
 autoscroll = Vector2(20, 0)
-repeat_times = 3
+repeat_times = 4
 ignore_camera_scroll = true
 
-[node name="Starfield" type="Sprite2D" parent="Parallax2D" unique_id=1916316546]
+[node name="StarfieldImage" type="Sprite2D" parent="Background/Parallax2D" unique_id=1916316546]
+unique_name_in_owner = true
 texture = ExtResource("2_2wvcj")

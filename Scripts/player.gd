@@ -17,7 +17,7 @@ func initialize(board: Board) -> void:
 
 func _ready() -> void:
 	_cached_shape = ConvexPolygonShape2D.new()
-	_cached_shape.points = %CollisionPolygon2D.polygon
+	_cached_shape.set_point_cloud(%CollisionPolygon2D.polygon)
 
 
 func _process(_delta: float) -> void:

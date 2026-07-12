@@ -6,8 +6,8 @@ const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
 const PLAYER = preload("res://Scenes/player.tscn")
 const ALIEN_SPEED: float = 40
 const ALIEN_DROP_DISTANCE: float = 40
-const STAR_ROTATION_AMOUNT: float = 0.0 # 0.0125
-const STAR_SCROLL_AMOUNT: float = 0.03
+const STAR_ROTATION_AMOUNT: float = 0.0015
+const STAR_SCROLL_AMOUNT: float = 10#0.003
 
 
 enum AlienMovement { RIGHT, DOWN, LEFT }
@@ -25,6 +25,7 @@ var _aliens: Array[AlienShip] = []
 var _alien_dir: AlienMovement = AlienMovement.RIGHT
 var _bottom_alien_in_each_column: Array[AlienShip] = []
 var _alien_downward_goal: float = 0
+var _alien_speed_multiple: float = 1.0
 
 
 func _ready() -> void:
@@ -35,9 +36,12 @@ func _ready() -> void:
 		bunker.position = Vector2((i + 0.5) * placement_width, 4 * size.y / 5)
 	placement_width = int(size.x / float(_alien_cols + 5))
 	var placement_height = int(size.y / float(_alien_rows + 5))
+	var aid: int = 0
 	for x: int in range(_alien_cols):
 		for y: int in range(_alien_rows):
 			_create_alien((x + 0.5) * placement_width, (y + 0.5) * placement_height, x)
+			aid += 1
+			_aliens.back().name = str("Alien#%d" % [aid])
 	for alien: AlienShip in _bottom_alien_in_each_column:
 		alien.power_up_weapon(_rnd.randf())
 	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)
@@ -48,7 +52,27 @@ func _ready() -> void:
 	var starfield_texture: Texture = ImageTexture.create_from_image(starfield_image)
 	%StarfieldImage.texture = starfield_texture
 	%Parallax2D.repeat_size = starfield_image.get_size()
+	#%Parallax2D.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	_create_player()
+
+
+func on_alien_died(alien: AlienShip) -> void:
+	var col: int = alien.get_col()
+	_aliens.erase(alien)
+	if _bottom_alien_in_each_column[col] == alien:
+		var next_alien: AlienShip = _find_lowest_alien_in_row(col)
+		_bottom_alien_in_each_column[col] = next_alien
+		if next_alien != null:
+			next_alien.power_up_weapon(min(_rnd.randf(), _rnd.randf()))
+
+
+func _find_lowest_alien_in_row(col: int) -> AlienShip:
+	var ret_val: AlienShip = null
+	for alien: AlienShip in _aliens:
+		if alien.get_col() == col:
+			if ret_val == null or alien.position.y > ret_val.position.y:
+				ret_val = alien
+	return ret_val
 
 
 func _add_stars(image: Image, count: int, center_x: float, center_y: float, force: bool) -> void:
@@ -130,16 +154,16 @@ func _add_large_star(image: Image, sx: float, sy: float) -> void:
 	image.set_pixel(hx, hy, Color(hh, hh, hh))
 
 
-func _create_alien(x: float, y: float, row: int) -> void:
+func _create_alien(x: float, y: float, col: int) -> void:
 	var alien: AlienShip = ALIEN_SHIP.instantiate()
 	alien.position = Vector2(x, y)
 	add_child(alien)
 	_aliens.append(alien)
-	alien.initialize(self)
-	if _bottom_alien_in_each_column.size() <= row:
+	alien.initialize(self, col)
+	if _bottom_alien_in_each_column.size() <= col:
 		_bottom_alien_in_each_column.append(alien)
 	else:
-		_bottom_alien_in_each_column[row] = alien
+		_bottom_alien_in_each_column[col] = alien
 
 
 func _create_player() -> void:
@@ -147,7 +171,6 @@ func _create_player() -> void:
 	_player.initialize(self)
 	add_child(_player)
 	_player.position = Vector2(size.x / 2.0, size.y - 40)
-	
 
 
 func get_time_dilation() -> float:
@@ -177,7 +200,7 @@ func _process(delta: float) -> void:
 			continue
 		new_td.append([tuple[0], remaining, tuple[2]])
 	_time_dilation_array = new_td
-	%Parallax2D.scroll_scale = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
+	%Parallax2D.autoscroll = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
 	$Background.rotation += delta * _time_dilation * STAR_ROTATION_AMOUNT
 
 
@@ -200,6 +223,7 @@ func _physics_process(delta: float) -> void:
 			_alien_dir = AlienMovement.RIGHT
 		else:
 			_alien_dir = AlienMovement.LEFT
+		_alien_speed_multiple += 0.25
 	
 	if _alien_dir == AlienMovement.RIGHT:
 		_move_all_aliens(tdd * Vector2.RIGHT, true, min_x, max_x, max_alien_y)
@@ -208,8 +232,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x: float, max_alien_y: float) -> void:
+	var mod_vel: Vector2 = velocity * ALIEN_SPEED
+	#if _alien_dir != AlienMovement.DOWN:
+	mod_vel *= _alien_speed_multiple
 	for alien: AlienShip in _aliens:
-		alien.position += velocity * ALIEN_SPEED
+		alien.position += mod_vel
 		if watch_margin:
 			if alien.position.x < min_x:
 				_alien_dir = AlienMovement.DOWN

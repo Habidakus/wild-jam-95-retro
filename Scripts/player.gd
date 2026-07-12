@@ -39,6 +39,7 @@ func _physics_process(delta: float) -> void:
 	query.shape = _cached_shape
 	query.transform = global_transform.translated(velocity)
 	query.collision_mask = collision_mask
+	query.collide_with_areas = true
 	query.exclude = [self.get_rid()]
 
 	var results: Array[Dictionary] = space_state.intersect_shape(query)

@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://3thfwb06xtod"]
+
+[ext_resource type="Script" uid="uid://jl43332vpspo" path="res://Scripts/missle_impact.gd" id="1_221x2"]
+[ext_resource type="AudioStream" uid="uid://cl177v4ekkxda" path="res://Sounds/Explosion001.wav" id="2_221x2"]
+
+[sub_resource type="Curve" id="Curve_tpxde"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.27710843, 0.4706586), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_seeyh"]
+offsets = PackedFloat32Array(0, 0.50980395, 1)
+colors = PackedColorArray(0.78431374, 0.3137255, 0.627451, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="AlienShipExplosion" type="CPUParticles2D" unique_id=815790375]
+amount = 90
+lifetime = 1.5
+explosiveness = 1.0
+local_coords = true
+direction = Vector2(0, -1)
+spread = 95.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 50.0
+scale_amount_max = 10.0
+scale_amount_curve = SubResource("Curve_tpxde")
+color_ramp = SubResource("Gradient_seeyh")
+script = ExtResource("1_221x2")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=2126452346]
+stream = ExtResource("2_221x2")
+max_polyphony = 4
+bus = &"VFX"
+
+[connection signal="finished" from="." to="." method="_on_finished"]

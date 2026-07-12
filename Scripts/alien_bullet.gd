@@ -1,5 +1,7 @@
 class_name AlienBullet extends AnimatableBody2D
 
+const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
+
 const SPEED: float = 200
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 var _cached_shape: ConvexPolygonShape2D
@@ -17,8 +19,11 @@ func initialize(flr: float, board: Board) -> void:
 	_board = board
 
 
-func die() -> void:
+func die(bunker: Bunker, hit_offset: Vector2) -> void:
 	#_board.start_time_dilation(0.05)
+	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	explosion.position = hit_offset
+	bunker.add_child(explosion)
 	queue_free()
 
 

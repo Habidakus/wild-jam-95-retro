@@ -30,11 +30,14 @@ func on_bullet_impact(bullet: AlienBullet, point: Vector2) -> void:
 	for y in range(r):
 		var bit_set: bool = _bitmap.get_bitv(Vector2i(dx, dy))
 		if bit_set:
-			_apply_damage(dx, y)
-			bullet.die()
+			var ay: int = _apply_damage(dx, y)
+			if ay < 0:
+				return
+			var hit_offset: Vector2 = Vector2(dx - (s.x / 2.0), ay - (s.y / 2.0))
+			bullet.die(self, hit_offset)
 
 
-func _apply_damage(x: int, start_y: int) -> void:
+func _apply_damage(x: int, start_y: int) -> int:
 	var height: int = _bitmap.get_size().y
 	var width: int = _bitmap.get_size().x
 	for y in range(start_y, height):
@@ -49,7 +52,8 @@ func _apply_damage(x: int, start_y: int) -> void:
 		if x > 0:
 			_bitmap.set_bitv(Vector2i(x - 1, y), false)
 		_calculate_image_and_collision()
-		return
+		return y
+	return -1
 
 
 func _calculate_image_and_collision() -> void:

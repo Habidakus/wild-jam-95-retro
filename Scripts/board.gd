@@ -2,7 +2,7 @@ class_name Board extends Control
 
 const BUNKER_SCENE = preload("res://Scenes/bunker_wide.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
-const ALIEN_SHIP = preload("res://Scenes/area_ship.tscn")
+const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
 const ALIEN_SPEED: float = 40
 const ALIEN_DROP_DISTANCE: float = 40
 
@@ -36,6 +36,56 @@ func _ready() -> void:
 			_create_alien((x + 0.5) * placement_width, (y + 0.5) * placement_height, x)
 	for alien: AlienShip in _bottom_alien_in_each_column:
 		alien.power_up_weapon(_rnd.randf())
+	var starfield_image: Image = Image.create_empty(size.x * 2, size.y, false, Image.FORMAT_RGB8)
+	starfield_image.fill(Color.BLACK)
+	for i: int in range(7):
+		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true)
+	_add_stars(starfield_image, 1000, 0, 0, false)
+	var starfield_texture: Texture = ImageTexture.create_from_image(starfield_image)
+	$Parallax2D/Starfield.texture = starfield_texture
+	$Parallax2D.repeat_size = starfield_image.get_size()
+
+
+func _add_stars(image: Image, count: int, center_x: float, center_y: float, force: bool) -> void:
+	var isize: Vector2 = image.get_size()
+	var center_point: Vector2 = isize / 2.0
+	for i: int in range(count):
+		var sx: float = -1
+		var sy: float = -1
+		if force:
+			for j: int in range(15):
+				var sx_a: float = _rnd.randf() * isize.x
+				var sy_a: float = _rnd.randf() * isize.y
+				if sx < 0 or Vector2(sx_a, sy_a).distance_squared_to(center_point) < Vector2(sx, sy).distance_squared_to(center_point):
+					sx = sx_a
+					sy = sy_a
+		else:
+			sx = _rnd.randf() * isize.x
+			sy = _rnd.randf() * isize.y
+		sx += center_x - center_point.x
+		sy += center_y - center_point.y
+		if sx > isize.x:
+			sx -= isize.x
+		elif sx < 0:
+			sx += isize.x
+		if sy > isize.y:
+			sy -= isize.y
+		elif sy < 0:
+			sy += isize.y
+		var lx: int = int(sx)
+		var ly: int = int(sy)
+		var hx: int = (lx + 1) % int(isize.x)
+		var hy: int = (ly + 1) % int(isize.y)
+		var ax: float = (sx - float(lx))
+		var ay: float = (sy - float(ly))
+		var ll: float = max((1.0 - ax) * (1.0 - ay), image.get_pixel(lx, ly).get_luminance())
+		var lh: float = max((1.0 - ax) * ay, image.get_pixel(lx, hy).get_luminance())
+		var hl: float = max(ax * (1.0 - ay), image.get_pixel(hx, ly).get_luminance())
+		var hh: float = max(ax * ay, image.get_pixel(hx, hy).get_luminance())
+		image.set_pixel(lx, ly, Color(ll, ll, ll))
+		image.set_pixel(lx, hy, Color(lh, lh, lh))
+		image.set_pixel(hx, ly, Color(hl, hl, hl))
+		image.set_pixel(hx, hy, Color(hh, hh, hh))
 
 
 func _create_alien(x: float, y: float, row: int) -> void:

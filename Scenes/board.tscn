@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://de0c261djrols"]
 
 [ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
+[ext_resource type="Texture2D" uid="uid://cgxds45qgkyma" path="res://Images/test_gun.png" id="2_2wvcj"]
 
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
@@ -10,3 +11,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2wvcj")
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=1779360628]
+scroll_scale = Vector2(-0.1, 0)
+repeat_size = Vector2(54, 54)
+autoscroll = Vector2(20, 0)
+repeat_times = 3
+ignore_camera_scroll = true
+
+[node name="Starfield" type="Sprite2D" parent="Parallax2D" unique_id=1916316546]
+texture = ExtResource("2_2wvcj")

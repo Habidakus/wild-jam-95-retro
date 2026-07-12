@@ -19,3 +19,4 @@ polygon = PackedVector2Array(0, 12, 1, 8, 1, -9, 0, -12, -1, -11, -1, 10)
 stream = ExtResource("3_gbjqb")
 volume_db = -20.0
 max_polyphony = 5
+bus = &"VFX"

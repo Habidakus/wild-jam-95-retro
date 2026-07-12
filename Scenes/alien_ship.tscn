@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://cvaomnad1ehbi"]
 
-[ext_resource type="Script" uid="uid://dwmolq6yhk7cr" path="res://Scripts/area_ship.gd" id="1_ooca6"]
-[ext_resource type="Texture2D" uid="uid://dald70v07n56g" path="res://Images/test_alien_01.png" id="1_y1elm"]
-[ext_resource type="Texture2D" uid="uid://bbpl2nj55o7a3" path="res://Images/test_alien_02.png" id="2_ooca6"]
+[ext_resource type="Script" uid="uid://dwmolq6yhk7cr" path="res://Scripts/alien_ship.gd" id="1_a47bc"]
+[ext_resource type="Texture2D" uid="uid://dald70v07n56g" path="res://Images/test_alien_01.png" id="2_qbl4w"]
+[ext_resource type="Texture2D" uid="uid://bbpl2nj55o7a3" path="res://Images/test_alien_02.png" id="3_avhiq"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6ya21"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_y1elm")
+"texture": ExtResource("2_qbl4w")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_ooca6")
+"texture": ExtResource("3_avhiq")
 }],
 "loop": true,
 "name": &"default",
@@ -25,7 +25,7 @@ height = 26.0
 [node name="Area2D" type="Area2D" unique_id=1787014791]
 collision_layer = 8
 collision_mask = 0
-script = ExtResource("1_ooca6")
+script = ExtResource("1_a47bc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=455135240]
 sprite_frames = SubResource("SpriteFrames_6ya21")

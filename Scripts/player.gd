@@ -75,6 +75,8 @@ func _on_hit_by_alien_ship(_alien: AlienShip) -> void:
 
 
 func _die() -> void:
+	if _state != PlayerState.ACTIVE:
+		return
 	_state = PlayerState.DYING
 	$AudioStreamPlayer2D.stream = DEATH_STREAM
 	$AudioStreamPlayer2D.play()

@@ -49,9 +49,11 @@ func die() -> void:
 
 
 func _process(delta: float) -> void:
+	var time_dilation: float = _board.get_time_dilation()
+	$AnimatedSprite2D.speed_scale = time_dilation
 	if not _can_shoot:
 		return
-	_weapon_cooldown -= delta * _board.get_time_dilation()
+	_weapon_cooldown -= delta * time_dilation
 	if _weapon_cooldown > 0:
 		return
 	_board.spawn_alien_bullet(position)

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://de0c261djrols"]
 
 [ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
-[ext_resource type="Texture2D" uid="uid://cgxds45qgkyma" path="res://Images/test_gun.png" id="2_2wvcj"]
 
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
@@ -24,4 +23,20 @@ ignore_camera_scroll = true
 
 [node name="StarfieldImage" type="Sprite2D" parent="Background/Parallax2D" unique_id=1916316546]
 unique_name_in_owner = true
-texture = ExtResource("2_2wvcj")
+
+[node name="GameOverLabel" type="Label" parent="." unique_id=356767335]
+unique_name_in_owner = true
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 128
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1

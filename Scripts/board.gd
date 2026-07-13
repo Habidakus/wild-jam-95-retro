@@ -15,6 +15,8 @@ enum AlienMovement { RIGHT, DOWN, LEFT }
 
 
 var _player: Player
+var _player_lives: int
+var _game_over: bool = false
 var _bunker_count: int = 7
 var _rnd: RandomNumberGenerator = RandomNumberGenerator.new()
 #var _wait: float = 1
@@ -30,6 +32,7 @@ var _alien_speed_multiple: float = 1.0
 
 
 func _ready() -> void:
+	%GameOverLabel.hide()
 	var placement_width: int = int(size.x / float(_bunker_count))
 	for i: int in range(_bunker_count):
 		var bunker: Bunker = BUNKER_SCENE.instantiate()
@@ -170,6 +173,7 @@ func _create_alien(x: float, y: float, col: int) -> void:
 func _create_player() -> void:
 	_player = PLAYER.instantiate()
 	_player.initialize(self)
+	_player_lives = 3
 	add_child(_player)
 	_place_player_in_spawn_location()
 
@@ -188,16 +192,17 @@ func _process(delta: float) -> void:
 	var new_td: Array[Array] = []
 	for tuple: Array in _time_dilation_array:
 		var value: float = tuple[0]
-		var elapsed: float = tuple[2] - tuple[1]
+		var elapsed: float = abs(tuple[2]) - tuple[1]
 		if elapsed < FADE_IN:
-			value = Tween.interpolate_value(1.0, value - 1.0, elapsed, tuple[2], Tween.TRANS_QUAD, Tween.EASE_OUT)
-		else:
+			value = Tween.interpolate_value(1.0, value - 1.0, elapsed, abs(tuple[2]), Tween.TRANS_QUAD, Tween.EASE_OUT)
+		elif tuple[2] > 0:
 			value = Tween.interpolate_value(value, 1.0 - value, elapsed - FADE_IN, tuple[2] - FADE_IN, Tween.TRANS_QUAD, Tween.EASE_OUT)
 		assert(value >= tuple[0])
 		if value < _time_dilation:
 			_time_dilation = value
 		var remaining: float = tuple[1] - delta
-		if remaining < 0:
+		if remaining < 0 && tuple[2] > 0:
+			print("Removing time dilation: %s since remaining is now %s" % [tuple, remaining])
 			continue
 		new_td.append([tuple[0], remaining, tuple[2]])
 	_time_dilation_array = new_td
@@ -247,11 +252,27 @@ func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x
 				_alien_dir = AlienMovement.DOWN
 				_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
 				watch_margin = false
+		if alien.position.y > _player.position.y:
+			if not _game_over:
+				_on_game_over()
 
 
 func on_player_death() -> void:
 	_place_player_in_spawn_location()
-	_player.start_respawn(1.0)
+	_player_lives -= 1
+	if _player_lives > 0:
+		_player.start_respawn(1.0)
+	elif not _game_over:
+		_on_game_over()
+
+
+func _on_game_over() -> void:
+	_game_over = true
+	_time_dilation_array = [[0, 1, -1]]
+	var tween: Tween = create_tween()
+	%GameOverLabel.show()
+	%GameOverLabel.modulate.a = 0
+	tween.tween_property(%GameOverLabel, "modulate:a", 1, 3)
 
 
 func _place_player_in_spawn_location() -> void:
@@ -263,6 +284,7 @@ func spawn_alien_bullet(pos: Vector2) -> void:
 	bullet.position = pos
 	bullet.initialize(size.y + 30, self, _rnd)
 	add_child(bullet)
+
 
 func spawn_player_bullet(pos: Vector2) -> void:
 	var bullet: PlayerBullet = PLAYER_BULLET.instantiate()

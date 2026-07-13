@@ -171,7 +171,7 @@ func _create_player() -> void:
 	_player = PLAYER.instantiate()
 	_player.initialize(self)
 	add_child(_player)
-	_player.position = Vector2(size.x / 2.0, size.y - 40)
+	_place_player_in_spawn_location()
 
 
 func get_time_dilation() -> float:
@@ -247,6 +247,15 @@ func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x
 				_alien_dir = AlienMovement.DOWN
 				_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
 				watch_margin = false
+
+
+func on_player_death() -> void:
+	_place_player_in_spawn_location()
+	_player.start_respawn(1.0)
+
+
+func _place_player_in_spawn_location() -> void:
+	_player.position = Vector2(size.x / 2.0, size.y - 40)
 
 
 func spawn_alien_bullet(pos: Vector2) -> void:

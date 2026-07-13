@@ -1,7 +1,21 @@
 class_name Player extends Area2D
 
+
 const SPEED: float = 400
 const GUN_COOLDOWN: float = 0.6
+
+
+enum PlayerState {
+	UNDEFINED,
+	ACTIVE,
+	DYING,
+	RESPAWNING,
+}
+
+
+const DEATH_STREAM: Resource = preload("res://Sounds/ElectroExplosion002.wav")
+const RESPAWN_STREAM: Resource = preload("res://Sounds/Engine001.wav")
+
 
 var _board: Board
 var _direction_vector: Vector2 = Vector2.ZERO
@@ -9,12 +23,15 @@ var _cached_shape: ConvexPolygonShape2D
 var _min_x: float
 var _max_x: float
 var _gun_cooldown: float = 0
+var _state: PlayerState = PlayerState.UNDEFINED
 
 
 func initialize(board: Board) -> void:
 	_board = board
 	_min_x = 27 * 3 / 4.0
 	_max_x = board.size.x - _min_x
+	_state = PlayerState.ACTIVE
+	self.show()
 
 
 func _ready() -> void:
@@ -24,6 +41,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_gun_cooldown -= delta * _board.get_time_dilation()
+	if _state != PlayerState.ACTIVE:
+		return
+
 	if Input.is_action_pressed("move_right"):
 		if Input.is_action_pressed("move_left"):
 			_direction_vector = Vector2.ZERO
@@ -46,12 +66,48 @@ func _attempt_fire() -> void:
 	_board.spawn_player_bullet(position)
 
 
-func _on_hit_by_alien_bullet(bullet: AlienBullet) -> void:
-	print("IMPLEMENT PLAYER RESPAWN")
+func _on_hit_by_alien_bullet(_bullet: AlienBullet) -> void:
+	_die()
 
 
-func _on_hit_by_alien_ship(alien: AlienShip) -> void:
-	print("IMPLEMENT PLAYER RESPAWN")
+func _on_hit_by_alien_ship(_alien: AlienShip) -> void:
+	_die()
+
+
+func _die() -> void:
+	_state = PlayerState.DYING
+	$AudioStreamPlayer2D.stream = DEATH_STREAM
+	$AudioStreamPlayer2D.play()
+	var tween: Tween = create_tween()
+	tween.tween_property(self, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(Callable(self, "hide"))
+	tween.tween_property(self, "modulate:a", 1.0, 0.01)
+	tween.tween_callback(Callable(_board, "on_player_death"))
+
+
+func start_respawn(time_to_respawn: float) -> void:
+	_state = PlayerState.RESPAWNING
+	self.hide()
+	var offscreen: Vector2 = position + Vector2(0, 50)
+	var return_spot: Vector2 = position
+	position = offscreen
+	self.show()
+	$AudioStreamPlayer2D.stream = RESPAWN_STREAM
+	#$AudioStreamPlayer2D.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	$AudioStreamPlayer2D.play()
+	var tween: Tween = create_tween()
+	tween.tween_property(self, "position", return_spot, time_to_respawn)
+	tween.tween_callback(Callable(self, "_respawn_complete"))
+
+
+func _respawn_complete() -> void:
+	_state = PlayerState.ACTIVE
+	$AudioStreamPlayer2D.stop()
+
+
+func _on_audio_stream_finished() -> void:
+	if _state == PlayerState.RESPAWNING:
+		$AudioStreamPlayer2D.play()
 
 
 func _physics_process(delta: float) -> void:

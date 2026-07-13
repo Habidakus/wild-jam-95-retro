@@ -1,7 +1,7 @@
 class_name Player extends Area2D
 
 const SPEED: float = 400
-const GUN_COOLDOWN: float = 0.9
+const GUN_COOLDOWN: float = 0.6
 
 var _board: Board
 var _direction_vector: Vector2 = Vector2.ZERO
@@ -46,6 +46,14 @@ func _attempt_fire() -> void:
 	_board.spawn_player_bullet(position)
 
 
+func _on_hit_by_alien_bullet(bullet: AlienBullet) -> void:
+	print("IMPLEMENT PLAYER RESPAWN")
+
+
+func _on_hit_by_alien_ship(alien: AlienShip) -> void:
+	print("IMPLEMENT PLAYER RESPAWN")
+
+
 func _physics_process(delta: float) -> void:
 	var velocity: Vector2 = _direction_vector * SPEED * delta * _board.get_time_dilation()
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
@@ -62,6 +70,11 @@ func _physics_process(delta: float) -> void:
 		if not rest_info.is_empty():
 			for collision_data: Dictionary in results:
 				var hit_object = collision_data.collider
-				print("Player collided with %s" % [hit_object])
+				if hit_object is AlienBullet:
+					_on_hit_by_alien_bullet(hit_object as AlienBullet)
+				elif hit_object is AlienShip:
+					_on_hit_by_alien_ship(hit_object as AlienShip)
+				else:
+					print("Player collided with %s" % [hit_object])
 	
 	position += velocity

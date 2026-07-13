@@ -2,7 +2,7 @@ class_name PlayerBullet extends Bullet
 
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
 
-const SPEED: float = 250
+const SPEED: float = 350
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 var _cached_shape: ConvexPolygonShape2D
 var _board: Board
@@ -27,7 +27,14 @@ func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 	queue_free()
 
 
-func die_against_alien(alien: AlienShip, hit_offset: Vector2) -> void:
+func die_against_alien(_alien: AlienShip, hit_offset: Vector2) -> void:
+	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	explosion.position = hit_offset
+	_board.add_child(explosion)
+	queue_free()
+
+
+func die_against_alien_bullet(hit_offset: Vector2) -> void:
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset
 	_board.add_child(explosion)

@@ -76,7 +76,7 @@ func _apply_damage_down(x: int, start_y: int) -> int:
 	return -1
 
 func _apply_damage_up(x: int, start_y: int) -> int:
-	var height: int = _bitmap.get_size().y
+	#var height: int = _bitmap.get_size().y
 	var width: int = _bitmap.get_size().x
 	for y in range(start_y, -1, -1):
 		var bit_set: bool = _bitmap.get_bitv(Vector2i(x, y))

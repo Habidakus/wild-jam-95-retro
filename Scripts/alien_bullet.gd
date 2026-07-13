@@ -30,6 +30,15 @@ func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 	queue_free()
 
 
+# Called when a player's bullet hits our bullet
+func on_bullet_impact(player_bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
+	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	explosion.position = point
+	_board.add_child(explosion)
+	player_bullet.die_against_alien_bullet(point)
+	queue_free()
+
+
 func _physics_process(delta: float) -> void:
 	var velocity: Vector2 = Vector2.DOWN * SPEED * delta * _board.get_time_dilation()
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state

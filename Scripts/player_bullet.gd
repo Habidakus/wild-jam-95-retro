@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func initialize(board: Board, rnd: RandomNumberGenerator) -> void:
 	_board = board
-	$AudioStreamPlayer2D.volume_db += rnd.randf() * 2 - 1.0
+	#$AudioStreamPlayer2D.volume_db += rnd.randf() * 2 - 1.0
 	$AudioStreamPlayer2D.pitch_scale *= (0.65 + rnd.randf() * 0.3)
 
 

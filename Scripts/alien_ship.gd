@@ -54,8 +54,5 @@ func _process(delta: float) -> void:
 	_weapon_cooldown -= delta * _board.get_time_dilation()
 	if _weapon_cooldown > 0:
 		return
-	if randf() < 0.15:
-		die()
-	else:
-		_board.spawn_alien_bullet(position)
-		_weapon_cooldown = WEAPON_COOLDOWN_TIME
+	_board.spawn_alien_bullet(position)
+	_weapon_cooldown = WEAPON_COOLDOWN_TIME

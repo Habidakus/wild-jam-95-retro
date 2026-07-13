@@ -25,6 +25,11 @@ func power_up_weapon(power_up_length: float) -> void:
 	_weapon_cooldown = 1 + WEAPON_COOLDOWN_TIME * power_up_length
 
 
+func on_bullet_impact(bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
+	bullet.die_against_alien(self, point)
+	die()
+
+
 func die() -> void:
 	#_board.start_time_dilation(0.05)
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()

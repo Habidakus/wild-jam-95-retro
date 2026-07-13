@@ -1,11 +1,10 @@
-class_name AlienBullet extends Bullet
+class_name PlayerBullet extends Bullet
 
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
 
-const SPEED: float = 200
+const SPEED: float = 250
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 var _cached_shape: ConvexPolygonShape2D
-var _floor: float
 var _board: Board
 
 
@@ -15,28 +14,34 @@ func _ready() -> void:
 	$AudioStreamPlayer2D.play()
 
 
-func initialize(flr: float, board: Board, rnd: RandomNumberGenerator) -> void:
-	_floor = flr
+func initialize(board: Board, rnd: RandomNumberGenerator) -> void:
 	_board = board
 	$AudioStreamPlayer2D.volume_db += rnd.randf() * 2 - 1.0
-	$AudioStreamPlayer2D.pitch_scale *= (0.85 + rnd.randf() * 0.3)
+	$AudioStreamPlayer2D.pitch_scale *= (0.65 + rnd.randf() * 0.3)
 
 
 func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
-	#_board.start_time_dilation(0.05)
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset
 	bunker.add_child(explosion)
 	queue_free()
 
 
+func die_against_alien(alien: AlienShip, hit_offset: Vector2) -> void:
+	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	explosion.position = hit_offset
+	_board.add_child(explosion)
+	queue_free()
+
+
 func _physics_process(delta: float) -> void:
-	var velocity: Vector2 = Vector2.DOWN * SPEED * delta * _board.get_time_dilation()
+	var velocity: Vector2 = Vector2.UP * SPEED * delta * _board.get_time_dilation()
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
 	var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 	query.shape = _cached_shape
 	query.transform = global_transform.translated(velocity)
 	query.collision_mask = collision_mask
+	query.collide_with_areas = true
 	query.exclude = [self.get_rid()]
 
 	var results: Array[Dictionary] = space_state.intersect_shape(query)
@@ -48,8 +53,8 @@ func _physics_process(delta: float) -> void:
 				if hit_object.has_method("on_bullet_impact"):
 					hit_object.on_bullet_impact(self, position, velocity)
 				else:
-					print("Bullet impact against %s, which does not have on_bullet_impact() function" % [hit_object])
+					print("Player bullet impact against %s, which does not have on_bullet_impact() function" % [hit_object])
 	
 	position += velocity
-	if position.y > _floor:
+	if position.y < 0:
 		queue_free()

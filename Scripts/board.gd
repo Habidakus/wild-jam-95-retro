@@ -1,6 +1,7 @@
 class_name Board extends Control
 
 const BUNKER_SCENE = preload("res://Scenes/bunker_wide.tscn")
+const PLAYER_BULLET = preload("res://Scenes/player_bullet.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
 const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
 const PLAYER = preload("res://Scenes/player.tscn")
@@ -33,7 +34,7 @@ func _ready() -> void:
 	for i: int in range(_bunker_count):
 		var bunker: Bunker = BUNKER_SCENE.instantiate()
 		add_child(bunker)
-		bunker.position = Vector2((i + 0.5) * placement_width, 4 * size.y / 5)
+		bunker.position = Vector2((i + 0.5) * placement_width, size.y - 80)
 	placement_width = int(size.x / float(_alien_cols + 5))
 	var placement_height = int(size.y / float(_alien_rows + 5))
 	var aid: int = 0
@@ -253,3 +254,10 @@ func spawn_alien_bullet(pos: Vector2) -> void:
 	bullet.position = pos
 	bullet.initialize(size.y + 30, self, _rnd)
 	add_child(bullet)
+
+func spawn_player_bullet(pos: Vector2) -> void:
+	var bullet: PlayerBullet = PLAYER_BULLET.instantiate()
+	bullet.position = pos
+	bullet.initialize(self, _rnd)
+	add_child(bullet)
+	

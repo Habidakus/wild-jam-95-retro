@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://wmybv7wb62vq"]
+
+[ext_resource type="Script" uid="uid://dc88ikd2g8d5v" path="res://Scripts/player_bullet.gd" id="1_jskx8"]
+[ext_resource type="Texture2D" uid="uid://dmspw6us7vite" path="res://Images/test_gun_bullet.png" id="2_jskx8"]
+[ext_resource type="AudioStream" uid="uid://cuxnsjknjfnwj" path="res://Sounds/Beam001.wav" id="3_jskx8"]
+
+[node name="PlayerBullet" type="AnimatableBody2D" unique_id=1325468317]
+collision_layer = 32
+collision_mask = 14
+script = ExtResource("1_jskx8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1304755846]
+texture = ExtResource("2_jskx8")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=733089978]
+polygon = PackedVector2Array(0, 12, 1, 3, 1, -4, 0, -13, -1, -4, -1, 3)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1111519160]
+stream = ExtResource("3_jskx8")
+volume_db = -20.0
+max_polyphony = 5
+bus = &"VFX"

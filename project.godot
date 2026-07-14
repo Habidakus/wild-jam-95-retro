@@ -23,6 +23,10 @@ buses/default_bus_layout="uid://mpq4babnh0gr"
 
 window/stretch/mode="canvas_items"
 
+[gui]
+
+theme/custom="uid://bsnmdfwdyc7p8"
+
 [input]
 
 move_right={

@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://bsnmdfwdyc7p8"]
+
+[ext_resource type="FontFile" uid="uid://b04r7np5djp6a" path="res://Fonts/Orbitron-VariableFont_wght.ttf" id="1_hmtju"]
+
+[resource]
+default_font = ExtResource("1_hmtju")

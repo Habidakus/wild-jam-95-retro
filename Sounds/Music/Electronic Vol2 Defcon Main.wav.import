@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://chtlhaknvn2gl"
+path="res://.godot/imported/Electronic Vol2 Defcon Main.wav-3bb2e4ba4e9c8ba3206db4542cb330bc.sample"
+
+[deps]
+
+source_file="res://Sounds/Music/Electronic Vol2 Defcon Main.wav"
+dest_files=["res://.godot/imported/Electronic Vol2 Defcon Main.wav-3bb2e4ba4e9c8ba3206db4542cb330bc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

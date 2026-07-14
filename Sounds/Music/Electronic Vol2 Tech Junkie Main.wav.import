@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cso7d15g1igg0"
+path="res://.godot/imported/Electronic Vol2 Tech Junkie Main.wav-26daa963529f86dd6f9489f42ecbb8e3.sample"
+
+[deps]
+
+source_file="res://Sounds/Music/Electronic Vol2 Tech Junkie Main.wav"
+dest_files=["res://.godot/imported/Electronic Vol2 Tech Junkie Main.wav-26daa963529f86dd6f9489f42ecbb8e3.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -37,6 +37,7 @@ func _ready() -> void:
 	for i: int in range(_bunker_count):
 		var bunker: Bunker = BUNKER_SCENE.instantiate()
 		add_child(bunker)
+		bunker.initialize(self)
 		bunker.position = Vector2((i + 0.5) * placement_width, size.y - 80)
 	placement_width = int(size.x / float(_alien_cols + 5))
 	var placement_height = int(size.y / float(_alien_rows + 5))
@@ -255,6 +256,10 @@ func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x
 		if alien.position.y > _player.position.y:
 			if not _game_over:
 				_on_game_over()
+
+
+func on_bunker_destroyed(bunker: Bunker) -> void:
+	bunker.queue_free()
 
 
 func on_player_death() -> void:

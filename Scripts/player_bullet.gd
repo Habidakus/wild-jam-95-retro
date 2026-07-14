@@ -20,6 +20,10 @@ func initialize(board: Board, rnd: RandomNumberGenerator) -> void:
 	$AudioStreamPlayer2D.pitch_scale *= (0.65 + rnd.randf() * 0.3)
 
 
+func get_damage() -> int:
+	return 55
+
+
 func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset

@@ -15,6 +15,10 @@ func _ready() -> void:
 	$AudioStreamPlayer2D.play()
 
 
+func get_damage() -> int:
+	return 45
+
+
 func initialize(flr: float, board: Board, rnd: RandomNumberGenerator) -> void:
 	_floor = flr
 	_board = board

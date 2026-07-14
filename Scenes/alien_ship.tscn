@@ -1,8 +1,15 @@
 [gd_scene format=3 uid="uid://cvaomnad1ehbi"]
 
 [ext_resource type="Script" uid="uid://dwmolq6yhk7cr" path="res://Scripts/alien_ship.gd" id="1_a47bc"]
+[ext_resource type="Shader" uid="uid://bt3kqhb5sokvj" path="res://Scripts/Shaders/color_interior.gdshader" id="2_avhiq"]
 [ext_resource type="Texture2D" uid="uid://dald70v07n56g" path="res://Images/test_alien_01.png" id="2_qbl4w"]
 [ext_resource type="Texture2D" uid="uid://bbpl2nj55o7a3" path="res://Images/test_alien_02.png" id="3_avhiq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pv8xr"]
+shader = ExtResource("2_avhiq")
+shader_parameter/white_threshold = 0.95
+shader_parameter/alpha_threshold = 0.650000030875
+shader_parameter/edge_thickness = 1.60000005225
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6ya21"]
 animations = [{
@@ -28,6 +35,7 @@ collision_mask = 4
 script = ExtResource("1_a47bc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=455135240]
+material = SubResource("ShaderMaterial_pv8xr")
 sprite_frames = SubResource("SpriteFrames_6ya21")
 autoplay = "default"
 frame_progress = 0.6636941

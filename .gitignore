@@ -2,6 +2,3 @@
 .godot/
 /android/
 Export_Web/
-
-# Don't bother storing the addons in github, anyone who wants can download the latest greatest version
-addons/

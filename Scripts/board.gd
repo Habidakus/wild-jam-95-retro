@@ -437,7 +437,7 @@ func _on_game_over() -> void:
 
 
 func _update_upgrades() -> void:
-	print("NEED TO IMPLEMENT UPGRADES: minor=%d major=%d" % [_minor_currency, _major_currency])
+	PlayerStats.add_currency(_minor_currency, _major_currency)
 	_menu_state_machine.switch_state("MainMenu")
 
 

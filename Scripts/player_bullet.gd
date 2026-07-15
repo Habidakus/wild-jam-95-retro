@@ -1,6 +1,8 @@
 class_name PlayerBullet extends Bullet
 
+
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
+
 
 const SPEED: float = 350
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D

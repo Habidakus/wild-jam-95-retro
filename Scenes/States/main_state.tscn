@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b85obl6fihjuk" path="res://addons/statemachine/StateMachine.gd" id="1_3shub"]
 [ext_resource type="Script" uid="uid://b7syegd82vm1t" path="res://addons/statemachine/StateMachineState_AnyKeyToContinue.gd" id="2_fbiki"]
-[ext_resource type="Script" uid="uid://doljrg6ukeyjn" path="res://Scenes/States/splash_screen.gd" id="2_h14px"]
+[ext_resource type="Script" uid="uid://doljrg6ukeyjn" path="res://Scripts/States/splash_screen.gd" id="2_h14px"]
 [ext_resource type="Script" uid="uid://b6dg5bqmn1c7c" path="res://Scripts/States/main_menu.gd" id="3_h14px"]
-[ext_resource type="Script" uid="uid://hcxkiffajh7k" path="res://Scenes/States/play.gd" id="4_3shub"]
+[ext_resource type="Script" uid="uid://hcxkiffajh7k" path="res://Scripts/States/play.gd" id="4_3shub"]
 
 [node name="StateMachine" type="Node" unique_id=398697420 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("1_3shub")

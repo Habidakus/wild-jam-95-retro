@@ -1,5 +1,6 @@
 class_name AlienBullet extends Bullet
 
+
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
 const SPEED: float = 200
 
@@ -22,9 +23,9 @@ func get_damage() -> int:
 	return 45
 
 
-func initialize(flr: float, board: Board, rnd: RandomNumberGenerator) -> void:
-	_floor = flr
+func initialize(board: Board, rnd: RandomNumberGenerator) -> void:
 	_board = board
+	_set_floor()
 	$AudioStreamPlayer2D.volume_db += rnd.randf() * 2 - 1.0
 	$AudioStreamPlayer2D.pitch_scale *= (0.85 + rnd.randf() * 0.3)
 
@@ -38,7 +39,7 @@ func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 		return
 	_is_dead = true
 	#_board.start_time_dilation(0.05)
-	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	var explosion: CPUParticles2D = _create_explosion_vfx()
 	explosion.position = hit_offset
 	bunker.add_child(explosion)
 	queue_free()
@@ -49,7 +50,7 @@ func on_bullet_impact(player_bullet: Bullet, point: Vector2, _velocity: Vector2)
 	if _is_dead:
 		return
 	_is_dead = true
-	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	var explosion: CPUParticles2D = _create_explosion_vfx()
 	explosion.position = point
 	_board.add_child(explosion)
 	player_bullet.die_against_alien_bullet(point)
@@ -77,5 +78,18 @@ func _physics_process(delta: float) -> void:
 					print("Bullet impact against %s, which does not have on_bullet_impact() function" % [hit_object])
 	
 	position += velocity
+	_check_against_floor()
+
+
+func _create_explosion_vfx() -> CPUParticles2D:
+	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
+	return explosion
+
+
+func _check_against_floor() -> void:
 	if position.y > _floor:
 		queue_free()
+
+
+func _set_floor() -> void:
+	_floor = _board.get_player_floor() + 30

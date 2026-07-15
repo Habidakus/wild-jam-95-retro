@@ -1,0 +1,25 @@
+class_name GroundFlames extends Area2D
+
+
+func extinguish() -> void:
+	queue_free()
+
+#func _physics_process(_delta: float) -> void:
+	#var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	#var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
+	#query.shape = $CollisionShape2D.shape
+	#query.transform = global_transform
+	#query.collision_mask = collision_mask
+	#query.collide_with_areas = true
+	#query.exclude = [self.get_rid()]
+#
+	#var results: Array[Dictionary] = space_state.intersect_shape(query)
+	#if not results.is_empty():
+		#var rest_info = space_state.get_rest_info(query)
+		#if not rest_info.is_empty():
+			#for collision_data: Dictionary in results:
+				#var hit_object = collision_data.collider
+				#if hit_object.has_method("on_flame_impact"):
+					#hit_object.on_flame_impact(self)
+				#else:
+					#print("Space ship impact against %s, which does not have on_ship_impact() function" % [hit_object])

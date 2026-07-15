@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bwhrgndfolebg"]
+
+[ext_resource type="Script" uid="uid://dtcveemmkdi4w" path="res://Scripts/drop_bullet.gd" id="1_ocwbu"]
+[ext_resource type="Texture2D" uid="uid://d2ew3pscekgeh" path="res://Images/green_drop.svg" id="2_ocwbu"]
+[ext_resource type="AudioStream" uid="uid://cyayqccpb5xb7" path="res://Sounds/FatBeam002.wav" id="3_jaqso"]
+
+[node name="AlienBullet" type="AnimatableBody2D" unique_id=1325468317]
+collision_layer = 2
+collision_mask = 20
+script = ExtResource("1_ocwbu")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1304755846]
+texture = ExtResource("2_ocwbu")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=733089978]
+position = Vector2(0, -1)
+polygon = PackedVector2Array(-1, 19, 10, 14, 10, 8, -1, -16, -11, 8, -11, 14)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1111519160]
+stream = ExtResource("3_jaqso")
+volume_db = -25.0
+max_polyphony = 5
+bus = &"VFX"

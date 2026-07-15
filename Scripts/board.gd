@@ -3,6 +3,7 @@ class_name Board extends Control
 const BUNKER_SCENE = preload("res://Scenes/bunker_wide.tscn")
 const PLAYER_BULLET = preload("res://Scenes/player_bullet.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
+const DROP_BULLET = preload("res://Scenes/alien_flame_bullet.tscn")
 const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
 const PLAYER = preload("res://Scenes/player.tscn")
 const COIN_TEXTURE = preload("res://Images/coin.svg")
@@ -454,13 +455,21 @@ func _on_exit_board() -> void:
 
 
 func _place_player_in_spawn_location() -> void:
-	_player.position = Vector2(size.x / 2.0, size.y - 40)
+	_player.position = Vector2(size.x / 2.0, get_player_floor())
+
+
+func get_player_floor() -> float:
+	return size.y - 40
 
 
 func spawn_alien_bullet(pos: Vector2) -> void:
-	var bullet: AlienBullet = ALIEN_BULLET.instantiate()
+	var bullet: AlienBullet 
+	if _rnd.randi() % 5 == 1:
+		bullet = DROP_BULLET.instantiate()
+	else:
+		bullet = ALIEN_BULLET.instantiate()
 	bullet.position = pos
-	bullet.initialize(size.y + 30, self, _rnd)
+	bullet.initialize(self, _rnd)
 	add_child(bullet)
 
 

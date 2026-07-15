@@ -66,6 +66,10 @@ func on_bullet_impact(bullet: Bullet, point: Vector2, velocity: Vector2) -> void
 		return
 	var s: Vector2 = _bitmap.get_size()
 	var dx: int = int(s.x / 2.0 + point.x - position.x)
+	if dx < 0.0:
+		dx = 0
+	elif dx >= s.x:
+		dx = int(s.x) - 1
 	if velocity.y > 0:
 		var range_start: float = 0.0
 		var range_end: float = s.y / 2 + point.y + velocity.y - position.y

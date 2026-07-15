@@ -74,9 +74,15 @@ func _on_hit_by_alien_ship(_alien: AlienShip) -> void:
 	_die()
 
 
+func _on_hit_by_ground_flames(_ground_flames: GroundFlames) -> void:
+	_ground_flames.extinguish()
+	_die()
+
+
 func _die() -> void:
 	if _state != PlayerState.ACTIVE:
 		return
+	_direction_vector = Vector2.ZERO
 	_state = PlayerState.DYING
 	$AudioStreamPlayer2D.stream = DEATH_STREAM
 	$AudioStreamPlayer2D.play()
@@ -132,7 +138,7 @@ func _physics_process(delta: float) -> void:
 					_on_hit_by_alien_bullet(hit_object as AlienBullet)
 				elif hit_object is AlienShip:
 					_on_hit_by_alien_ship(hit_object as AlienShip)
-				else:
-					print("Player collided with %s" % [hit_object])
+				elif hit_object is GroundFlames:
+					_on_hit_by_ground_flames(hit_object as GroundFlames)
 	
 	position += velocity

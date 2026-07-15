@@ -14,6 +14,7 @@ const STAR_SCROLL_AMOUNT: float = 10#0.003
 enum AlienMovement { RIGHT, DOWN, LEFT }
 
 
+var _menu_state_machine: StateMachine
 var _player: Player
 var _player_lives: int
 var _game_over: bool = false
@@ -25,30 +26,54 @@ var _time_dilation_array: Array[Array] = []
 var _alien_rows: int = 5
 var _alien_cols: int = 11
 var _aliens: Array[AlienShip] = []
+var _bunkers: Array[Bunker] = []
 var _alien_dir: AlienMovement = AlienMovement.RIGHT
 var _bottom_alien_in_each_column: Array[AlienShip] = []
 var _alien_downward_goal: float = 0
 var _alien_speed_multiple: float = 1.0
+var _minor_currency: int = 0
+var _difficulty: int = 0
 
 
 func _ready() -> void:
+	initialize(0)
+
+
+func initialize(difficulty: int) -> void:
+	_time_dilation_array = []
 	%GameOverLabel.hide()
-	var placement_width: int = int(size.x / float(_bunker_count))
+	%Congrats.hide()
+	_difficulty = difficulty
+	_create_bunkers()
+	_create_aliens()
+	_create_starfield()
+	_create_player()
+
+
+func _create_bunkers() -> void:
+	assert(_bunkers.is_empty())
+	var placement_width: float = size.x / float(_bunker_count)
 	for i: int in range(_bunker_count):
 		var bunker: Bunker = BUNKER_SCENE.instantiate()
 		add_child(bunker)
 		bunker.initialize(self)
 		bunker.position = Vector2((i + 0.5) * placement_width, size.y - 80)
-	placement_width = int(size.x / float(_alien_cols + 5))
-	var placement_height = int(size.y / float(_alien_rows + 5))
+		_bunkers.append(bunker)
+
+
+func _create_aliens() -> void:
+	assert(_aliens.is_empty())
+	var placement: Vector2i = Vector2i(int(size.x / float(_alien_cols + 5)), int(size.y / float(_alien_rows + 5)))
 	var aid: int = 0
 	for x: int in range(_alien_cols):
 		for y: int in range(_alien_rows):
-			_create_alien((x + 0.5) * placement_width, (y + 0.5) * placement_height, x)
+			_create_alien((x + 0.5) * placement.x, (y + 0.5) * placement.y, x)
 			aid += 1
 			_aliens.back().name = str("Alien#%d" % [aid])
 	for alien: AlienShip in _bottom_alien_in_each_column:
 		alien.power_up_weapon(_rnd.randf())
+
+func _create_starfield() -> void:
 	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)
 	starfield_image.fill(Color.BLACK)
 	for i: int in range(7):
@@ -58,10 +83,15 @@ func _ready() -> void:
 	%StarfieldImage.texture = starfield_texture
 	%Parallax2D.repeat_size = starfield_image.get_size()
 	#%Parallax2D.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	_create_player()
+
+
+func register_menu_scene(menu_state_machine: StateMachine) -> void:
+	_menu_state_machine = menu_state_machine
 
 
 func on_alien_died(alien: AlienShip) -> void:
+	assert(_aliens.has(alien))
+	_minor_currency += 1
 	var col: int = alien.get_col()
 	_aliens.erase(alien)
 	if _bottom_alien_in_each_column[col] == alien:
@@ -69,6 +99,8 @@ func on_alien_died(alien: AlienShip) -> void:
 		_bottom_alien_in_each_column[col] = next_alien
 		if next_alien != null:
 			next_alien.power_up_weapon(min(_rnd.randf(), _rnd.randf()))
+	if _aliens.is_empty():
+		_on_level_won()
 
 
 func _find_lowest_alien_in_row(col: int) -> AlienShip:
@@ -172,6 +204,7 @@ func _create_alien(x: float, y: float, col: int) -> void:
 
 
 func _create_player() -> void:
+	assert(_player == null)
 	_player = PLAYER.instantiate()
 	_player.initialize(self)
 	_player_lives = 3
@@ -259,6 +292,8 @@ func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x
 
 
 func on_bunker_destroyed(bunker: Bunker) -> void:
+	assert(_bunkers.has(bunker))
+	_bunkers.erase(bunker)
 	bunker.queue_free()
 
 
@@ -271,6 +306,24 @@ func on_player_death() -> void:
 		_on_game_over()
 
 
+func _on_level_won() -> void:
+	_time_dilation_array = [[0, 1, -1]]
+	var tween: Tween = create_tween()
+	%Congrats.show()
+	%Congrats.modulate.a = 0
+	tween.tween_property(%Congrats, "modulate:a", 1, 3)
+	_player.queue_free()
+	_player = null
+	if _bunkers.is_empty():
+		tween.tween_interval(1.5)
+	else:
+		for bunker: Bunker in _bunkers:
+			tween.tween_callback(Callable(bunker, "queue_free"))
+			tween.tween_interval(0.25)
+		_bunkers = []
+	tween.tween_callback(Callable(self, "initialize").bind(_difficulty + 1))
+
+
 func _on_game_over() -> void:
 	_game_over = true
 	_time_dilation_array = [[0, 1, -1]]
@@ -278,6 +331,27 @@ func _on_game_over() -> void:
 	%GameOverLabel.show()
 	%GameOverLabel.modulate.a = 0
 	tween.tween_property(%GameOverLabel, "modulate:a", 1, 3)
+	tween.tween_interval(1.5)
+	tween.tween_callback(Callable(self, "_on_exit_board"))
+
+
+func _update_upgrades() -> void:
+	if _aliens.is_empty():
+		print("NEED TO IMPLEMENT UPGRADES: minor=%d major=%d" % [_minor_currency, _bunkers.size()])
+	else:
+		print("NEED TO IMPLEMENT UPGRADES: minor=%d" % [_minor_currency])
+	_menu_state_machine.switch_state("MainMenu")
+
+
+func _on_exit_board() -> void:
+	var root: Window = get_tree().root
+	var current_scene: Node = get_tree().current_scene
+	assert(current_scene is Board)
+	_update_upgrades()
+	root.add_child(_menu_state_machine)
+	get_tree().current_scene = _menu_state_machine
+	if current_scene != null:
+		current_scene.queue_free()
 
 
 func _place_player_in_spawn_location() -> void:

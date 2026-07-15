@@ -16,3 +16,8 @@ func die_against_alien_bullet(_hit_offset: Vector2) -> void:
 func get_damage() -> int:
 	assert(false, "MUST IMPLEMENT")
 	return 5
+
+
+func is_dead() -> bool:
+	assert(false, "MUST IMPLEMENT")
+	return false

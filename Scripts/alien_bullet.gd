@@ -1,12 +1,14 @@
 class_name AlienBullet extends Bullet
 
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
-
 const SPEED: float = 200
+
+
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 var _cached_shape: ConvexPolygonShape2D
 var _floor: float
 var _board: Board
+var _is_dead: bool = false
 
 
 func _ready() -> void:
@@ -26,7 +28,14 @@ func initialize(flr: float, board: Board, rnd: RandomNumberGenerator) -> void:
 	$AudioStreamPlayer2D.pitch_scale *= (0.85 + rnd.randf() * 0.3)
 
 
+func is_dead() -> bool:
+	return _is_dead
+
+
 func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
+	if _is_dead:
+		return
+	_is_dead = true
 	#_board.start_time_dilation(0.05)
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset
@@ -36,6 +45,9 @@ func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 
 # Called when a player's bullet hits our bullet
 func on_bullet_impact(player_bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
+	if _is_dead:
+		return
+	_is_dead = true
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = point
 	_board.add_child(explosion)

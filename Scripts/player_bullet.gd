@@ -6,6 +6,7 @@ const SPEED: float = 350
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 var _cached_shape: ConvexPolygonShape2D
 var _board: Board
+var _is_dead: bool = false
 
 
 func _ready() -> void:
@@ -25,6 +26,9 @@ func get_damage() -> int:
 
 
 func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
+	if _is_dead:
+		return
+	_is_dead = true
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset
 	bunker.add_child(explosion)
@@ -32,6 +36,9 @@ func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 
 
 func die_against_alien(_alien: AlienShip, hit_offset: Vector2) -> void:
+	if _is_dead:
+		return
+	_is_dead = true
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset
 	_board.add_child(explosion)
@@ -39,10 +46,17 @@ func die_against_alien(_alien: AlienShip, hit_offset: Vector2) -> void:
 
 
 func die_against_alien_bullet(hit_offset: Vector2) -> void:
+	if _is_dead:
+		return
+	_is_dead = true
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = hit_offset
 	_board.add_child(explosion)
 	queue_free()
+
+
+func is_dead() -> bool:
+	return _is_dead
 
 
 func _physics_process(delta: float) -> void:

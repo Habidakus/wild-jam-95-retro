@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b85obl6fihjuk" path="res://addons/statemachine/StateMachine.gd" id="1_3shub"]
 [ext_resource type="Script" uid="uid://b7syegd82vm1t" path="res://addons/statemachine/StateMachineState_AnyKeyToContinue.gd" id="2_fbiki"]
 [ext_resource type="Script" uid="uid://b6dg5bqmn1c7c" path="res://Scripts/States/main_menu.gd" id="3_h14px"]
-[ext_resource type="Script" uid="uid://bbl41p6swfbs4" path="res://addons/statemachine/StateMachineState.gd" id="4_m63qk"]
+[ext_resource type="Script" uid="uid://hcxkiffajh7k" path="res://Scenes/States/play.gd" id="4_3shub"]
 
 [node name="StateMachine" type="Node" unique_id=398697420 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("1_3shub")
@@ -115,7 +115,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("4_m63qk")
+script = ExtResource("4_3shub")
 metadata/_custom_type_script = "uid://bbl41p6swfbs4"
 
 [node name="Credits" type="Control" parent="." unique_id=1553422954 node_paths=PackedStringArray("next_state")]

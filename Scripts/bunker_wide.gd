@@ -52,6 +52,8 @@ func _apply_damage(amount: int, impact_point: Vector2i) -> void:
 
 
 func on_ship_impact(alien: AlienShip) -> void:
+	if alien.is_dead():
+		return
 	var s: Vector2 = _bitmap.get_size()
 	var dx: int = int(s.x / 2.0 + alien.position.x - position.x)
 	var dy: int = int(s.y / 2.0 + alien.position.y - position.y)
@@ -60,6 +62,8 @@ func on_ship_impact(alien: AlienShip) -> void:
 
 
 func on_bullet_impact(bullet: Bullet, point: Vector2, velocity: Vector2) -> void:
+	if bullet.is_dead():
+		return
 	var s: Vector2 = _bitmap.get_size()
 	var dx: int = int(s.x / 2.0 + point.x - position.x)
 	if velocity.y > 0:

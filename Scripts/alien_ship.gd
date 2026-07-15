@@ -9,6 +9,7 @@ var _can_shoot: bool = false
 var _weapon_cooldown: float
 var _board: Board
 var _col: int
+var _is_dead: bool = false
 
 
 func initialize(board: Board, col: int) -> void:
@@ -30,11 +31,19 @@ func power_up_weapon(power_up_length: float) -> void:
 
 
 func on_bullet_impact(bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
+	if bullet.is_dead():
+		return
 	bullet.die_against_alien(self, point)
 	die()
 
 
+func is_dead() -> bool:
+	return _is_dead
+
+
 func die() -> void:
+	assert(_is_dead == false)
+	_is_dead = true
 	#_board.start_time_dilation(0.05)
 	var explosion: CPUParticles2D = EXPLOSION_SCENE.instantiate()
 	explosion.position = position

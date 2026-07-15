@@ -63,6 +63,9 @@ func _create_bunkers() -> void:
 
 func _create_aliens() -> void:
 	assert(_aliens.is_empty())
+	_alien_speed_multiple = 1.0
+	_alien_dir = AlienMovement.RIGHT
+	_bottom_alien_in_each_column = []
 	var placement: Vector2i = Vector2i(int(size.x / float(_alien_cols + 5)), int(size.y / float(_alien_rows + 5)))
 	var aid: int = 0
 	for x: int in range(_alien_cols):
@@ -72,6 +75,7 @@ func _create_aliens() -> void:
 			_aliens.back().name = str("Alien#%d" % [aid])
 	for alien: AlienShip in _bottom_alien_in_each_column:
 		alien.power_up_weapon(_rnd.randf())
+
 
 func _create_starfield() -> void:
 	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)

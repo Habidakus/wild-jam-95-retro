@@ -1,13 +1,12 @@
 Colors:
   Maybe:
-    Emerald:        50c878
-    Orchid:         c850A0
-    blueish:        5064c8
+	Emerald:        50c878
+	Orchid:         c850A0
+	blueish:        5064c8
 
-    goldish:        c8b450
-    green:          a0c850
-    brick:          c87850
-
+	goldish:        c8b450  HSV: 50/60/78.4
+	green:          a0c850
+	brick:          c87850
 
 Isolate Your Vector Graphics
   Because vector graphics turn into standard textures upon import, Godot will treat them like pixel art unless you tell it otherwise. To keep your vector graphics smooth:

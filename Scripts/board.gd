@@ -5,6 +5,7 @@ const PLAYER_BULLET = preload("res://Scenes/player_bullet.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
 const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
 const PLAYER = preload("res://Scenes/player.tscn")
+const COIN_TEXTURE = preload("res://Images/coin.svg")
 const ALIEN_SPEED: float = 40
 const ALIEN_DROP_DISTANCE: float = 40
 const STAR_ROTATION_AMOUNT: float = 0.0015
@@ -32,6 +33,7 @@ var _bottom_alien_in_each_column: Array[AlienShip] = []
 var _alien_downward_goal: float = 0
 var _alien_speed_multiple: float = 1.0
 var _minor_currency: int = 0
+var _major_currency: int = 0
 var _difficulty: int = 0
 
 
@@ -304,6 +306,9 @@ func _process(delta: float) -> void:
 	_time_dilation_array = new_td
 	%Parallax2D.autoscroll = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
 	$Background.rotation += delta * _time_dilation * STAR_ROTATION_AMOUNT
+	if Input.is_key_pressed(KEY_P) and not _aliens.is_empty():
+		for alien: AlienShip in _aliens:
+			alien.die()
 
 
 func _physics_process(delta: float) -> void:
@@ -376,14 +381,48 @@ func _on_level_won() -> void:
 	tween.tween_property(%Congrats, "modulate:a", 1, 3)
 	_player.queue_free()
 	_player = null
+	var wait_time: float = 0
 	if _bunkers.is_empty():
-		tween.tween_interval(1.5)
+		wait_time = 1.5
 	else:
 		for bunker: Bunker in _bunkers:
-			tween.tween_callback(Callable(bunker, "queue_free"))
-			tween.tween_interval(0.25)
+			wait_time = max(wait_time, _cash_in_bunker(tween, bunker))
 		_bunkers = []
+	tween.tween_interval(wait_time)
 	tween.tween_callback(Callable(self, "initialize").bind(_difficulty + 1))
+
+
+func _cash_in_bunker(coord_tween: Tween, bunker: Bunker) -> float:
+	_major_currency += 1
+	# TODO: Spawn coin on fading bunker
+	var coin_sprite: Sprite2D = Sprite2D.new()
+	var bunker_size: Vector2 = bunker._sprite.texture.get_size()
+	coin_sprite.position = bunker.position + Vector2.UP * 25 # + bunker_size / 2
+	coin_sprite.centered = true
+	coin_sprite.texture = COIN_TEXTURE
+	var ratio: float = bunker_size.y / coin_sprite.texture.get_size().y
+	coin_sprite.scale = Vector2(ratio, ratio)
+	const FADE_TIME: float = 1.0
+	coord_tween.tween_callback(Callable(self, "_spawn_coin").bind(coin_sprite, FADE_TIME))
+	coord_tween.parallel()
+	coord_tween.tween_property(bunker, "modulate:a", 0, FADE_TIME / 2.0)
+	coord_tween.tween_callback(Callable(bunker, "queue_free"))
+	#coord_tween.tween_interval(FADE_TIME / 2.0)
+	return FADE_TIME / 2.0
+
+
+func _spawn_coin(coin_sprite: Sprite2D, time: float) -> void:
+	var tween: Tween = create_tween()
+	add_child(coin_sprite)
+	#coin_sprite.modulate.a = 0.01
+	#tween.tween_property(coin_sprite, "modulate:a", 0.0, 0.01)
+	#tween.tween_interval(0.01)
+	tween.tween_property(coin_sprite, "modulate:a", 1.0, time / 4.0)
+	tween.parallel()
+	tween.tween_property(coin_sprite, "position", coin_sprite.position + Vector2.UP	* 150, time)
+	tween.parallel()
+	tween.tween_property(coin_sprite, "modulate:a", 0.0, time)
+	tween.tween_callback(Callable(coin_sprite, "queue_free"))
 
 
 func _on_game_over() -> void:
@@ -398,10 +437,7 @@ func _on_game_over() -> void:
 
 
 func _update_upgrades() -> void:
-	if _aliens.is_empty():
-		print("NEED TO IMPLEMENT UPGRADES: minor=%d major=%d" % [_minor_currency, _bunkers.size()])
-	else:
-		print("NEED TO IMPLEMENT UPGRADES: minor=%d" % [_minor_currency])
+	print("NEED TO IMPLEMENT UPGRADES: minor=%d major=%d" % [_minor_currency, _major_currency])
 	_menu_state_machine.switch_state("MainMenu")
 
 

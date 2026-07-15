@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://1mcj38xfyn4v"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_fuf7o"]
+
+[resource]
+script = ExtResource("1_fuf7o")
+button_name = "Even Wider Bunkers"
+description = "All good gunners know to take cover, better gunners hide behind wider bunkers. Are you a better gunner? Well? Are you?!"
+buff_type = 3
+strength = 1.0
+prereq_buffs = Array[ExtResource("1_fuf7o")]([null])
+cost_minor = 100
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

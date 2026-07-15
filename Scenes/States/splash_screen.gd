@@ -7,7 +7,7 @@ func _ready() -> void:
 	starfield_image.fill(Color.BLACK)
 	
 	for i: int in range(2):
-		Board._add_galaxy(starfield_image, 3000, _rnd)
+		Board._add_galaxy(starfield_image, 1000 + _rnd.randi() % 2000, _rnd)
 	for i: int in range(7):
 		Board._add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true, _rnd)
 	Board._add_stars(starfield_image, 1000, 0, 0, false, _rnd)

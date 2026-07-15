@@ -81,7 +81,7 @@ func _create_starfield() -> void:
 	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)
 	starfield_image.fill(Color.BLACK)
 	for i: int in range(3):
-		_add_galaxy(starfield_image, 3000, _rnd)
+		_add_galaxy(starfield_image, 500 + _rnd.randi() % 2500, _rnd)
 	for i: int in range(7):
 		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true, _rnd)
 	_add_stars(starfield_image, 1000, 0, 0, false, _rnd)
@@ -122,9 +122,12 @@ static func _add_galaxy(image: Image, count: int, rnd: RandomNumberGenerator) ->
 	var isize: Vector2 = image.get_size()
 	var cx: int = rnd.randi() % int(isize.x)
 	var cy: int = rnd.randi() % int(isize.y)
+	var tilt_x: float = rnd.randf() * PI / 3.0
+	var tilt_y: float = rnd.randf() * PI / 3.0
 	#var galaxy_angle: float = rnd.randf() * TAU
 	#var galaxy_vector: Vector2 = Vector2(sin(galaxy_angle), cos(galaxy_angle))
 	var max_dist: float = rnd.randf() * 100.0 + 50.0
+	var spiral_offset: float = rnd.randf() * TAU
 	var spiral_dir: bool = (rnd.randi() % 2) == 1
 	for i: int in range(count):
 		var dist: float = rnd.randf() * max_dist
@@ -142,9 +145,15 @@ static func _add_galaxy(image: Image, count: int, rnd: RandomNumberGenerator) ->
 		else:
 			radian -= dist / max_dist
 		radian *= PI
-		#dist *= abs(Vector2(sin(radian), cos(radian)).dot(galaxy_vector))
-		var px: int = int(isize.x + cx + sin(radian) * dist) % int(isize.x)
-		var py: int = int(isize.y + cy + cos(radian) * dist) % int(isize.y)
+		radian += spiral_offset
+		var sx: float = cx + sin(radian) * dist
+		var sy: float = cy + cos(radian) * dist
+		#rotate in 3d space
+		var rx: float = sx * cos(tilt_y) + sy * sin(tilt_x) * sin(tilt_y)
+		var ry: float = sy * cos(tilt_x)
+		
+		var px: int = int(isize.x + rx) % int(isize.x)
+		var py: int = int(isize.y + ry) % int(isize.y)
 		var hh: float = 0.33 + image.get_pixel(px, py).get_luminance()
 		if hh > 1.0:
 			hh = 1.0

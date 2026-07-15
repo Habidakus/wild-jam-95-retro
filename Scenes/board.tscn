@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://de0c261djrols"]
 
 [ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
+[ext_resource type="AudioStream" uid="uid://d6p50lodrap8" path="res://Sounds/WinkOut002.wav" id="2_2wvcj"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tnbny"]
 font_size = 32
@@ -77,3 +78,7 @@ grow_horizontal = 0
 text = "3"
 label_settings = SubResource("LabelSettings_tnbny")
 horizontal_alignment = 2
+
+[node name="CoinNoise" type="AudioStreamPlayer2D" parent="." unique_id=409955532]
+stream = ExtResource("2_2wvcj")
+bus = &"VFX"

@@ -13,6 +13,7 @@ func _ready() -> void:
 	_cached_shape = ConvexPolygonShape2D.new()
 	_cached_shape.points = _collision_poly.polygon
 	$AudioStreamPlayer2D.play()
+	add_to_group("bullet")
 
 
 func initialize(board: Board, rnd: RandomNumberGenerator) -> void:

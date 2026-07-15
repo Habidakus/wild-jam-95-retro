@@ -378,9 +378,10 @@ func _on_level_won() -> void:
 	var tween: Tween = create_tween()
 	%Congrats.show()
 	%Congrats.modulate.a = 0
-	tween.tween_property(%Congrats, "modulate:a", 1, 3)
+	tween.tween_property(%Congrats, "modulate:a", 1, 2)
 	_player.queue_free()
 	_player = null
+	get_tree().call_group("bullet", "queue_free")
 	var wait_time: float = 0
 	if _bunkers.is_empty():
 		wait_time = 1.5
@@ -418,10 +419,9 @@ func _spawn_coin(coin_sprite: Sprite2D, time: float) -> void:
 	#tween.tween_property(coin_sprite, "modulate:a", 0.0, 0.01)
 	#tween.tween_interval(0.01)
 	tween.tween_property(coin_sprite, "modulate:a", 1.0, time / 4.0)
-	tween.parallel()
-	tween.tween_property(coin_sprite, "position", coin_sprite.position + Vector2.UP	* 150, time)
-	tween.parallel()
-	tween.tween_property(coin_sprite, "modulate:a", 0.0, time)
+	tween.parallel().tween_callback(Callable($CoinNoise, "play"))
+	tween.parallel().tween_property(coin_sprite, "position", coin_sprite.position + Vector2.UP	* 150, time)
+	tween.parallel().tween_property(coin_sprite, "modulate:a", 0.0, time)
 	tween.tween_callback(Callable(coin_sprite, "queue_free"))
 
 

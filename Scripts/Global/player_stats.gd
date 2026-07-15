@@ -1,12 +1,12 @@
 extends Node
 
 
-class BuffTupple:
-	var buff_type: PlayerBuff.BuffType
-	var buff_strength: float
-	func _init(bt: PlayerBuff.BuffType, bs: float) -> void:
-		buff_type = bt
-		buff_strength = bs
+#class BuffTupple:
+	#var buff_type: PlayerBuff.BuffType
+	#var buff_strength: float
+	#func _init(bt: PlayerBuff.BuffType, bs: float) -> void:
+		#buff_type = bt
+		#buff_strength = bs
 
 
 const STAT_FILE: String = "user://save_game.json"
@@ -42,8 +42,8 @@ func load_game() -> void:
 	var file: FileAccess = FileAccess.open(STAT_FILE, FileAccess.READ)
 	var path: String = ProjectSettings.globalize_path(STAT_FILE)
 	if not file:
-		var error: Error = FileAccess.get_open_error()
-		print("LOAD ERROR accessing %s: %s" % [path, error])
+		var file_error: Error = FileAccess.get_open_error()
+		print("LOAD ERROR accessing %s: %s" % [path, file_error])
 		reset()
 		return
 	var file_text: String = file.get_as_text()

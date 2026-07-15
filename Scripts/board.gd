@@ -65,6 +65,7 @@ func initialize(difficulty: int) -> void:
 	_create_aliens()
 	_create_starfield()
 	_create_player()
+	MusicPlayer.play_next_track()
 
 
 func _create_bunkers() -> void:

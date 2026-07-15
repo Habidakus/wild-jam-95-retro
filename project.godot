@@ -22,6 +22,7 @@ buses/default_bus_layout="uid://mpq4babnh0gr"
 [autoload]
 
 PlayerStats="*uid://3a1ud0hb5qdm"
+MusicPlayer="*uid://bnfmpsjmalejn"
 
 [display]
 

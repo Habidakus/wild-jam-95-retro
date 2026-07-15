@@ -13,3 +13,4 @@ func _ready() -> void:
 	Board._add_stars(starfield_image, 1000, 0, 0, false, _rnd)
 	var starfield_texture: Texture = ImageTexture.create_from_image(starfield_image)
 	$ColorRect/TextureRect.texture = starfield_texture
+	MusicPlayer.play_next_track()

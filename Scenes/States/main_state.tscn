@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b85obl6fihjuk" path="res://addons/statemachine/StateMachine.gd" id="1_3shub"]
 [ext_resource type="Script" uid="uid://b7syegd82vm1t" path="res://addons/statemachine/StateMachineState_AnyKeyToContinue.gd" id="2_fbiki"]
+[ext_resource type="Script" uid="uid://doljrg6ukeyjn" path="res://Scenes/States/splash_screen.gd" id="2_h14px"]
 [ext_resource type="Script" uid="uid://b6dg5bqmn1c7c" path="res://Scripts/States/main_menu.gd" id="3_h14px"]
 [ext_resource type="Script" uid="uid://hcxkiffajh7k" path="res://Scenes/States/play.gd" id="4_3shub"]
 
@@ -11,7 +12,6 @@ initial_state = NodePath("SplashScreen")
 metadata/_custom_type_script = "uid://b85obl6fihjuk"
 
 [node name="SplashScreen" type="Control" parent="." unique_id=1706461537 node_paths=PackedStringArray("next_state")]
-visible = false
 texture_filter = 2
 layout_mode = 3
 anchors_preset = 15
@@ -21,9 +21,9 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.2268928
 pivot_offset = Vector2(576, 324)
-script = ExtResource("2_fbiki")
+script = ExtResource("2_h14px")
 next_state = NodePath("../MainMenu")
-time_out_in_seconds = 2.5
+time_out_in_seconds = 12.5
 fade_out = true
 fade_time = 0.5
 metadata/_custom_type_script = "uid://b7syegd82vm1t"
@@ -38,6 +38,14 @@ grow_vertical = 2
 rotation = 0.2268928
 pivot_offset = Vector2(576, 324)
 color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="SplashScreen/ColorRect" unique_id=1062127698]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="SplashScreen" unique_id=1140315610]
 layout_mode = 1
@@ -119,6 +127,7 @@ script = ExtResource("4_3shub")
 metadata/_custom_type_script = "uid://bbl41p6swfbs4"
 
 [node name="Credits" type="Control" parent="." unique_id=1553422954 node_paths=PackedStringArray("next_state")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

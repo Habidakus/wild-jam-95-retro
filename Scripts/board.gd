@@ -80,9 +80,11 @@ func _create_aliens() -> void:
 func _create_starfield() -> void:
 	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)
 	starfield_image.fill(Color.BLACK)
+	for i: int in range(3):
+		_add_galaxy(starfield_image, 3000, _rnd)
 	for i: int in range(7):
-		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true)
-	_add_stars(starfield_image, 1000, 0, 0, false)
+		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true, _rnd)
+	_add_stars(starfield_image, 1000, 0, 0, false, _rnd)
 	var starfield_texture: Texture = ImageTexture.create_from_image(starfield_image)
 	%StarfieldImage.texture = starfield_texture
 	%Parallax2D.repeat_size = starfield_image.get_size()
@@ -116,7 +118,40 @@ func _find_lowest_alien_in_row(col: int) -> AlienShip:
 	return ret_val
 
 
-func _add_stars(image: Image, count: int, center_x: float, center_y: float, force: bool) -> void:
+static func _add_galaxy(image: Image, count: int, rnd: RandomNumberGenerator) -> void:
+	var isize: Vector2 = image.get_size()
+	var cx: int = rnd.randi() % int(isize.x)
+	var cy: int = rnd.randi() % int(isize.y)
+	#var galaxy_angle: float = rnd.randf() * TAU
+	#var galaxy_vector: Vector2 = Vector2(sin(galaxy_angle), cos(galaxy_angle))
+	var max_dist: float = rnd.randf() * 100.0 + 50.0
+	var spiral_dir: bool = (rnd.randi() % 2) == 1
+	for i: int in range(count):
+		var dist: float = rnd.randf() * max_dist
+		var radian: float = rnd.randf()
+		for j: int in range(dist / 5):
+			var nrad: float = rnd.randf()
+			if nrad < radian:
+				radian = nrad
+		if rnd.randi() % 2 == 1:
+			radian += 1
+		if rnd.randi() % 2 == 1:
+			radian = -radian
+		if spiral_dir:
+			radian += dist / max_dist
+		else:
+			radian -= dist / max_dist
+		radian *= PI
+		#dist *= abs(Vector2(sin(radian), cos(radian)).dot(galaxy_vector))
+		var px: int = int(isize.x + cx + sin(radian) * dist) % int(isize.x)
+		var py: int = int(isize.y + cy + cos(radian) * dist) % int(isize.y)
+		var hh: float = 0.33 + image.get_pixel(px, py).get_luminance()
+		if hh > 1.0:
+			hh = 1.0
+		image.set_pixel(px, py, Color(hh,hh,hh))
+
+
+static func _add_stars(image: Image, count: int, center_x: float, center_y: float, force: bool, rnd: RandomNumberGenerator) -> void:
 	var isize: Vector2 = image.get_size()
 	var center_point: Vector2 = isize / 2.0
 	for i: int in range(count):
@@ -124,14 +159,14 @@ func _add_stars(image: Image, count: int, center_x: float, center_y: float, forc
 		var sy: float = -1
 		if force:
 			for j: int in range(15):
-				var sx_a: float = _rnd.randf() * isize.x
-				var sy_a: float = _rnd.randf() * isize.y
+				var sx_a: float = rnd.randf() * isize.x
+				var sy_a: float = rnd.randf() * isize.y
 				if sx < 0 or Vector2(sx_a, sy_a).distance_squared_to(center_point) < Vector2(sx, sy).distance_squared_to(center_point):
 					sx = sx_a
 					sy = sy_a
 		else:
-			sx = _rnd.randf() * isize.x
-			sy = _rnd.randf() * isize.y
+			sx = rnd.randf() * isize.x
+			sy = rnd.randf() * isize.y
 		sx += center_x - center_point.x
 		sy += center_y - center_point.y
 		if sx > isize.x:
@@ -148,7 +183,7 @@ func _add_stars(image: Image, count: int, center_x: float, center_y: float, forc
 			_add_small_star(image, sx, sy)
 
 
-func _add_small_star(image: Image, sx: float, sy: float) -> void:
+static func _add_small_star(image: Image, sx: float, sy: float) -> void:
 	var isize: Vector2 = image.get_size()
 	var lx: int = int(sx)
 	var ly: int = int(sy)
@@ -166,7 +201,7 @@ func _add_small_star(image: Image, sx: float, sy: float) -> void:
 	image.set_pixel(hx, hy, Color(hh, hh, hh))
 
 
-func _add_large_star(image: Image, sx: float, sy: float) -> void:
+static func _add_large_star(image: Image, sx: float, sy: float) -> void:
 	var isize: Vector2 = image.get_size()
 	var lx: int = int(sx)
 	var ly: int = int(sy)

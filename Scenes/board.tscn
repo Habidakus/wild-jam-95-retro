@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_tnbny"]
+font_size = 32
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
 anchors_preset = 15
@@ -43,6 +48,7 @@ vertical_alignment = 1
 
 [node name="Congrats" type="Label" parent="." unique_id=679883725]
 unique_name_in_owner = true
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 15
@@ -57,3 +63,17 @@ text = "Brace  yourself
 there  are  more"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Lives" type="Label" parent="." unique_id=1506430452]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -47.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 49.0
+grow_horizontal = 0
+text = "3"
+label_settings = SubResource("LabelSettings_tnbny")
+horizontal_alignment = 2

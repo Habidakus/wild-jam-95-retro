@@ -16,7 +16,7 @@ enum AlienMovement { RIGHT, DOWN, LEFT }
 
 var _menu_state_machine: StateMachine
 var _player: Player
-var _player_lives: int
+var _player_lives: int = 3
 var _game_over: bool = false
 var _bunker_count: int = 7
 var _rnd: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -37,6 +37,21 @@ var _difficulty: int = 0
 
 func _ready() -> void:
 	initialize(0)
+	_set_player_lives(3)
+
+
+func _set_player_lives(amount: int) -> void:
+	if _player_lives == amount:
+		return
+	_player_lives = amount
+	var tween: Tween = create_tween()
+	if amount > 0:
+		tween.tween_property($Lives, "modulate:a", 0, 0.1)
+		$Lives.text = str(amount)
+		tween.tween_property($Lives, "modulate:a", 1, 0.1)
+		tween.tween_property($Lives, "modulate:a", 0.5, 2)
+	else:
+		tween.tween_property($Lives, "modulate:a", 0, 0.5)
 
 
 func initialize(difficulty: int) -> void:
@@ -255,7 +270,6 @@ func _create_player() -> void:
 	assert(_player == null)
 	_player = PLAYER.instantiate()
 	_player.initialize(self)
-	_player_lives = 3
 	add_child(_player)
 	_place_player_in_spawn_location()
 
@@ -347,7 +361,7 @@ func on_bunker_destroyed(bunker: Bunker) -> void:
 
 func on_player_death() -> void:
 	_place_player_in_spawn_location()
-	_player_lives -= 1
+	_set_player_lives(_player_lives - 1)
 	if _player_lives > 0:
 		_player.start_respawn(1.0)
 	elif not _game_over:

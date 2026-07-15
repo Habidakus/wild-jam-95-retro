@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="RogueSpaceInvaders"
-run/main_scene="uid://de0c261djrols"
+run/main_scene="uid://bpofbm53xn7mt"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -22,6 +22,10 @@ buses/default_bus_layout="uid://mpq4babnh0gr"
 [display]
 
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/statemachine/plugin.cfg")
 
 [gui]
 

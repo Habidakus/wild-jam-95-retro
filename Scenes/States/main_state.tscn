@@ -1,0 +1,246 @@
+[gd_scene format=3 uid="uid://bpofbm53xn7mt"]
+
+[ext_resource type="Script" uid="uid://b85obl6fihjuk" path="res://addons/statemachine/StateMachine.gd" id="1_3shub"]
+[ext_resource type="Script" uid="uid://b7syegd82vm1t" path="res://addons/statemachine/StateMachineState_AnyKeyToContinue.gd" id="2_fbiki"]
+[ext_resource type="Script" uid="uid://b6dg5bqmn1c7c" path="res://Scripts/States/main_menu.gd" id="3_h14px"]
+[ext_resource type="Script" uid="uid://bbl41p6swfbs4" path="res://addons/statemachine/StateMachineState.gd" id="4_m63qk"]
+
+[node name="StateMachine" type="Node" unique_id=398697420 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("1_3shub")
+initial_state = NodePath("SplashScreen")
+metadata/_custom_type_script = "uid://b85obl6fihjuk"
+
+[node name="SplashScreen" type="Control" parent="." unique_id=1706461537 node_paths=PackedStringArray("next_state")]
+visible = false
+texture_filter = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.2268928
+pivot_offset = Vector2(576, 324)
+script = ExtResource("2_fbiki")
+next_state = NodePath("../MainMenu")
+time_out_in_seconds = 2.5
+fade_out = true
+fade_time = 0.5
+metadata/_custom_type_script = "uid://b7syegd82vm1t"
+
+[node name="ColorRect" type="ColorRect" parent="SplashScreen" unique_id=1532881454]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.2268928
+pivot_offset = Vector2(576, 324)
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="SplashScreen" unique_id=1140315610]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 128
+text = "Space-lite
+Invaders"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenu" type="Control" parent="." unique_id=946545521]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_h14px")
+metadata/_custom_type_script = "uid://bbl41p6swfbs4"
+
+[node name="ColorRect" type="ColorRect" parent="MainMenu" unique_id=1192924228]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu" unique_id=1532927107]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -14.5
+offset_right = 24.0
+offset_bottom = 14.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 48
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=231112736]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Play"
+
+[node name="UpgradeButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=239692150]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Upgrade"
+
+[node name="CreditsButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=367093061]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Credits"
+
+[node name="ExitButton" type="Button" parent="MainMenu/VBoxContainer" unique_id=413821630]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Exit"
+
+[node name="Play" type="Control" parent="." unique_id=965801993]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_m63qk")
+metadata/_custom_type_script = "uid://bbl41p6swfbs4"
+
+[node name="Credits" type="Control" parent="." unique_id=1553422954 node_paths=PackedStringArray("next_state")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_fbiki")
+next_state = NodePath("../MainMenu")
+fade_in = true
+fade_out = true
+fade_time = 0.5
+metadata/_custom_type_script = "uid://b7syegd82vm1t"
+
+[node name="ColorRect" type="ColorRect" parent="Credits" unique_id=1156102438]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+color = Color(0, 0, 0, 1)
+
+[node name="GridContainer" type="GridContainer" parent="Credits" unique_id=1932853448]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.5
+offset_top = -48.0
+offset_right = 92.5
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 24
+columns = 2
+
+[node name="Programmer" type="Label" parent="Credits/GridContainer" unique_id=920122562]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Code:"
+horizontal_alignment = 2
+
+[node name="JasonAbbott" type="Label" parent="Credits/GridContainer" unique_id=1950317558]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Jason Abbott"
+
+[node name="Art" type="Label" parent="Credits/GridContainer" unique_id=583369605]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Art:"
+horizontal_alignment = 2
+
+[node name="JasonAbbott2" type="Label" parent="Credits/GridContainer" unique_id=1392493934]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Jason Abbott"
+
+[node name="Sound" type="Label" parent="Credits/GridContainer" unique_id=992463650]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Sound:"
+horizontal_alignment = 2
+
+[node name="JasonAbbott3" type="Label" parent="Credits/GridContainer" unique_id=1585967204]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Jason Abbott"
+
+[node name="Music" type="Label" parent="Credits/GridContainer" unique_id=1447190650]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Music:"
+horizontal_alignment = 2
+
+[node name="OvaniSound" type="Label" parent="Credits/GridContainer" unique_id=1773257456]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Ovani Sound"
+
+[node name="Font" type="Label" parent="Credits/GridContainer" unique_id=800630038]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Font:"
+horizontal_alignment = 2
+
+[node name="MattMcInerney" type="Label" parent="Credits/GridContainer" unique_id=1435417962]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Matt McInerney"
+
+[node name="Engine" type="Label" parent="Credits/GridContainer" unique_id=29543955]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Engine:"
+horizontal_alignment = 2
+
+[node name="Godot" type="Label" parent="Credits/GridContainer" unique_id=1203491349]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Godot 4.6"
+
+[node name="Label" type="Label" parent="Credits" unique_id=844708308]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -29.0
+offset_right = 71.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "(press ANY key)"
+
+[connection signal="button_up" from="MainMenu/VBoxContainer/PlayButton" to="MainMenu" method="_on_play_button_button_up"]
+[connection signal="button_up" from="MainMenu/VBoxContainer/UpgradeButton" to="MainMenu" method="_on_upgrade_button_button_up"]
+[connection signal="button_up" from="MainMenu/VBoxContainer/CreditsButton" to="MainMenu" method="_on_credits_button_button_up"]
+[connection signal="button_up" from="MainMenu/VBoxContainer/ExitButton" to="MainMenu" method="_on_exit_button_button_up"]

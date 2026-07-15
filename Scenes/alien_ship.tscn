@@ -36,6 +36,7 @@ script = ExtResource("1_a47bc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=455135240]
 material = SubResource("ShaderMaterial_pv8xr")
+instance_shader_parameters/target_color = Color(0.78431374, 0.3137255, 0.627451, 1)
 sprite_frames = SubResource("SpriteFrames_6ya21")
 autoplay = "default"
 frame_progress = 0.6636941

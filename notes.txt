@@ -56,3 +56,7 @@ Enemy Upgrades:
   Wider Bullet
   Rate of Fire
 
+
+Juice:
+  - buttons
+  - planets & galaxies for the starmap

@@ -58,6 +58,8 @@ func _set_player_lives(amount: int) -> void:
 		tween.tween_property($Lives, "modulate:a", 0, 0.5)
 
 
+var _primary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
+var _secondary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 func initialize(difficulty: int) -> void:
 	_player_bullet_speed_multiple = (1.0 + PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_BULLET_SPEED))
 	_time_dilation_array = []
@@ -69,6 +71,28 @@ func initialize(difficulty: int) -> void:
 	_create_starfield()
 	_create_player()
 	MusicPlayer.play_next_track()
+	_primary_alien_type = AlienShip.ShipType.Regular
+	_secondary_alien_type = AlienShip.ShipType.Regular
+	_alien_speed_multiple = 1.0 + floor(difficulty / 4.0) * 0.33
+	match difficulty % 4:
+		0:
+			_primary_alien_type = AlienShip.ShipType.Regular
+		1:
+			_primary_alien_type = AlienShip.ShipType.Thin
+		2:
+			_primary_alien_type = AlienShip.ShipType.Acid
+		3:
+			_primary_alien_type = AlienShip.ShipType.Shield
+	if difficulty > 8:
+		match _primary_alien_type:
+			AlienShip.ShipType.Regular:
+				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Acid
+			AlienShip.ShipType.Shield:
+				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Acid
+			AlienShip.ShipType.Acid:
+				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Shield
+			AlienShip.ShipType.Thin:
+				_secondary_alien_type = AlienShip.ShipType.Acid if difficulty % 2 == 0 else AlienShip.ShipType.Shield
 
 
 func _create_bunkers() -> void:
@@ -84,7 +108,6 @@ func _create_bunkers() -> void:
 
 func _create_aliens() -> void:
 	assert(_aliens.is_empty())
-	_alien_speed_multiple = 1.0
 	_alien_dir = AlienMovement.RIGHT
 	_bottom_alien_in_each_column = []
 	var placement: Vector2i = Vector2i(int(size.x / float(_alien_cols + 5)), int(size.y / float(_alien_rows + 5)))
@@ -263,7 +286,11 @@ static func _add_large_star(image: Image, sx: float, sy: float) -> void:
 func _create_alien(x: float, y: float, col: int, row: int) -> void:
 	var alien: AlienShip = ALIEN_SHIP.instantiate()
 	alien.position = Vector2(x, y)
-	var alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular if col != 1 and col != 9 else AlienShip.ShipType.Shield
+	var alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
+	if col == 2 or col == 5 or col == 8:
+		alien_type = _primary_alien_type
+	elif col == 1 or col == 9:
+		alien_type = _secondary_alien_type
 	alien.initialize(self, col, row, alien_type)
 	add_child(alien)
 	_aliens.append(alien)

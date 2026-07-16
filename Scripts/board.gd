@@ -37,6 +37,8 @@ var _minor_currency: int = 0
 var _major_currency: int = 0
 var _difficulty: int = 0
 var _player_bullet_speed_multiple: float = 1.0
+var _primary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
+var _secondary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 
 
 func _ready() -> void:
@@ -58,19 +60,20 @@ func _set_player_lives(amount: int) -> void:
 		tween.tween_property($Lives, "modulate:a", 0, 0.5)
 
 
-var _primary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
-var _secondary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 func initialize(difficulty: int) -> void:
 	_player_bullet_speed_multiple = (1.0 + PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_BULLET_SPEED))
 	_time_dilation_array = []
 	%GameOverLabel.hide()
 	%Congrats.hide()
-	_difficulty = difficulty
+	_initialize_difficulty(difficulty)
 	_create_bunkers()
 	_create_aliens()
 	_create_starfield()
 	_create_player()
 	MusicPlayer.play_next_track()
+
+func _initialize_difficulty(difficulty: int) -> void:
+	_difficulty = difficulty
 	_primary_alien_type = AlienShip.ShipType.Regular
 	_secondary_alien_type = AlienShip.ShipType.Regular
 	_alien_speed_multiple = 1.0 + floor(difficulty / 4.0) * 0.33
@@ -93,7 +96,7 @@ func initialize(difficulty: int) -> void:
 				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Shield
 			AlienShip.ShipType.Thin:
 				_secondary_alien_type = AlienShip.ShipType.Acid if difficulty % 2 == 0 else AlienShip.ShipType.Shield
-
+	print("Initialized diff=%d prim=%s sec=%s" % [difficulty, AlienShip.ShipType.keys()[_primary_alien_type], AlienShip.ShipType.keys()[_secondary_alien_type]])
 
 func _create_bunkers() -> void:
 	assert(_bunkers.is_empty())

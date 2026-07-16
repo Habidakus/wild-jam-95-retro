@@ -91,7 +91,7 @@ func _create_aliens() -> void:
 	var aid: int = 0
 	for x: int in range(_alien_cols):
 		for y: int in range(_alien_rows):
-			_create_alien((x + 0.5) * placement.x, (y + 0.5) * placement.y, x)
+			_create_alien((x + 0.5) * placement.x, (y + 0.5) * placement.y, x, y)
 			aid += 1
 			_aliens.back().name = str("Alien#%d" % [aid])
 	for alien: AlienShip in _bottom_alien_in_each_column:
@@ -260,16 +260,31 @@ static func _add_large_star(image: Image, sx: float, sy: float) -> void:
 	image.set_pixel(hx, hy, Color(hh, hh, hh))
 
 
-func _create_alien(x: float, y: float, col: int) -> void:
+func _create_alien(x: float, y: float, col: int, row: int) -> void:
 	var alien: AlienShip = ALIEN_SHIP.instantiate()
 	alien.position = Vector2(x, y)
-	alien.initialize(self, col, col == 2 or col == 5 or col == 8)
+	var alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular if col != 1 and col != 9 else AlienShip.ShipType.Shield
+	alien.initialize(self, col, row, alien_type)
 	add_child(alien)
 	_aliens.append(alien)
 	if _bottom_alien_in_each_column.size() <= col:
 		_bottom_alien_in_each_column.append(alien)
 	else:
 		_bottom_alien_in_each_column[col] = alien
+
+
+func get_ship_shielded_dir(alien_ship: AlienShip) -> int:
+	var hit_col: int = alien_ship.get_col()
+	var hit_row: int = alien_ship.get_row()
+	for other: AlienShip in _aliens:
+		if other.has_shield():
+			if other.get_row() == hit_row:
+				var other_col: int = other.get_col()
+				if other_col == hit_col - 1:
+					return -1
+				elif other_col == hit_col + 1:
+					return 1
+	return 0
 
 
 func _create_player() -> void:

@@ -2,33 +2,73 @@ class_name AlienShip extends Area2D
 
 
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/alien_ship_explosion.tscn")
+const SHIELD_NEG: Texture = preload("res://Images/Shield_Neg.png")
+const SHIELD_POS: Texture = preload("res://Images/Shield_Pos.png")
 const WEAPON_COOLDOWN_TIME: float = 4.0
+
+
+enum ShipType {
+	Regular,
+	Acid,
+	Thin,
+	Shield,
+}
 
 
 var _can_shoot: bool = false
 var _weapon_cooldown: float
 var _board: Board
 var _col: int
+var _row: int
 var _is_dead: bool = false
 var _acid: bool = false
 var _body_color: Color = Color.WHITE
+var _animation_set: String = "Regular"
+var _ship_mass: int = 250
+var _has_shield: bool = false
+var _loaded_shield: int = 0
 
 
-func initialize(board: Board, col: int, acid: bool) -> void:
+func _ready() -> void:
+	$AnimatedSprite2D.play(_animation_set)
+	$Shield.modulate.a = 0.0
+
+
+func initialize(board: Board, col: int, row: int, ship_type: ShipType) -> void:
 	_board = board
 	_col = col
-	_acid = acid
-	if _acid:
-		_body_color = Color(0x50c878ff)
+	_row = row
+	match ship_type:
+		ShipType.Regular:
+			pass
+		ShipType.Acid:
+			_acid = true
+			_body_color = Color(0x50c878ff)
+		ShipType.Thin:
+			_animation_set = "Thin"
+			$CollisionShape2D.scale = Vector2(0.36, 1.0)
+		ShipType.Shield:
+			_animation_set = "Shield"
+			_ship_mass = 500
+			_body_color = Color(0x5064c8ff)
+			_has_shield = true
 	$AnimatedSprite2D.material.set_shader_parameter("target_color", _body_color)
+
+
+func has_shield() -> bool:
+	return _has_shield
 
 
 func get_col() -> int:
 	return _col
 
 
+func get_row() -> int:
+	return _row
+
+
 func get_impact_damage() -> int:
-	return 250
+	return _ship_mass
 
 
 func power_up_weapon(power_up_length: float) -> void:
@@ -39,8 +79,28 @@ func power_up_weapon(power_up_length: float) -> void:
 func on_bullet_impact(bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
 	if bullet.is_dead():
 		return
+	var shield_dir: int = _board.get_ship_shielded_dir(self)
+	if shield_dir != 0:
+		var shield_y: float = _spawn_shield(shield_dir)
+		bullet.die_against_alien_bullet(Vector2(bullet.position.x, shield_y))
+		return
 	bullet.die_against_alien(self, point)
 	die()
+
+
+func _spawn_shield(dir: int) -> float:
+	if dir != _loaded_shield:
+		_loaded_shield = dir
+		if dir < 0:
+			$Shield.texture = SHIELD_NEG
+			$Shield.position.x = -4
+		else:
+			$Shield.texture = SHIELD_POS
+			$Shield.position.x = 4
+	$Shield.modulate.a = 1.0
+	var tween: Tween = create_tween()
+	tween.tween_property($Shield, "modulate:a", 0.0, 0.5)
+	return $Shield.texture.get_size().y / 2 + position.y
 
 
 func is_dead() -> bool:

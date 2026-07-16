@@ -28,7 +28,6 @@ func initialize(board: Board) -> void:
 		_texture = WIDE_BUNKER_IMAGE
 	else:
 		_texture = BASIC_BUNKER_IMAGE
-	print(str(_texture.get_size()))
 	_image = _texture.get_image()
 	_bitmap.create_from_image_alpha(_image)
 	_calculate_image_and_collision()

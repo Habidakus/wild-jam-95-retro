@@ -43,6 +43,7 @@ func update_buttons() -> void:
 func _set_up_buttons() -> void:
 	_dummy_button.show()
 	var parent: Node = _dummy_button.get_parent()
+	var any_button_present: bool = false
 	for buff: PlayerBuff in _all_upgrades:
 		if buff.has():
 			continue
@@ -64,7 +65,10 @@ func _set_up_buttons() -> void:
 		button.button_up.connect(Callable(self, "_on_button_up").bind(buff))
 		button.mouse_exited.connect(Callable(self, "_on_mouse_exited").bind(buff))
 		button.mouse_entered.connect(Callable(self, "_on_mouse_entered").bind(buff, description))
+		any_button_present = true
 	_dummy_button.hide()
+	if not any_button_present:
+		%Description.text = "-+-  You've bought out the store.  -+-"
 
 
 func _process(_delta: float) -> void:

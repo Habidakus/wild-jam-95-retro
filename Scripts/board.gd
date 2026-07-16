@@ -263,7 +263,7 @@ func _create_alien(x: float, y: float, col: int) -> void:
 	alien.position = Vector2(x, y)
 	add_child(alien)
 	_aliens.append(alien)
-	alien.initialize(self, col)
+	alien.initialize(self, col, col == 2 or col == 5 or col == 8)
 	if _bottom_alien_in_each_column.size() <= col:
 		_bottom_alien_in_each_column.append(alien)
 	else:
@@ -462,9 +462,9 @@ func get_player_floor() -> float:
 	return size.y - 40
 
 
-func spawn_alien_bullet(pos: Vector2) -> void:
+func spawn_alien_bullet(pos: Vector2, acid: bool) -> void:
 	var bullet: AlienBullet 
-	if _rnd.randi() % 5 == 1:
+	if acid:
 		bullet = DROP_BULLET.instantiate()
 	else:
 		bullet = ALIEN_BULLET.instantiate()

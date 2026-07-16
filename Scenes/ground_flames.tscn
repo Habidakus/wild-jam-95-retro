@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://bhmnr4g1ggvd" path="res://Images/Flames/green_flame_d.svg" id="4_omlr1"]
 [ext_resource type="Texture2D" uid="uid://b88rdna68jqf3" path="res://Images/Flames/green_flame_e.svg" id="5_u0d2r"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8vc5l"]
+size = Vector2(33, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_od1kg"]
 animations = [{
 "frames": [{
@@ -30,19 +33,32 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8vc5l"]
-size = Vector2(33, 32)
-
 [node name="Area2D" type="Area2D" unique_id=56387617]
 collision_layer = 2
 collision_mask = 16
 script = ExtResource("1_63y5m")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=96656960]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1210035527]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_8vc5l")
+
+[node name="ShrinkControl" type="Control" parent="." unique_id=636335805]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -20.0
+offset_right = 19.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(0, 37)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ShrinkControl" unique_id=96656960]
+position = Vector2(19, 17)
 sprite_frames = SubResource("SpriteFrames_od1kg")
 autoplay = "default"
-frame_progress = 0.13453296
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1210035527]
-position = Vector2(-0.5, 0)
-shape = SubResource("RectangleShape2D_8vc5l")
+frame_progress = 0.8712853

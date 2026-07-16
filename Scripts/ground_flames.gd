@@ -1,8 +1,20 @@
 class_name GroundFlames extends Area2D
 
 
+const FLAME_DURATION: float = 6.0
+
+
+func _ready() -> void:
+	var tween: Tween = create_tween()
+	tween.tween_interval(FLAME_DURATION / 2.0)
+	tween.tween_property($ShrinkControl, "scale", Vector2(1, 0.333), FLAME_DURATION / 2.0)
+	tween.tween_callback(Callable(self, "extinguish"))
+	add_to_group("bullet")
+
+
 func extinguish() -> void:
 	queue_free()
+
 
 #func _physics_process(_delta: float) -> void:
 	#var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state

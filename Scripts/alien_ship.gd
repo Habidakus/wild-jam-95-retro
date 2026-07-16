@@ -10,11 +10,17 @@ var _weapon_cooldown: float
 var _board: Board
 var _col: int
 var _is_dead: bool = false
+var _acid: bool = false
+var _body_color: Color = Color.WHITE
 
 
-func initialize(board: Board, col: int) -> void:
+func initialize(board: Board, col: int, acid: bool) -> void:
 	_board = board
 	_col = col
+	_acid = acid
+	if _acid:
+		_body_color = Color(0x50c878ff)
+	$AnimatedSprite2D.set_instance_shader_parameter("target_color", _body_color)
 
 
 func get_col() -> int:
@@ -61,6 +67,13 @@ func die() -> void:
 	queue_free()
 
 
+func _get_weapon_cooldown_time() -> float:
+	if _acid:
+		return WEAPON_COOLDOWN_TIME * 4.0
+	else:
+		return WEAPON_COOLDOWN_TIME
+
+
 func _process(delta: float) -> void:
 	var time_dilation: float = _board.get_time_dilation()
 	$AnimatedSprite2D.speed_scale = time_dilation
@@ -69,8 +82,8 @@ func _process(delta: float) -> void:
 	_weapon_cooldown -= delta * time_dilation
 	if _weapon_cooldown > 0:
 		return
-	_board.spawn_alien_bullet(position)
-	_weapon_cooldown = WEAPON_COOLDOWN_TIME
+	_board.spawn_alien_bullet(position, _acid)
+	_weapon_cooldown = _get_weapon_cooldown_time()
 
 
 func _physics_process(_delta: float) -> void:

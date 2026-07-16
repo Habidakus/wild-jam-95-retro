@@ -28,6 +28,14 @@ func reset() -> void:
 	_purchased_buffs = []
 
 
+func can_afford(minor: int, major: int) -> bool:
+	return _minor_currency >= minor && _major_currency >= major
+
+
+func has_buff(buff: PlayerBuff) -> bool:
+	return _purchased_buffs.has(buff)
+
+
 func add_currency(minor: int, major: int) -> void:
 	_minor_currency += minor
 	_major_currency += major

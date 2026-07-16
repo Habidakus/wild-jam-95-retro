@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://f3rn062lt8c3"]
 
 [ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_rdcsa"]
+[ext_resource type="Resource" uid="uid://1mcj38xfyn4v" path="res://Resources/PlayerBuffs/bunker_width_1.tres" id="2_0pt4d"]
 
 [resource]
 script = ExtResource("1_rdcsa")
-button_name = "Wider Bunkers"
+button_name = "Even Wider Bunkers"
 description = "Finally, suitably wide bunkers."
 buff_type = 3
 strength = 2.0
+prereq_buffs = Array[ExtResource("1_rdcsa")]([ExtResource("2_0pt4d")])
 cost_minor = 50
 metadata/_custom_type_script = "uid://drmwlmgaehrlr"

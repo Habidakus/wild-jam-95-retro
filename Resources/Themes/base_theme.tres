@@ -3,8 +3,10 @@
 [ext_resource type="StyleBox" uid="uid://dxpb7wt6t6s3d" path="res://Resources/Themes/button_style_hover.tres" id="1_br835"]
 [ext_resource type="StyleBox" uid="uid://cpielcinyl2jj" path="res://Resources/Themes/button_style.tres" id="1_bvi35"]
 [ext_resource type="FontFile" uid="uid://b04r7np5djp6a" path="res://Fonts/Orbitron-VariableFont_wght.ttf" id="1_hmtju"]
+[ext_resource type="StyleBox" uid="uid://lgwu0kccq8fv" path="res://Resources/Themes/button_style_disabled.tres" id="1_n1apx"]
 
 [resource]
 default_font = ExtResource("1_hmtju")
+Button/styles/disabled = ExtResource("1_n1apx")
 Button/styles/hover = ExtResource("1_br835")
 Button/styles/normal = ExtResource("1_bvi35")

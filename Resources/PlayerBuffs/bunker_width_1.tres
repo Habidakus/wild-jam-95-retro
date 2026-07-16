@@ -4,10 +4,9 @@
 
 [resource]
 script = ExtResource("1_fuf7o")
-button_name = "Even Wider Bunkers"
+button_name = "Wider Bunkers"
 description = "All good gunners know to take cover, better gunners hide behind wider bunkers. Are you a better gunner? Well? Are you?!"
 buff_type = 3
 strength = 1.0
-prereq_buffs = Array[ExtResource("1_fuf7o")]([null])
 cost_minor = 100
 metadata/_custom_type_script = "uid://drmwlmgaehrlr"

@@ -5,7 +5,21 @@
 [ext_resource type="Script" uid="uid://doljrg6ukeyjn" path="res://Scripts/States/splash_screen.gd" id="2_h14px"]
 [ext_resource type="Script" uid="uid://b6dg5bqmn1c7c" path="res://Scripts/States/main_menu.gd" id="3_h14px"]
 [ext_resource type="Script" uid="uid://hcxkiffajh7k" path="res://Scripts/States/play.gd" id="4_3shub"]
+[ext_resource type="AudioStream" uid="uid://bslnvkf742cxn" path="res://Sounds/UI/hover_01.wav" id="4_k5sv7"]
+[ext_resource type="AudioStream" uid="uid://ccikjmh2u3oke" path="res://Sounds/UI/hover_03.wav" id="6_56qlx"]
 [ext_resource type="Script" uid="uid://dcx3phnbxg4n3" path="res://Scenes/States/settings.gd" id="6_h14px"]
+[ext_resource type="Script" uid="uid://ch8oh6ne2exbs" path="res://Scenes/States/upgrades.gd" id="7_m63qk"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_8do68"]
+random_volume_offset_db = 15.0
+streams_count = 2
+stream_0/stream = ExtResource("4_k5sv7")
+stream_1/stream = ExtResource("6_56qlx")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_b0q1f"]
+streams_count = 2
+stream_0/stream = ExtResource("4_k5sv7")
+stream_1/stream = ExtResource("6_56qlx")
 
 [node name="StateMachine" type="Node" unique_id=398697420 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("1_3shub")
@@ -63,7 +77,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MainMenu" type="Control" parent="." unique_id=946545521]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,6 +97,7 @@ pivot_offset = Vector2(576, 324)
 color = Color(0, 0, 0, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainMenu" unique_id=1532927107]
+texture_filter = 2
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -123,6 +137,10 @@ text = "Settings"
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "Exit"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="MainMenu" unique_id=438781072]
+stream = SubResource("AudioStreamRandomizer_8do68")
+bus = &"UI"
 
 [node name="Play" type="Control" parent="." unique_id=965801993]
 visible = false
@@ -257,6 +275,7 @@ grow_vertical = 0
 text = "(ESC to return)"
 
 [node name="Settings" type="Control" parent="." unique_id=885281664]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -391,6 +410,82 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "(ESC to return)"
+
+[node name="Upgrades" type="Control" parent="." unique_id=75370778]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_m63qk")
+metadata/_custom_type_script = "uid://bbl41p6swfbs4"
+
+[node name="ColorRect" type="ColorRect" parent="Upgrades" unique_id=1185900059]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Upgrades" unique_id=581757822]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -66.5
+offset_top = -22.5
+offset_right = 66.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Upgrades/HBoxContainer" unique_id=643829400]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="DummyButton" type="Button" parent="Upgrades/HBoxContainer/VBoxContainer" unique_id=1573829638]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "FNORD"
+
+[node name="Control" type="Control" parent="Upgrades/HBoxContainer" unique_id=633057729]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="Upgrades/HBoxContainer" unique_id=1256577141]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+text = "Description"
+autowrap_mode = 3
+
+[node name="Label" type="Label" parent="Upgrades" unique_id=1324669613]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -29.0
+offset_right = 71.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "(ESC to return)"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Upgrades" unique_id=1292384474]
+stream = SubResource("AudioStreamRandomizer_b0q1f")
 
 [connection signal="button_up" from="MainMenu/VBoxContainer/PlayButton" to="MainMenu" method="_on_play_button_button_up"]
 [connection signal="button_up" from="MainMenu/VBoxContainer/UpgradeButton" to="MainMenu" method="_on_upgrade_button_button_up"]

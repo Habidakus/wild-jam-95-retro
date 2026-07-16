@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-instance uniform vec4 target_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
+uniform vec4 target_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
 uniform float white_threshold : hint_range(0.0, 1.0) = 0.95;
 uniform float alpha_threshold : hint_range(0.0, 1.0) = 0.65;
 

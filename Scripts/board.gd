@@ -261,9 +261,9 @@ static func _add_large_star(image: Image, sx: float, sy: float) -> void:
 func _create_alien(x: float, y: float, col: int) -> void:
 	var alien: AlienShip = ALIEN_SHIP.instantiate()
 	alien.position = Vector2(x, y)
+	alien.initialize(self, col, col == 2 or col == 5 or col == 8)
 	add_child(alien)
 	_aliens.append(alien)
-	alien.initialize(self, col, col == 2 or col == 5 or col == 8)
 	if _bottom_alien_in_each_column.size() <= col:
 		_bottom_alien_in_each_column.append(alien)
 	else:

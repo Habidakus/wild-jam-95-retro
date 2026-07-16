@@ -20,7 +20,7 @@ func initialize(board: Board, col: int, acid: bool) -> void:
 	_acid = acid
 	if _acid:
 		_body_color = Color(0x50c878ff)
-	$AnimatedSprite2D.set_instance_shader_parameter("target_color", _body_color)
+	$AnimatedSprite2D.material.set_shader_parameter("target_color", _body_color)
 
 
 func get_col() -> int:

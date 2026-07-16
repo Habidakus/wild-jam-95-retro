@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://drdrrwbsg5a4m"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_wahra"]
+
+[resource]
+script = ExtResource("1_wahra")
+button_name = "Additional Tank"
+description = "Hey, one more spare tank would be really handy if we blew up all the ones we were using for defense [Raises max lives by one]"
+buff_type = 14
+strength = 1.0
+cost_minor = 400
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

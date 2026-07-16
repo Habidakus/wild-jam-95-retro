@@ -41,7 +41,7 @@ var _player_bullet_speed_multiple: float = 1.0
 
 func _ready() -> void:
 	initialize(0)
-	_set_player_lives(3)
+	_set_player_lives(3 + int(round(PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.LIVES_HIGHER_MAX))))
 
 
 func _set_player_lives(amount: int) -> void:

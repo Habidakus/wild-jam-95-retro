@@ -7,8 +7,8 @@
 [ext_resource type="Script" uid="uid://hcxkiffajh7k" path="res://Scripts/States/play.gd" id="4_3shub"]
 [ext_resource type="AudioStream" uid="uid://bslnvkf742cxn" path="res://Sounds/UI/hover_01.wav" id="4_k5sv7"]
 [ext_resource type="AudioStream" uid="uid://ccikjmh2u3oke" path="res://Sounds/UI/hover_03.wav" id="6_56qlx"]
-[ext_resource type="Script" uid="uid://dcx3phnbxg4n3" path="res://Scenes/States/settings.gd" id="6_h14px"]
-[ext_resource type="Script" uid="uid://ch8oh6ne2exbs" path="res://Scenes/States/upgrades.gd" id="7_m63qk"]
+[ext_resource type="Script" uid="uid://dcx3phnbxg4n3" path="res://Scripts/States/settings.gd" id="6_h14px"]
+[ext_resource type="Script" uid="uid://ch8oh6ne2exbs" path="res://Scripts/States/upgrades.gd" id="7_m63qk"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_8do68"]
 random_volume_offset_db = 15.0
@@ -455,7 +455,7 @@ alignment = 1
 [node name="DummyButton" type="Button" parent="Upgrades/HBoxContainer/VBoxContainer" unique_id=1573829638]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "FNORD"
 
 [node name="Control" type="Control" parent="Upgrades/HBoxContainer" unique_id=633057729]

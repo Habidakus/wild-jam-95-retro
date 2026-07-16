@@ -2,7 +2,7 @@ class_name Player extends Area2D
 
 
 const SPEED: float = 400
-const GUN_COOLDOWN: float = 0.6
+const BASE_GUN_COOLDOWN_RATE: float = 0.8
 
 
 enum PlayerState {
@@ -23,6 +23,7 @@ var _cached_shape: ConvexPolygonShape2D
 var _min_x: float
 var _max_x: float
 var _gun_cooldown: float = 0
+var _gun_cooldown_rate: float = BASE_GUN_COOLDOWN_RATE
 var _state: PlayerState = PlayerState.UNDEFINED
 
 
@@ -31,7 +32,9 @@ func initialize(board: Board) -> void:
 	_min_x = 27 * 3 / 4.0
 	_max_x = board.size.x - _min_x
 	_state = PlayerState.ACTIVE
-	self.show()
+	show()
+	var cooldown_strength: float = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_RATE_OF_FIRE)
+	_gun_cooldown_rate = BASE_GUN_COOLDOWN_RATE / (1.0 + cooldown_strength)
 
 
 func _ready() -> void:
@@ -62,7 +65,7 @@ func _process(delta: float) -> void:
 func _attempt_fire() -> void:
 	if _gun_cooldown > 0:
 		return
-	_gun_cooldown = GUN_COOLDOWN
+	_gun_cooldown = _gun_cooldown_rate
 	_board.spawn_player_bullet(position)
 
 

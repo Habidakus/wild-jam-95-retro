@@ -4,11 +4,12 @@ class_name PlayerBullet extends Bullet
 const EXPLOSION_SCENE: Resource = preload("res://Scenes/missle_impact.tscn")
 
 
-const SPEED: float = 350
+const BASE_SPEED: float = 300
 @onready var _collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 var _cached_shape: ConvexPolygonShape2D
 var _board: Board
 var _is_dead: bool = false
+var _speed: float = BASE_SPEED
 
 
 func _ready() -> void:
@@ -22,6 +23,7 @@ func initialize(board: Board, rnd: RandomNumberGenerator) -> void:
 	_board = board
 	#$AudioStreamPlayer2D.volume_db += rnd.randf() * 2 - 1.0
 	$AudioStreamPlayer2D.pitch_scale *= (0.65 + rnd.randf() * 0.3)
+	_speed = BASE_SPEED * _board.get_player_bullet_speed_multiple()
 
 
 func get_damage() -> int:
@@ -63,7 +65,7 @@ func is_dead() -> bool:
 
 
 func _physics_process(delta: float) -> void:
-	var velocity: Vector2 = Vector2.UP * SPEED * delta * _board.get_time_dilation()
+	var velocity: Vector2 = Vector2.UP * _speed * delta * _board.get_time_dilation()
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
 	var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 	query.shape = _cached_shape

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://d0locvotan704"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_nltu0"]
+[ext_resource type="Resource" uid="uid://cfglti0umb1nd" path="res://Resources/PlayerBuffs/bunker_defense_1.tres" id="2_io2d2"]
+
+[resource]
+script = ExtResource("1_nltu0")
+button_name = "Iron Bunkers"
+description = "Our engineers say iron reinforcement is pretty good."
+buff_type = 4
+strength = 2.0
+prereq_buffs = Array[ExtResource("1_nltu0")]([ExtResource("2_io2d2")])
+cost_minor = 400
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

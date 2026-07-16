@@ -44,12 +44,17 @@ func _set_up_buttons() -> void:
 	_dummy_button.show()
 	var parent: Node = _dummy_button.get_parent()
 	var any_button_present: bool = false
+	var has_one_shrouded: bool = false
 	for buff: PlayerBuff in _all_upgrades:
 		if buff.has():
 			continue
 		var can_see: PlayerBuff.HowVisible = buff.can_see()
 		if can_see == PlayerBuff.HowVisible.INVISIBLE:
 			continue
+		if can_see == PlayerBuff.HowVisible.SHROUDED:
+			if has_one_shrouded:
+				continue
+			has_one_shrouded = true
 		var button: Button = _dummy_button.duplicate()
 		var description: String = "???"
 		button.set_meta("buff", buff)

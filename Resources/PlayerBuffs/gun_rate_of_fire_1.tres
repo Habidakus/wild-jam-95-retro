@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://dih2rmplptt7o"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_1oiky"]
+
+[resource]
+script = ExtResource("1_1oiky")
+button_name = "Double Barrelled"
+description = "More barrelles means more bullets. That's gotta be good, right?"
+buff_type = 12
+strength = 0.5
+cost_minor = 50
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

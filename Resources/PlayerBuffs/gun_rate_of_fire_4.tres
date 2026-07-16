@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://njqhr61qoe54"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_tty5d"]
+[ext_resource type="Resource" uid="uid://c330ba0ld31do" path="res://Resources/PlayerBuffs/gun_rate_of_fire_3.tres" id="2_tty5d"]
+
+[resource]
+script = ExtResource("1_tty5d")
+button_name = "Eight Barrels"
+description = "Ok, hear me out... eight barrels"
+buff_type = 12
+strength = 3.0
+prereq_buffs = Array[ExtResource("1_tty5d")]([ExtResource("2_tty5d")])
+cost_minor = 900
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

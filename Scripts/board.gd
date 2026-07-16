@@ -36,6 +36,7 @@ var _alien_speed_multiple: float = 1.0
 var _minor_currency: int = 0
 var _major_currency: int = 0
 var _difficulty: int = 0
+var _player_bullet_speed_multiple: float = 1.0
 
 
 func _ready() -> void:
@@ -58,6 +59,7 @@ func _set_player_lives(amount: int) -> void:
 
 
 func initialize(difficulty: int) -> void:
+	_player_bullet_speed_multiple = (1.0 + PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_BULLET_SPEED))
 	_time_dilation_array = []
 	%GameOverLabel.hide()
 	%Congrats.hide()
@@ -471,6 +473,10 @@ func spawn_alien_bullet(pos: Vector2, acid: bool) -> void:
 	bullet.position = pos
 	bullet.initialize(self, _rnd)
 	add_child(bullet)
+
+
+func get_player_bullet_speed_multiple() -> float:
+	return _player_bullet_speed_multiple
 
 
 func spawn_player_bullet(pos: Vector2) -> void:

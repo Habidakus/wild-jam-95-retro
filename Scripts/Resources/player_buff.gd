@@ -21,6 +21,13 @@ enum BuffType {
 	RESPEC,
 }
 
+enum HowVisible {
+	INVISIBLE,
+	SHROUDED,
+	DESCRIBED,
+	FULLY_VISIBLE
+}
+
 
 @export var button_name: String
 @export var description: String
@@ -47,7 +54,6 @@ func can_be_bought() -> bool:
 	return true
 
 
-enum HowVisible { INVISIBLE, SHROUDED, DESCRIBED, FULLY_VISIBLE }
 func can_see() -> HowVisible:
 	if PlayerStats.has_buff(self):
 		return HowVisible.FULLY_VISIBLE
@@ -57,6 +63,9 @@ func can_see() -> HowVisible:
 		if PlayerStats.has_buff(prereq):
 			gained_prereqs += 1
 		else:
+			var pr_visibility: HowVisible = prereq.can_see()
+			if pr_visibility == HowVisible.SHROUDED or pr_visibility == HowVisible.INVISIBLE:
+				return HowVisible.INVISIBLE
 			missing_prereqs += 1
 	if gained_prereqs > 0:
 		if missing_prereqs == 0:

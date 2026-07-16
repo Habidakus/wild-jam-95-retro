@@ -19,3 +19,7 @@ func _check_against_floor() -> void:
 
 func _set_floor() -> void:
 	_floor = _board.get_player_floor()
+
+
+func get_damage() -> int:
+	return 65

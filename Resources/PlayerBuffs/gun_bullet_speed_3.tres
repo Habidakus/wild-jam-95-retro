@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://bbjydeqfjyob1"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_c4s1u"]
+[ext_resource type="Resource" uid="uid://c3ql40c217qqb" path="res://Resources/PlayerBuffs/gun_bullet_speed_2.tres" id="2_18x7o"]
+
+[resource]
+script = ExtResource("1_c4s1u")
+button_name = "Rocket Bullets"
+description = "Faster than a speeding bullet, a speeding rocket."
+buff_type = 12
+strength = 1.5
+prereq_buffs = Array[ExtResource("1_c4s1u")]([ExtResource("2_18x7o")])
+cost_minor = 500
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

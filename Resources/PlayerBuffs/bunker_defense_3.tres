@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://bnvusowd2ejck"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_gcx0v"]
+[ext_resource type="Resource" uid="uid://d0locvotan704" path="res://Resources/PlayerBuffs/bunker_defense_2.tres" id="2_gcx0v"]
+
+[resource]
+script = ExtResource("1_gcx0v")
+button_name = "Krell Bunkers"
+description = "The Seabees say we should just make the bunkers out of all these alien spaceship wrecks."
+buff_type = 4
+strength = 3.0
+prereq_buffs = Array[ExtResource("1_gcx0v")]([ExtResource("2_gcx0v")])
+cost_minor = 800
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

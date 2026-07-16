@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://ce42gwj2sr3gr"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_abuue"]
+[ext_resource type="Resource" uid="uid://dih2rmplptt7o" path="res://Resources/PlayerBuffs/gun_rate_of_fire_1.tres" id="2_r8ju1"]
+
+[resource]
+script = ExtResource("1_abuue")
+button_name = "Liquid Cooling"
+description = "The science boffins say that if we keep the barrels cooler, we can fire faster."
+buff_type = 12
+strength = 1.0
+prereq_buffs = Array[ExtResource("1_abuue")]([ExtResource("2_r8ju1")])
+cost_minor = 150
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

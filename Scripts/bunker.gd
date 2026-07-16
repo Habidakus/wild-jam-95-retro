@@ -11,6 +11,7 @@ var _image: Image
 var _texture: Texture2D
 var _rnd: RandomNumberGenerator
 var _board: Board
+var _defense: float
 
 
 func _ready() -> void:
@@ -21,6 +22,7 @@ func _ready() -> void:
 
 func initialize(board: Board) -> void:
 	_board = board
+	_defense = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.BUNKER_DEFENSE)
 	var max_bunker_width: float = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.BUNKER_WIDTH)
 	if max_bunker_width >= 2.0:
 		_texture = VERY_WIDE_BUNKER_IMAGE
@@ -42,6 +44,7 @@ func _apply_damage(amount: int, impact_point: Vector2i) -> void:
 	var select_array: Array = []
 	var s: Vector2 = _bitmap.get_size()
 	var maxd: float = 0
+	amount = ceil(amount / (1.0 + _defense))
 	for x: int in range(s.x):
 		for y: int in range(s.y):
 			var bit_coord: Vector2i = Vector2i(x, y)

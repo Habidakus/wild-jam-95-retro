@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://c330ba0ld31do"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_nuheq"]
+[ext_resource type="Resource" uid="uid://ce42gwj2sr3gr" path="res://Resources/PlayerBuffs/gun_rate_of_fire_2.tres" id="2_nuheq"]
+
+[resource]
+script = ExtResource("1_nuheq")
+button_name = "Four Barrels"
+description = "What about four barrels, that's a lot of bullets, right?"
+buff_type = 12
+strength = 2.0
+prereq_buffs = Array[ExtResource("1_nuheq")]([ExtResource("2_nuheq")])
+cost_minor = 450
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

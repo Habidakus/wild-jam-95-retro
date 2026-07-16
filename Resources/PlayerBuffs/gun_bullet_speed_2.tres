@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://c3ql40c217qqb"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_py7w1"]
+[ext_resource type="Resource" uid="uid://ctyu7xkd2dw1w" path="res://Resources/PlayerBuffs/gun_bullet_speed_1.tres" id="2_owdbs"]
+
+[resource]
+script = ExtResource("1_py7w1")
+button_name = "Even More Powder"
+description = "You can really feel the boom!"
+buff_type = 12
+strength = 1.0
+prereq_buffs = Array[ExtResource("1_py7w1")]([ExtResource("2_owdbs")])
+cost_minor = 250
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

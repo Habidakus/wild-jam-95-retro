@@ -19,10 +19,6 @@ func _ready() -> void:
 	add_to_group("bullet")
 
 
-func get_damage() -> int:
-	return 45
-
-
 func initialize(board: Board, rnd: RandomNumberGenerator) -> void:
 	_board = board
 	_set_floor()
@@ -93,3 +89,7 @@ func _check_against_floor() -> void:
 
 func _set_floor() -> void:
 	_floor = _board.get_player_floor() + 30
+
+
+func get_damage() -> int:
+	return 45

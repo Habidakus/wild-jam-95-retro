@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://cfglti0umb1nd"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_iewcg"]
+
+[resource]
+script = ExtResource("1_iewcg")
+button_name = "Sturdy Bunkers"
+description = "Maybe we should make these things out of something other than wood."
+buff_type = 4
+strength = 1.0
+cost_minor = 200
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

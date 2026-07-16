@@ -18,7 +18,7 @@ enum BuffType {
 	GUN_BULLET_SPEED,
 	LIVES_HIGHER_MAX,
 	LIVES_RESTORE_PER_WAVE,
-	RESPEC,
+	SKIP_TO_LEVEL,
 }
 
 enum HowVisible {

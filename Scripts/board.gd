@@ -42,7 +42,8 @@ var _secondary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 
 
 func _ready() -> void:
-	initialize(0)
+	var first_wave: int = int(round(PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.SKIP_TO_LEVEL)))
+	initialize(first_wave)
 	_set_player_lives(3 + int(round(PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.LIVES_HIGHER_MAX))))
 
 
@@ -71,6 +72,12 @@ func initialize(difficulty: int) -> void:
 	_create_starfield()
 	_create_player()
 	MusicPlayer.play_next_track()
+	%WaveNumber.modulate.a = 0
+	%WaveNumber.text = str("Wave %d" % [_difficulty + 1])
+	var tween: Tween = create_tween()
+	tween.tween_property(%WaveNumber, "modulate:a", 1.0, 0.2)
+	tween.tween_property(%WaveNumber, "modulate:a", 0.0, 0.8)
+
 
 func _initialize_difficulty(difficulty: int) -> void:
 	_difficulty = difficulty

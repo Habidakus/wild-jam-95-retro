@@ -68,7 +68,7 @@ material = SubResource("ShaderMaterial_pv8xr")
 sprite_frames = SubResource("SpriteFrames_6ya21")
 animation = &"Shield"
 autoplay = "Regular"
-frame_progress = 0.8180628
+frame_progress = 0.61574507
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1520182911]
 shape = SubResource("CapsuleShape2D_1tbak")

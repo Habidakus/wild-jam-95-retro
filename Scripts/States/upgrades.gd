@@ -11,6 +11,28 @@ var _all_upgrades: Array[PlayerBuff] = []
 func _ready() -> void:
 	Input.use_accumulated_input = false
 	%Description.text = ""
+	_load_buffs_from_file()
+	_proc_gen_other_buffs()
+	call_deferred("_set_up_buttons")
+
+
+func _proc_gen_other_buffs() -> void:
+	var previous_buff: PlayerBuff = null
+	for i: int in range(2,21):
+		var skip_level_buff: PlayerBuff = PlayerBuff.new()
+		skip_level_buff.strength = i - 1
+		skip_level_buff.buff_type = PlayerBuff.BuffType.SKIP_TO_LEVEL
+		skip_level_buff.button_name = str("Skip Wave %d" % [i - 1])
+		skip_level_buff.description = str("Don't waste time on waves 1 to %d, skip right to wave %d" % [i - 1, i])
+		skip_level_buff.cost_major = 0
+		skip_level_buff.cost_minor = 40 + 10 * i
+		if previous_buff != null:
+			skip_level_buff.prereq_buffs.append(previous_buff)
+		previous_buff = skip_level_buff
+		_all_upgrades.append(skip_level_buff)
+
+
+func _load_buffs_from_file() -> void:
 	var dir: DirAccess = DirAccess.open(BUFF_DIR)
 	if not dir:
 		print("Failed to open resource path: %s" % [BUFF_DIR])
@@ -26,7 +48,6 @@ func _ready() -> void:
 		var resource: Resource = ResourceLoader.load(file_path)
 		if resource and resource is PlayerBuff:
 			_all_upgrades.append(resource as PlayerBuff)
-	call_deferred("_set_up_buttons")
 
 
 func update_buttons() -> void:

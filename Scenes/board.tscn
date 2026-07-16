@@ -8,6 +8,11 @@ font_size = 32
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_2wvcj"]
+font_size = 64
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
 anchors_preset = 15
@@ -82,3 +87,16 @@ horizontal_alignment = 2
 [node name="CoinNoise" type="AudioStreamPlayer2D" parent="." unique_id=409955532]
 stream = ExtResource("2_2wvcj")
 bus = &"VFX"
+
+[node name="WaveNumber" type="Label" parent="." unique_id=1837482769]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Wave 20"
+label_settings = SubResource("LabelSettings_2wvcj")
+horizontal_alignment = 1
+vertical_alignment = 1

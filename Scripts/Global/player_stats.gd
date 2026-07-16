@@ -28,6 +28,23 @@ func reset() -> void:
 	_purchased_buffs = []
 
 
+func buy_buff(buff: PlayerBuff) -> void:
+	assert(not _purchased_buffs.has(buff))
+	assert(buff.can_be_bought())
+	_minor_currency -= buff.cost_minor
+	_major_currency -= buff.cost_major
+	_purchased_buffs.append(buff)
+
+
+func get_max_strength_acquired(buff_type: PlayerBuff.BuffType) -> float:
+	var ret_val: float = 0.0
+	for buff: PlayerBuff in _purchased_buffs:
+		if buff.buff_type == buff_type:
+			if buff.strength > ret_val:
+				ret_val = buff.strength
+	return ret_val
+
+
 func can_afford(minor: int, major: int) -> bool:
 	return _minor_currency >= minor && _major_currency >= major
 

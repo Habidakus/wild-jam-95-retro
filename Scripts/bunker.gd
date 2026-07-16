@@ -1,5 +1,9 @@
 class_name Bunker extends StaticBody2D
 
+const BASIC_BUNKER_IMAGE: Texture = preload("res://Images/test_bunker.png")
+const WIDE_BUNKER_IMAGE: Texture = preload("res://Images/test_bunker_wide.png")
+const VERY_WIDE_BUNKER_IMAGE: Texture = preload("res://Images/test_bunker_very_wide.png")
+
 
 var _bitmap: BitMap
 var _sprite: Sprite2D
@@ -13,7 +17,18 @@ func _ready() -> void:
 	_bitmap = BitMap.new()
 	_rnd = RandomNumberGenerator.new()
 	_sprite = $Sprite2D
-	_texture = _sprite.texture
+
+
+func initialize(board: Board) -> void:
+	_board = board
+	var max_bunker_width: float = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.BUNKER_WIDTH)
+	if max_bunker_width >= 2.0:
+		_texture = VERY_WIDE_BUNKER_IMAGE
+	elif max_bunker_width >= 1.0:
+		_texture = WIDE_BUNKER_IMAGE
+	else:
+		_texture = BASIC_BUNKER_IMAGE
+	print(str(_texture.get_size()))
 	_image = _texture.get_image()
 	_bitmap.create_from_image_alpha(_image)
 	_calculate_image_and_collision()
@@ -22,10 +37,6 @@ func _ready() -> void:
 	if not polygons.is_empty():
 		$CollisionPolygon2D.polygon = polygons[0]
 		$CollisionPolygon2D.position = _image.get_size() / -2.0
-
-
-func initialize(board: Board) -> void:
-	_board = board
 
 
 func _apply_damage(amount: int, impact_point: Vector2i) -> void:

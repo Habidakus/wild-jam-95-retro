@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://njqqfqyx41f3"]
 
 [ext_resource type="Texture2D" uid="uid://sneehyfmw86h" path="res://Images/test_bunker_wide.png" id="1_2l1iw"]
-[ext_resource type="Script" uid="uid://dmx13wldmkx52" path="res://Scripts/bunker_wide.gd" id="1_lh3gj"]
+[ext_resource type="Script" uid="uid://dmx13wldmkx52" path="res://Scripts/bunker.gd" id="1_lh3gj"]
 
 [node name="StaticBody2D" type="StaticBody2D" unique_id=680075904]
 collision_layer = 4

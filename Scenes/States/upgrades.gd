@@ -79,9 +79,9 @@ func has_upgrades_to_buy() -> bool:
 	return false
 
 
-func _on_button_up(_buff: PlayerBuff) -> void:
+func _on_button_up(buff: PlayerBuff) -> void:
+	PlayerStats.buy_buff(buff)
 	update_buttons()
-	pass # Replace with function body.
 
 
 var _current_hover_buff: PlayerBuff = null

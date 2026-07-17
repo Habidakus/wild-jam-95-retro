@@ -13,6 +13,10 @@ var _tracks: Array = [
 var _current_track: int = 0
 var _audio_player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
 
+const MIN_PITCH: float = 0.91
+const MAX_PITCH: float = 1.09
+const PITCH_DELTA: float = 0.03
+
 
 func _ready() -> void:
 	_tracks.shuffle()
@@ -20,7 +24,14 @@ func _ready() -> void:
 	add_child(_audio_player)
 
 
-func play_next_track() -> void:
+func play_next_track(speed: int = 0) -> void:
 	_current_track = (1 + _current_track) % _tracks.size()
 	_audio_player.stream = _tracks[_current_track]
+	_audio_player.pitch_scale = clamp(1.0 + speed * PITCH_DELTA, MIN_PITCH, MAX_PITCH)
 	_audio_player.play()
+
+
+func IncreaseSpeed(inc: int) -> void:
+	var new_pitch: float = clamp(_audio_player.pitch_scale + inc * PITCH_DELTA, MIN_PITCH, MAX_PITCH)
+	var tween: Tween = create_tween()
+	tween.tween_property(_audio_player, "pitch_scale", new_pitch, 2)

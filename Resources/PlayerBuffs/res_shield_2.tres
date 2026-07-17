@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://celv4l3jnjtai"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_opjbn"]
+[ext_resource type="Resource" uid="uid://crjsmku0qi82m" path="res://Resources/PlayerBuffs/res_shield_1.tres" id="2_hfv8n"]
+
+[resource]
+script = ExtResource("1_opjbn")
+button_name = "Improved Res Shield"
+description = "Your resurrection shield lasts a little longer."
+buff_type = 17
+strength = 3.5
+prereq_buffs = Array[ExtResource("1_opjbn")]([ExtResource("2_hfv8n")])
+cost_minor = 100
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

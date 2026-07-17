@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dk1awqli7ep7k" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://cgxds45qgkyma" path="res://Images/test_gun.png" id="1_v0iea"]
 [ext_resource type="AudioStream" uid="uid://cn2skwilgmkq" path="res://Sounds/ElectroExplosion002.wav" id="3_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://bncqhyd0xerpq" path="res://Images/tank_shield.png" id="4_vgqql"]
 
 [node name="Area2D" type="Area2D" unique_id=1311917480]
 collision_layer = 16
@@ -19,5 +20,10 @@ polygon = PackedVector2Array(-13, 13, 13, 13, 13, 2, 9, -3, 3, -3, 3, -6, -3, -6
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1369925576]
 stream = ExtResource("3_6t5aa")
 bus = &"VFX"
+
+[node name="Shield" type="Sprite2D" parent="." unique_id=1074070327]
+unique_name_in_owner = true
+position = Vector2(0, -10)
+texture = ExtResource("4_vgqql")
 
 [connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_audio_stream_finished"]

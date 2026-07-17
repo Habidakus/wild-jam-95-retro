@@ -19,6 +19,7 @@ enum BuffType {
 	LIVES_HIGHER_MAX,
 	LIVES_RESTORE_PER_WAVE,
 	SKIP_TO_LEVEL,
+	RES_SHIELD,
 }
 
 enum HowVisible {

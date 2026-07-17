@@ -25,6 +25,8 @@ var _max_x: float
 var _gun_cooldown: float = 0
 var _gun_cooldown_rate: float = BASE_GUN_COOLDOWN_RATE
 var _state: PlayerState = PlayerState.UNDEFINED
+var _active_shield: float = -1
+var _shield_duration: float = -1
 
 
 func initialize(board: Board) -> void:
@@ -34,6 +36,13 @@ func initialize(board: Board) -> void:
 	_state = PlayerState.ACTIVE
 	show()
 	var cooldown_strength: float = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_RATE_OF_FIRE)
+	_shield_duration = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.RES_SHIELD)
+	if _shield_duration > 0:
+		_active_shield = _shield_duration
+		%Shield.show()
+		%Shield.modulate.a = 1.0
+	else:
+		%Shield.hide()
 	_gun_cooldown_rate = BASE_GUN_COOLDOWN_RATE / (1.0 + cooldown_strength)
 
 
@@ -42,11 +51,33 @@ func _ready() -> void:
 	_cached_shape.set_point_cloud(%CollisionPolygon2D.polygon)
 
 
+func is_shielded() -> bool:
+	return _active_shield > 0
+
+
+func get_shield_y() -> float:
+	return %Shield.position.y - %Shield.texture.size().y / 2
+
+
 func _process(delta: float) -> void:
-	_gun_cooldown -= delta * _board.get_time_dilation()
+	delta *= _board.get_time_dilation()
+	_gun_cooldown -= delta
+	if _active_shield > 0:
+		var last_phase: int = int(round(_active_shield * 7.0 / _shield_duration))
+		_active_shield -= delta
+		var current_phase: int = int(round(_active_shield * 7.0 / _shield_duration))
+		if last_phase != current_phase:
+			var tween: Tween = create_tween()
+			if current_phase % 2 == 0:
+				tween.tween_property(%Shield, "modulate:a", 0.3, _shield_duration / 7.0)
+			else:
+				tween.tween_property(%Shield, "modulate:a", 1.0, _shield_duration / 7.0)
+		if _active_shield <= 0:
+			%Shield.hide()
+	
 	if _state != PlayerState.ACTIVE:
 		return
-
+	
 	if Input.is_action_pressed("move_right"):
 		if Input.is_action_pressed("move_left"):
 			_direction_vector = Vector2.ZERO
@@ -70,15 +101,21 @@ func _attempt_fire() -> void:
 
 
 func _on_hit_by_alien_bullet(_bullet: AlienBullet) -> void:
+	if _active_shield > 0:
+		return
 	_die()
 
 
 func _on_hit_by_alien_ship(_alien: AlienShip) -> void:
+	if _active_shield > 0:
+		return
 	_die()
 
 
 func _on_hit_by_ground_flames(_ground_flames: GroundFlames) -> void:
 	_ground_flames.extinguish()
+	if _active_shield > 0:
+		return
 	_die()
 
 
@@ -114,6 +151,11 @@ func start_respawn(time_to_respawn: float) -> void:
 func _respawn_complete() -> void:
 	_state = PlayerState.ACTIVE
 	$AudioStreamPlayer2D.stop()
+	if _shield_duration > 0:
+		_active_shield = _shield_duration
+		%Shield.show()
+		%Shield.modulate.a = 1.0
+
 
 
 func _on_audio_stream_finished() -> void:

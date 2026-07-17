@@ -73,6 +73,6 @@ TODO:
   - add explosive shells
   - add piercing shot
   - add pause (ESC in action)
-  - add accelleration to player tank
+  + add accelleration to player tank
   - sort enemy difficulty
   - fix name of gun rate-of-fire upgrades

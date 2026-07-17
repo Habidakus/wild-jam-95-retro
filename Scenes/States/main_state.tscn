@@ -289,7 +289,6 @@ grow_vertical = 0
 text = "(ESC to return)"
 
 [node name="Settings" type="Control" parent="." unique_id=885281664]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -316,10 +315,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -92.5
-offset_top = -48.0
-offset_right = 92.5
-offset_bottom = 48.0
+offset_left = -350.5
+offset_top = -160.5
+offset_right = 359.5
+offset_bottom = 160.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 16
@@ -343,9 +342,9 @@ ticks_on_borders = true
 ticks_position = 3
 
 [node name="MasterVolumeValue" type="Label" parent="Settings/GridContainer" unique_id=300848282]
-custom_minimum_size = Vector2(48, 0)
+custom_minimum_size = Vector2(64, 23)
 layout_mode = 2
-text = "Mute"
+text = "Instant	"
 
 [node name="VFXVolume" type="Label" parent="Settings/GridContainer" unique_id=1483690896]
 layout_mode = 2
@@ -364,9 +363,9 @@ ticks_on_borders = true
 ticks_position = 3
 
 [node name="VFXVolumeValue" type="Label" parent="Settings/GridContainer" unique_id=1067287899]
-custom_minimum_size = Vector2(48, 0)
+custom_minimum_size = Vector2(64, 23)
 layout_mode = 2
-text = "Mute"
+text = "Instant	"
 
 [node name="MusicVolume" type="Label" parent="Settings/GridContainer" unique_id=1769165520]
 layout_mode = 2
@@ -385,9 +384,9 @@ ticks_on_borders = true
 ticks_position = 3
 
 [node name="MusicVolumeValue" type="Label" parent="Settings/GridContainer" unique_id=802962711]
-custom_minimum_size = Vector2(48, 0)
+custom_minimum_size = Vector2(64, 23)
 layout_mode = 2
-text = "Mute"
+text = "Instant	"
 
 [node name="UIVolume" type="Label" parent="Settings/GridContainer" unique_id=119217431]
 layout_mode = 2
@@ -406,9 +405,26 @@ ticks_on_borders = true
 ticks_position = 3
 
 [node name="UIVolumeValue" type="Label" parent="Settings/GridContainer" unique_id=864872868]
-custom_minimum_size = Vector2(48, 0)
+custom_minimum_size = Vector2(64, 23)
 layout_mode = 2
-text = "Mute"
+text = "Instant	"
+
+[node name="UseAcceleration" type="Label" parent="Settings/GridContainer" unique_id=1481848569]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Tank Acceleration:"
+horizontal_alignment = 2
+
+[node name="UseAccelerationButton" type="CheckButton" parent="Settings/GridContainer" unique_id=166258491]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="UseAccelerationValue" type="Label" parent="Settings/GridContainer" unique_id=1092031004]
+custom_minimum_size = Vector2(64, 23)
+layout_mode = 2
+text = "Instant	"
 
 [node name="Label" type="Label" parent="Settings" unique_id=364166297]
 layout_mode = 1
@@ -427,6 +443,7 @@ text = "(ESC to return)"
 
 [node name="Upgrades" type="Control" parent="." unique_id=75370778]
 unique_name_in_owner = true
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

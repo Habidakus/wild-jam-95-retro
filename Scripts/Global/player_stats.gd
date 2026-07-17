@@ -16,6 +16,7 @@ var _minor_currency: int = 0
 var _major_currency: int = 0
 var _purchased_buffs: Array[PlayerBuff] = []
 var _difficulties_completed: Array[int] = []
+var _use_acceleration: bool = false
 
 
 func _ready() -> void:
@@ -28,6 +29,7 @@ func reset() -> void:
 	_major_currency = 0
 	_purchased_buffs = []
 	_difficulties_completed = []
+	_use_acceleration = false
 
 
 func get_minor_currency() -> int:
@@ -48,6 +50,15 @@ func buy_buff(buff: PlayerBuff) -> void:
 	_minor_currency -= buff.cost_minor
 	_major_currency -= buff.cost_major
 	_purchased_buffs.append(buff)
+
+
+func get_use_acceleration() -> bool:
+	return _use_acceleration
+
+
+func set_use_acceleration(use: bool) -> void:
+	_use_acceleration = use
+	save_game()
 
 
 func get_max_strength_acquired(buff_type: PlayerBuff.BuffType) -> float:
@@ -113,6 +124,8 @@ func load_game() -> void:
 		for diff: int in player_stats["diffs"]:
 			_difficulties_completed.append(diff)
 		_difficulties_completed.sort()
+	if player_stats.has("accel"):
+		_use_acceleration = player_stats["accel"]
 
 
 func save_game() -> void:
@@ -125,6 +138,7 @@ func save_game() -> void:
 		"minor": minor,
 		"major": major,
 		"diffs": _difficulties_completed,
+		"accel": _use_acceleration,
 	}
 	var path: String = ProjectSettings.globalize_path(STAT_FILE)
 	var file: FileAccess = FileAccess.open(STAT_FILE, FileAccess.WRITE)

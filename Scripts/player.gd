@@ -27,6 +27,8 @@ var _gun_cooldown_rate: float = BASE_GUN_COOLDOWN_RATE
 var _state: PlayerState = PlayerState.UNDEFINED
 var _active_shield: float = -1
 var _shield_duration: float = -1
+var _speed: float = 0
+var _use_acceleration: bool = false
 
 
 func initialize(board: Board) -> void:
@@ -35,6 +37,7 @@ func initialize(board: Board) -> void:
 	_max_x = board.size.x - _min_x
 	_state = PlayerState.ACTIVE
 	show()
+	_use_acceleration = PlayerStats.get_use_acceleration()
 	var cooldown_strength: float = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_RATE_OF_FIRE)
 	_shield_duration = PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.RES_SHIELD)
 	if _shield_duration > 0:
@@ -78,9 +81,11 @@ func _process(delta: float) -> void:
 	if _state != PlayerState.ACTIVE:
 		return
 	
+	var old_direction_vector: Vector2 = _direction_vector
 	if Input.is_action_pressed("move_right"):
 		if Input.is_action_pressed("move_left"):
 			_direction_vector = Vector2.ZERO
+			_speed = 0.0
 		else:
 			var right: float = Input.get_action_strength("move_right")
 			_direction_vector = Vector2.RIGHT * right if position.x < _max_x else Vector2.ZERO
@@ -89,6 +94,9 @@ func _process(delta: float) -> void:
 		_direction_vector = Vector2.LEFT * left if position.x > _min_x else Vector2.ZERO
 	else:
 		_direction_vector = Vector2.ZERO
+		_speed = 0.0
+	if old_direction_vector.x * _direction_vector.x < 0:
+		_speed = 0.0
 	if Input.is_action_pressed("fire"):
 		_attempt_fire()
 
@@ -157,14 +165,18 @@ func _respawn_complete() -> void:
 		%Shield.modulate.a = 1.0
 
 
-
 func _on_audio_stream_finished() -> void:
 	if _state == PlayerState.RESPAWNING:
 		$AudioStreamPlayer2D.play()
 
 
 func _physics_process(delta: float) -> void:
-	var velocity: Vector2 = _direction_vector * SPEED * delta * _board.get_time_dilation()
+	delta *= _board.get_time_dilation()
+	if _use_acceleration:
+		_speed = move_toward(_speed, SPEED, 2.0 * SPEED * delta)
+	else: 
+		_speed = SPEED
+	var velocity: Vector2 = _direction_vector * _speed * delta
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
 	var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 	query.shape = _cached_shape

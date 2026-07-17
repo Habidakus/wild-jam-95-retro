@@ -103,7 +103,7 @@ func _initialize_difficulty(difficulty: int) -> void:
 				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Shield
 			AlienShip.ShipType.Thin:
 				_secondary_alien_type = AlienShip.ShipType.Acid if difficulty % 2 == 0 else AlienShip.ShipType.Shield
-	print("Initialized diff=%d prim=%s sec=%s" % [difficulty, AlienShip.ShipType.keys()[_primary_alien_type], AlienShip.ShipType.keys()[_secondary_alien_type]])
+
 
 func _create_bunkers() -> void:
 	assert(_bunkers.is_empty())

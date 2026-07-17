@@ -11,6 +11,10 @@ var _all_upgrades: Array[PlayerBuff] = []
 func _ready() -> void:
 	Input.use_accumulated_input = false
 	%Description.text = ""
+	%MinorLabel.hide()
+	%MinorValue.text = ""
+	%MajorLabel.hide()
+	%MajorValue.text = ""
 	_load_buffs_from_file()
 	_proc_gen_other_buffs()
 	call_deferred("_set_up_buttons")
@@ -78,6 +82,8 @@ func _set_up_buttons() -> void:
 			has_one_shrouded = true
 		var button: Button = _dummy_button.duplicate()
 		var description: String = "???"
+		var minor_cost: int = 0
+		var major_cost: int = 0
 		button.set_meta("buff", buff)
 		button.disabled = true
 		if can_see == PlayerBuff.HowVisible.SHROUDED:
@@ -85,16 +91,23 @@ func _set_up_buttons() -> void:
 		else:
 			button.text = buff.button_name
 			description = buff.description
+			minor_cost = buff.cost_minor
+			major_cost = buff.cost_major
 		if buff.can_be_bought():
 			button.disabled = false
 		parent.add_child(button)
 		button.button_up.connect(Callable(self, "_on_button_up").bind(buff))
 		button.mouse_exited.connect(Callable(self, "_on_mouse_exited").bind(buff))
-		button.mouse_entered.connect(Callable(self, "_on_mouse_entered").bind(buff, description))
+		button.mouse_entered.connect(Callable(self, "_on_mouse_entered").bind(buff, description, minor_cost, major_cost))
 		any_button_present = true
 	_dummy_button.hide()
 	if not any_button_present:
 		%Description.text = "-+-  You've bought out the store.  -+-"
+		%MinorLabel.hide()
+		%MinorValue.text = ""
+		%MajorLabel.hide()
+		%MajorValue.text = ""
+
 
 
 func _process(_delta: float) -> void:
@@ -115,13 +128,30 @@ func _on_button_up(buff: PlayerBuff) -> void:
 
 
 var _current_hover_buff: PlayerBuff = null
-func _on_mouse_entered(buff: PlayerBuff, description: String) -> void:
+func _on_mouse_entered(buff: PlayerBuff, description: String, cost_minor: int, cost_major: int) -> void:
 	_current_hover_buff = buff
 	$AudioStreamPlayer2D.play()
 	%Description.text = description
+	%MinorLabel.show()
+	if cost_minor > 0:
+		%MinorLabel.show()
+		%MinorValue.text = str(cost_minor)
+	else:
+		%MinorLabel.hide()
+		%MinorValue.text = ""
+	if cost_major > 0:
+		%MajorValue.text = cost_major
+		%MajorLabel.show()
+	else:
+		%MajorValue.text = ""
+		%MajorLabel.hide()
 
 
 func _on_mouse_exited(buff: PlayerBuff) -> void:
 	if _current_hover_buff == buff:
 		_current_hover_buff = null
 		%Description.text = ""
+		%MinorLabel.hide()
+		%MinorValue.text = ""
+		%MajorLabel.hide()
+		%MajorValue.text = ""

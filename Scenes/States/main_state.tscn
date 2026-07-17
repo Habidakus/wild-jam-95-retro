@@ -77,6 +77,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MainMenu" type="Control" parent="." unique_id=946545521]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -259,6 +260,19 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Godot 4.6"
 
+[node name="SpaceInvaders" type="Label" parent="Credits/GridContainer" unique_id=102639500]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Original 1978 Design:"
+horizontal_alignment = 2
+
+[node name="TomohiroNishikado" type="Label" parent="Credits/GridContainer" unique_id=161637870]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 32
+text = "Tomohiro Nishikado"
+vertical_alignment = 2
+
 [node name="Label" type="Label" parent="Credits" unique_id=844708308]
 layout_mode = 1
 anchors_preset = 7
@@ -432,42 +446,84 @@ grow_vertical = 2
 pivot_offset = Vector2(576, 324)
 color = Color(0, 0, 0, 1)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Upgrades" unique_id=581757822]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Upgrades" unique_id=167553632]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -66.5
-offset_top = -22.5
-offset_right = 66.5
-offset_bottom = 22.5
-grow_horizontal = 2
+offset_left = -490.0
+offset_top = -24.0
+offset_right = -40.0
+offset_bottom = 22.0
+grow_horizontal = 0
 grow_vertical = 2
-theme_override_constants/separation = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Upgrades/HBoxContainer" unique_id=643829400]
-layout_mode = 2
-theme_override_constants/separation = 40
 alignment = 1
 
-[node name="DummyButton" type="Button" parent="Upgrades/HBoxContainer/VBoxContainer" unique_id=1573829638]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "FNORD"
-
-[node name="Control" type="Control" parent="Upgrades/HBoxContainer" unique_id=633057729]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="Description" type="Label" parent="Upgrades/HBoxContainer" unique_id=1256577141]
+[node name="Description" type="Label" parent="Upgrades/VBoxContainer2" unique_id=1256577141]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Description"
 autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Upgrades/VBoxContainer2" unique_id=1368385119]
+layout_mode = 2
+alignment = 1
+
+[node name="Control2" type="Control" parent="Upgrades/VBoxContainer2/HBoxContainer" unique_id=711471394]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="MinorLabel" type="Label" parent="Upgrades/VBoxContainer2/HBoxContainer" unique_id=159139144]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Credits:"
+horizontal_alignment = 2
+
+[node name="MinorValue" type="Label" parent="Upgrades/VBoxContainer2/HBoxContainer" unique_id=1009678514]
+unique_name_in_owner = true
+layout_mode = 2
+text = "900"
+
+[node name="Control" type="Control" parent="Upgrades/VBoxContainer2/HBoxContainer" unique_id=159285571]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="MajorLabel" type="Label" parent="Upgrades/VBoxContainer2/HBoxContainer" unique_id=180773725]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tokens:"
+horizontal_alignment = 2
+
+[node name="MajorValue" type="Label" parent="Upgrades/VBoxContainer2/HBoxContainer" unique_id=259065192]
+unique_name_in_owner = true
+layout_mode = 2
+text = "900"
+
+[node name="ButtonContainer" type="GridContainer" parent="Upgrades" unique_id=1662736896]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 80.0
+offset_top = -22.5
+offset_right = 580.0
+offset_bottom = 22.5
+grow_vertical = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 40
+columns = 2
+
+[node name="DummyButton" type="Button" parent="Upgrades/ButtonContainer" unique_id=1573829638]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "FNORD"
 
 [node name="Label" type="Label" parent="Upgrades" unique_id=1324669613]
 layout_mode = 1

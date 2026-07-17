@@ -23,9 +23,9 @@ Scale Your Vectors Before Filtering
 
 Bunker Tech:
   Drones
-  Wider
+  + Wider
   More of them
-  Stronger
+  + Stronger
   Ballard (destroys aliens who collide)
 
 Quartermaster:
@@ -44,14 +44,14 @@ Forge:
   +1 bullet for all bullets
 
 Gun Upgrade:
-  Rate of Fire
+  + Rate of Fire
   Shields
 
 Enemy Upgrades:
-  Faster
+  + Faster
   Timed Shot (over Gun or Base)
   Timed Shot (gun pos + gun vector * time == alien height - alien bullet speed * time)
-  Shield
+  + Shield
   Wider Bullet
   Rate of Fire
 

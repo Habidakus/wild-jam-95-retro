@@ -7,6 +7,8 @@ const DROP_BULLET = preload("res://Scenes/alien_flame_bullet.tscn")
 const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
 const PLAYER = preload("res://Scenes/player.tscn")
 const COIN_TEXTURE = preload("res://Images/coin.svg")
+const HAPPY_BUNKER_SOUND = preload("res://Sounds/AlienYell001.wav")
+const SAD_BUNKER_SOUND = preload("res://Sounds/AlienYell002.wav")
 const ALIEN_SPEED: float = 40
 const ALIEN_DROP_DISTANCE: float = 40
 const STAR_ROTATION_AMOUNT: float = 0.0015
@@ -34,7 +36,6 @@ var _bottom_alien_in_each_column: Array[AlienShip] = []
 var _alien_downward_goal: float = 0
 var _alien_speed_multiple: float = 1.0
 var _minor_currency: int = 0
-var _major_currency: int = 0
 var _difficulty: int = 0
 var _player_bullet_speed_multiple: float = 1.0
 var _primary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
@@ -53,19 +54,18 @@ func _set_player_lives(amount: int) -> void:
 	_player_lives = amount
 	var tween: Tween = create_tween()
 	if amount > 0:
-		tween.tween_property($Lives, "modulate:a", 0, 0.1)
-		$Lives.text = str(amount)
-		tween.tween_property($Lives, "modulate:a", 1, 0.1)
-		tween.tween_property($Lives, "modulate:a", 0.5, 2)
+		tween.tween_property(%Lives, "modulate:a", 0, 0.1)
+		%Lives.text = str(amount - 1)
+		tween.tween_property(%Lives, "modulate:a", 1, 0.1)
+		tween.tween_property(%Lives, "modulate:a", 0.5, 2)
 	else:
-		tween.tween_property($Lives, "modulate:a", 0, 0.5)
+		tween.tween_property(%Lives, "modulate:a", 0, 0.5)
 
 
 func initialize(difficulty: int) -> void:
 	_player_bullet_speed_multiple = (1.0 + PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_BULLET_SPEED))
 	_time_dilation_array = []
 	_minor_currency = 0
-	_major_currency = 0
 	%GameOverLabel.hide()
 	%Congrats.hide()
 	_initialize_difficulty(difficulty)
@@ -441,48 +441,76 @@ func _on_level_won() -> void:
 	_player = null
 	get_tree().call_group("bullet", "queue_free")
 	var wait_time: float = 0
+	var has_all_bunkers: bool = false
+	%BunkerComplete.step = 0.01
+	%BunkerComplete.value = 0.0
+	%BunkerComplete.modulate.a = 1.0
+	%BunkerComplete.min_value = 0.0
+	%BunkerComplete.max_value = float(_bunker_count)
 	if _bunkers.is_empty():
 		wait_time = 1.5
 	else:
+		has_all_bunkers = _bunkers.size() == _bunker_count
+		var fill_value: int = 1
 		for bunker: Bunker in _bunkers:
-			wait_time = max(wait_time, _cash_in_bunker(tween, bunker))
+			wait_time = max(wait_time, _cash_in_bunker(tween, bunker, fill_value))
+			fill_value += 1
 		_bunkers = []
-	assert(_major_currency <= _bunker_count)
-	PlayerStats.on_wave_end(_minor_currency, _difficulty, _major_currency == _bunker_count)
+	var show_coin: bool = not PlayerStats.has_completed_difficulty(_difficulty)
+	PlayerStats.on_wave_end(_minor_currency, _difficulty, has_all_bunkers)
 	tween.tween_interval(wait_time)
+	if show_coin:
+		var major_current: Vector2 = %BunkerComplete.position
+		if has_all_bunkers:
+			var major_dest: Vector2 = major_current + Vector2.UP * 150
+			%BunkerSound.stream = HAPPY_BUNKER_SOUND
+			tween.tween_callback(Callable(%BunkerSound, "play"))
+			tween.parallel().tween_property(%BunkerComplete, "position", major_dest, wait_time)
+			tween.parallel().tween_property(%BunkerComplete, "modulate:a", 0.0, wait_time)
+		else:
+			%BunkerSound.stream = SAD_BUNKER_SOUND
+			var major_dest: Vector2 = major_current + Vector2.DOWN * 50
+			tween.tween_callback(Callable(%BunkerSound, "play"))
+			tween.parallel().tween_property(%BunkerComplete, "position", major_dest, wait_time)
+			tween.parallel().tween_property(%BunkerComplete, "value", 0.0, wait_time)
+			tween.tween_property(%BunkerComplete, "modulate:a", 0.0, 0.0)
+		tween.tween_property(%BunkerComplete, "position", major_current, 0.0)
 	tween.tween_callback(Callable(self, "initialize").bind(_difficulty + 1))
 
 
-func _cash_in_bunker(coord_tween: Tween, bunker: Bunker) -> float:
-	_major_currency += 1
+func _cash_in_bunker(coord_tween: Tween, bunker: Bunker, fill_value: int) -> float:
 	# TODO: Spawn coin on fading bunker
-	var coin_sprite: Sprite2D = Sprite2D.new()
-	var bunker_size: Vector2 = bunker._sprite.texture.get_size()
-	coin_sprite.position = bunker.position + Vector2.UP * 25 # + bunker_size / 2
-	coin_sprite.centered = true
-	coin_sprite.texture = COIN_TEXTURE
-	var ratio: float = bunker_size.y / coin_sprite.texture.get_size().y
-	coin_sprite.scale = Vector2(ratio, ratio)
+	var show_coin: bool = not PlayerStats.has_completed_difficulty(_difficulty)
 	const FADE_TIME: float = 1.0
-	coord_tween.tween_callback(Callable(self, "_spawn_coin").bind(coin_sprite, FADE_TIME))
-	coord_tween.parallel()
+	if show_coin:
+		var coin_sprite: Sprite2D = Sprite2D.new()
+		var bunker_size: Vector2 = bunker._sprite.texture.get_size()
+		coin_sprite.position = bunker.position + Vector2.UP * 25 # + bunker_size / 2
+		coin_sprite.centered = true
+		coin_sprite.texture = COIN_TEXTURE
+		var ratio: float = bunker_size.y / coin_sprite.texture.get_size().y
+		coin_sprite.scale = Vector2(ratio, ratio)
+		coord_tween.tween_callback(Callable(self, "_spawn_coin").bind(coin_sprite, FADE_TIME, fill_value))
+		coord_tween.parallel()
 	coord_tween.tween_property(bunker, "modulate:a", 0, FADE_TIME / 2.0)
 	coord_tween.tween_callback(Callable(bunker, "queue_free"))
 	#coord_tween.tween_interval(FADE_TIME / 2.0)
-	return FADE_TIME / 2.0
+	return FADE_TIME / 2.0 if show_coin else FADE_TIME / 4.0
 
 
-func _spawn_coin(coin_sprite: Sprite2D, time: float) -> void:
+func _spawn_coin(coin_sprite: Sprite2D, time: float, fill_value: float) -> void:
 	var tween: Tween = create_tween()
 	add_child(coin_sprite)
 	#coin_sprite.modulate.a = 0.01
 	#tween.tween_property(coin_sprite, "modulate:a", 0.0, 0.01)
 	#tween.tween_interval(0.01)
+	var destination: Vector2 = %BunkerComplete.position + %BunkerComplete.size / 2.0
 	tween.tween_property(coin_sprite, "modulate:a", 1.0, time / 4.0)
 	tween.parallel().tween_callback(Callable($CoinNoise, "play"))
-	tween.parallel().tween_property(coin_sprite, "position", coin_sprite.position + Vector2.UP	* 150, time)
-	tween.parallel().tween_property(coin_sprite, "modulate:a", 0.0, time)
+	tween.parallel().tween_property(coin_sprite, "position", destination, time / 2.0)
+	tween.parallel().tween_property(coin_sprite, "modulate:a", 0.0, time / 2.0)
 	tween.tween_callback(Callable(coin_sprite, "queue_free"))
+	tween.tween_property(%BunkerComplete, "value", float(fill_value), time / 2.0)
 
 
 func _on_game_over() -> void:

@@ -7,6 +7,6 @@ script = ExtResource("1_1oiky")
 button_name = "Double Barrelled"
 description = "More barrelles means more bullets. That's gotta be good, right?"
 buff_type = 12
-strength = 0.5
+strength = 0.25
 cost_minor = 50
 metadata/_custom_type_script = "uid://drmwlmgaehrlr"

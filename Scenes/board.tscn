@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
 [ext_resource type="AudioStream" uid="uid://d6p50lodrap8" path="res://Sounds/WinkOut002.wav" id="2_2wvcj"]
+[ext_resource type="Texture2D" uid="uid://cg5tuuoqdmu1w" path="res://Images/majorCurrency.svg" id="3_uh3b8"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tnbny"]
 font_size = 32
@@ -54,7 +55,6 @@ vertical_alignment = 1
 
 [node name="Congrats" type="Label" parent="." unique_id=679883725]
 unique_name_in_owner = true
-visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 15
@@ -68,9 +68,9 @@ theme_override_font_sizes/font_size = 112
 text = "Brace  yourself
 there  are  more"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="Lives" type="Label" parent="." unique_id=1506430452]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -90,6 +90,7 @@ bus = &"VFX"
 
 [node name="WaveNumber" type="Label" parent="." unique_id=1837482769]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,3 +101,24 @@ text = "Wave 20"
 label_settings = SubResource("LabelSettings_2wvcj")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BunkerComplete" type="TextureProgressBar" parent="." unique_id=735557847]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -108.0
+offset_top = -44.0
+offset_right = 108.0
+offset_bottom = 172.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 4
+texture_progress = ExtResource("3_uh3b8")
+
+[node name="BunkerSound" type="AudioStreamPlayer2D" parent="." unique_id=1848101389]
+unique_name_in_owner = true
+bus = &"VFX"

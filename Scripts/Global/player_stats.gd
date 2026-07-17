@@ -75,6 +75,7 @@ func load_game() -> void:
 		return
 	var file: FileAccess = FileAccess.open(STAT_FILE, FileAccess.READ)
 	var path: String = ProjectSettings.globalize_path(STAT_FILE)
+	print("Loading from %s" % [path])
 	if not file:
 		var file_error: Error = FileAccess.get_open_error()
 		print("LOAD ERROR accessing %s: %s" % [path, file_error])
@@ -99,6 +100,7 @@ func load_game() -> void:
 	if player_stats.has("diffs"):
 		for diff: int in player_stats["diffs"]:
 			_difficulties_completed.append(diff)
+		_difficulties_completed.sort()
 
 
 func save_game() -> void:

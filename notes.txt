@@ -28,6 +28,9 @@ Bunker Tech:
   + Stronger
   Ballard (destroys aliens who collide)
 
+Tank Upgrades:
+  + Res shields
+
 Quartermaster:
   EMP Bomb (slows all enemies for a bit)
   Smart Bomb (damages all fragile enemies)

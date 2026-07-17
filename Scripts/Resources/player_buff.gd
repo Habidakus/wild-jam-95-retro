@@ -36,6 +36,7 @@ enum HowVisible {
 @export var prereq_buffs: Array[PlayerBuff]
 @export var cost_minor: int
 @export var cost_major: int
+@export var diff_completed: int = -1
 
 
 func has() -> bool:
@@ -48,6 +49,9 @@ func can_be_bought() -> bool:
 		return false
 	if not PlayerStats.can_afford(cost_minor, cost_major):
 		return false
+	if diff_completed >= 0:
+		if not PlayerStats.has_completed_difficulty(diff_completed):
+			return false
 	for prereq: PlayerBuff in prereq_buffs:
 		if not PlayerStats.has_buff(prereq):
 			return false
@@ -67,6 +71,9 @@ func can_see() -> HowVisible:
 			if pr_visibility == HowVisible.SHROUDED or pr_visibility == HowVisible.INVISIBLE:
 				return HowVisible.INVISIBLE
 			missing_prereqs += 1
+	if diff_completed >= 0:
+		if not PlayerStats.has_completed_difficulty(diff_completed):
+			return HowVisible.SHROUDED
 	if gained_prereqs > 0:
 		if missing_prereqs == 0:
 			return HowVisible.FULLY_VISIBLE

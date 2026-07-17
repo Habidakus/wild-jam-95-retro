@@ -64,6 +64,8 @@ func _set_player_lives(amount: int) -> void:
 func initialize(difficulty: int) -> void:
 	_player_bullet_speed_multiple = (1.0 + PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.GUN_BULLET_SPEED))
 	_time_dilation_array = []
+	_minor_currency = 0
+	_major_currency = 0
 	%GameOverLabel.hide()
 	%Congrats.hide()
 	_initialize_difficulty(difficulty)
@@ -445,6 +447,8 @@ func _on_level_won() -> void:
 		for bunker: Bunker in _bunkers:
 			wait_time = max(wait_time, _cash_in_bunker(tween, bunker))
 		_bunkers = []
+	assert(_major_currency <= _bunker_count)
+	PlayerStats.on_wave_end(_minor_currency, _difficulty, _major_currency == _bunker_count)
 	tween.tween_interval(wait_time)
 	tween.tween_callback(Callable(self, "initialize").bind(_difficulty + 1))
 
@@ -483,6 +487,7 @@ func _spawn_coin(coin_sprite: Sprite2D, time: float) -> void:
 
 func _on_game_over() -> void:
 	_game_over = true
+	PlayerStats.on_wave_end(_minor_currency, _difficulty, false)
 	_time_dilation_array = [[0, 1, -1]]
 	var tween: Tween = create_tween()
 	%GameOverLabel.show()
@@ -493,7 +498,7 @@ func _on_game_over() -> void:
 
 
 func _update_upgrades() -> void:
-	PlayerStats.add_currency(_minor_currency, _major_currency)
+	#PlayerStats.add_currency(_minor_currency, _major_currency)
 	_menu_state_machine.switch_state("MainMenu")
 
 

@@ -29,7 +29,8 @@ func _proc_gen_other_buffs() -> void:
 		skip_level_buff.button_name = str("Skip Wave %d" % [i - 1])
 		skip_level_buff.description = str("Don't waste time on waves 1 to %d, skip right to wave %d" % [i - 1, i])
 		skip_level_buff.cost_major = 0
-		skip_level_buff.cost_minor = 40 + 10 * i
+		skip_level_buff.cost_minor = 40 + 5 * i
+		skip_level_buff.diff_completed = i - 2
 		if previous_buff != null:
 			skip_level_buff.prereq_buffs.append(previous_buff)
 		previous_buff = skip_level_buff
@@ -109,7 +110,6 @@ func _set_up_buttons() -> void:
 		%MajorValue.text = ""
 
 
-
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		our_state_machine.switch_state("MainMenu")
@@ -120,6 +120,11 @@ func has_upgrades_to_buy() -> bool:
 		if buff.can_be_bought():
 			return true
 	return false
+
+
+func enter_state() -> void:
+	super.enter_state()
+	update_buttons()
 
 
 func _on_button_up(buff: PlayerBuff) -> void:

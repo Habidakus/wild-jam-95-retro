@@ -15,17 +15,19 @@ const STAT_FILE: String = "user://save_game.json"
 var _minor_currency: int = 0
 var _major_currency: int = 0
 var _purchased_buffs: Array[PlayerBuff] = []
+var _difficulties_completed: Array[int] = []
 
 
 func _ready() -> void:
 	load_game()
-	print("Current player stats minor=%d major=%d" % [_minor_currency, _major_currency])
+	print("Current player stats minor=%d major=%d completed=%s" % [_minor_currency, _major_currency, _difficulties_completed])
 
 
 func reset() -> void:
 	_minor_currency = 0
 	_major_currency = 0
 	_purchased_buffs = []
+	_difficulties_completed = []
 
 
 func buy_buff(buff: PlayerBuff) -> void:
@@ -45,6 +47,10 @@ func get_max_strength_acquired(buff_type: PlayerBuff.BuffType) -> float:
 	return ret_val
 
 
+func has_completed_difficulty(diff: int) -> bool:
+	return _difficulties_completed.has(diff)
+
+
 func can_afford(minor: int, major: int) -> bool:
 	return _minor_currency >= minor && _major_currency >= major
 
@@ -53,9 +59,12 @@ func has_buff(buff: PlayerBuff) -> bool:
 	return _purchased_buffs.has(buff)
 
 
-func add_currency(minor: int, major: int) -> void:
+func on_wave_end(minor: int, difficulty: int, completed: bool) -> void:
 	_minor_currency += minor
-	_major_currency += major
+	if completed:
+		if not _difficulties_completed.has(difficulty):
+			_difficulties_completed.append(difficulty)
+			_major_currency += 1
 	save_game()
 	print("Current player stats minor=%d major=%d" % [_minor_currency, _major_currency])
 
@@ -87,6 +96,9 @@ func load_game() -> void:
 	_minor_currency = player_stats["minor"]
 	_major_currency = player_stats["major"]
 	_purchased_buffs = []
+	if player_stats.has("diffs"):
+		for diff: int in player_stats["diffs"]:
+			_difficulties_completed.append(diff)
 
 
 func save_game() -> void:
@@ -98,6 +110,7 @@ func save_game() -> void:
 	var player_stats: Dictionary = {
 		"minor": minor,
 		"major": major,
+		"diffs": _difficulties_completed,
 	}
 	var path: String = ProjectSettings.globalize_path(STAT_FILE)
 	var file: FileAccess = FileAccess.open(STAT_FILE, FileAccess.WRITE)

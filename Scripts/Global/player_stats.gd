@@ -30,6 +30,18 @@ func reset() -> void:
 	_difficulties_completed = []
 
 
+func get_minor_currency() -> int:
+	return _minor_currency
+
+
+func get_major_currency() -> int:
+	return _major_currency
+
+
+func has_completed_any() -> bool:
+	return not _difficulties_completed.is_empty()
+
+
 func buy_buff(buff: PlayerBuff) -> void:
 	assert(not _purchased_buffs.has(buff))
 	assert(buff.can_be_bought())

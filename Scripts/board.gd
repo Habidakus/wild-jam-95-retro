@@ -364,9 +364,10 @@ func _process(delta: float) -> void:
 	_time_dilation_array = new_td
 	%Parallax2D.autoscroll = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
 	$Background.rotation += delta * _time_dilation * STAR_ROTATION_AMOUNT
-	if Input.is_key_pressed(KEY_P) and not _aliens.is_empty():
-		for alien: AlienShip in _aliens:
-			alien.die()
+	if OS.has_feature("editor"):
+		if Input.is_key_pressed(KEY_P) and not _aliens.is_empty():
+			for alien: AlienShip in _aliens:
+				alien.die()
 
 
 func _physics_process(delta: float) -> void:

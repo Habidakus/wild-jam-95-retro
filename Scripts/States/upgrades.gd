@@ -45,7 +45,7 @@ func _load_buffs_from_file() -> void:
 	for file: String in dir.get_files():
 		var file_path = BUFF_DIR.path_join(file)
 		if file_path.ends_with(".remap"):
-			file_path = file_path.remap(".remap", "")
+			file_path = file_path.replace(".remap", "")
 		elif file_path.ends_with(".import"):
 			file_path = file_path.replace(".import", "")
 		if not file_path.ends_with(".tres") and not file_path.ends_with(".res"):
@@ -64,6 +64,14 @@ func update_buttons() -> void:
 		parent.remove_child(child)
 		child.queue_free()
 	_set_up_buttons()
+	%OwnedMinor.text = str(PlayerStats.get_minor_currency())
+	var major_currency: int = PlayerStats.get_major_currency()
+	if major_currency > 0 or PlayerStats.has_completed_any():
+		%OwnedMajorLabel.show()
+		%OwnedMajor.text = str(major_currency)
+	else:
+		%OwnedMajorLabel.hide()
+		%OwnedMajor.text = ""
 
 
 func _set_up_buttons() -> void:

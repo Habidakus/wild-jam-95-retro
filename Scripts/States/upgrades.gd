@@ -153,7 +153,7 @@ func _on_mouse_entered(buff: PlayerBuff, description: String, cost_minor: int, c
 		%MinorLabel.hide()
 		%MinorValue.text = ""
 	if cost_major > 0:
-		%MajorValue.text = cost_major
+		%MajorValue.text = str(cost_major)
 		%MajorLabel.show()
 	else:
 		%MajorValue.text = ""

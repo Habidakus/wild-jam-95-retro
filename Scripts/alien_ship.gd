@@ -12,7 +12,25 @@ enum ShipType {
 	Acid,
 	Thin,
 	Shield,
+	RapidFire,
 }
+
+
+static func get_strength(ship_type: ShipType) -> float:
+	match ship_type:
+		ShipType.Regular:
+			return 1.0
+		ShipType.Acid:
+			return 1.5
+		ShipType.Thin:
+			return 1.25
+		ShipType.Shield:
+			return 1.8
+		ShipType.RapidFire:
+			return 1.65
+		_:
+			assert(false)
+			return 1.0
 
 
 var _can_shoot: bool = false
@@ -27,6 +45,7 @@ var _animation_set: String = "Regular"
 var _ship_mass: int = 250
 var _has_shield: bool = false
 var _loaded_shield: int = 0
+var _weapon_speed_multiple: float = 1.0
 
 
 func _ready() -> void:
@@ -40,6 +59,10 @@ func initialize(board: Board, col: int, row: int, ship_type: ShipType) -> void:
 	_row = row
 	match ship_type:
 		ShipType.Regular:
+			if col == 0 or col == 10:
+				_animation_set = "Hat"
+			elif col % 2 == 0:
+				_animation_set = "Waggle"
 			pass
 		ShipType.Acid:
 			_acid = true
@@ -52,6 +75,9 @@ func initialize(board: Board, col: int, row: int, ship_type: ShipType) -> void:
 			_ship_mass = 500
 			_body_color = Color(0x5064c8ff)
 			_has_shield = true
+		ShipType.RapidFire:
+			_animation_set = "RapidFire"
+			_weapon_speed_multiple = 0.33
 	$AnimatedSprite2D.material.set_shader_parameter("target_color", _body_color)
 
 
@@ -73,7 +99,7 @@ func get_impact_damage() -> int:
 
 func power_up_weapon(power_up_length: float) -> void:
 	_can_shoot = true
-	_weapon_cooldown = 1 + WEAPON_COOLDOWN_TIME * power_up_length
+	_weapon_cooldown = (1 + WEAPON_COOLDOWN_TIME * power_up_length) * _weapon_speed_multiple
 
 
 func on_bullet_impact(bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
@@ -131,7 +157,7 @@ func _get_weapon_cooldown_time() -> float:
 	if _acid:
 		return WEAPON_COOLDOWN_TIME * 4.0
 	else:
-		return WEAPON_COOLDOWN_TIME
+		return WEAPON_COOLDOWN_TIME * _weapon_speed_multiple
 
 
 func _process(delta: float) -> void:

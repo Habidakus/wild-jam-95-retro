@@ -3,12 +3,18 @@
 [ext_resource type="Script" uid="uid://dwmolq6yhk7cr" path="res://Scripts/alien_ship.gd" id="1_a47bc"]
 [ext_resource type="Shader" uid="uid://bt3kqhb5sokvj" path="res://Scripts/Shaders/color_interior.gdshader" id="2_avhiq"]
 [ext_resource type="Texture2D" uid="uid://dald70v07n56g" path="res://Images/test_alien_01.png" id="2_qbl4w"]
+[ext_resource type="Texture2D" uid="uid://5f0xlrcn103v" path="res://Images/HatAlien_01.png" id="3_6aavr"]
 [ext_resource type="Texture2D" uid="uid://bbpl2nj55o7a3" path="res://Images/test_alien_02.png" id="3_avhiq"]
+[ext_resource type="Texture2D" uid="uid://bfhfoghm53akc" path="res://Images/RapidFireAlien_01.png" id="3_slpj7"]
+[ext_resource type="Texture2D" uid="uid://bo7oe26swcs3f" path="res://Images/RapidFireAlien_02.png" id="4_ogsft"]
+[ext_resource type="Texture2D" uid="uid://cvo4xqa4bx706" path="res://Images/HatAlien_02.png" id="4_tg0gl"]
 [ext_resource type="Texture2D" uid="uid://cmlteyccysmy5" path="res://Images/Shield_Alien_1.png" id="5_00bnw"]
 [ext_resource type="Texture2D" uid="uid://d3vi67tja1ydf" path="res://Images/thin_alien_1.png" id="5_pv8xr"]
 [ext_resource type="Texture2D" uid="uid://dfrr6qqquhm7a" path="res://Images/Shield_Alien_2.png" id="6_nse5b"]
 [ext_resource type="Texture2D" uid="uid://3fy6p0480opq" path="res://Images/thin_alien_2.png" id="6_qxc1b"]
 [ext_resource type="Texture2D" uid="uid://b6n7v07qhtbxt" path="res://Images/Shield_Neg.png" id="9_nse5b"]
+[ext_resource type="Texture2D" uid="uid://b75kernywrejb" path="res://Images/Waggle_01.png" id="13_8kc81"]
+[ext_resource type="Texture2D" uid="uid://dspqtv7ur42rh" path="res://Images/Waggle_02.png" id="14_2qma8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pv8xr"]
 resource_local_to_scene = true
@@ -20,6 +26,28 @@ shader_parameter/edge_thickness = 1.60000005225
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6ya21"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_6aavr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tg0gl")
+}],
+"loop": true,
+"name": &"Hat",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_slpj7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ogsft")
+}],
+"loop": true,
+"name": &"RapidFire",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_qbl4w")
@@ -52,6 +80,17 @@ animations = [{
 "loop": true,
 "name": &"Thin",
 "speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_8kc81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_2qma8")
+}],
+"loop": true,
+"name": &"Waggle",
+"speed": 2.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1tbak"]
@@ -66,9 +105,9 @@ script = ExtResource("1_a47bc")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=455135240]
 material = SubResource("ShaderMaterial_pv8xr")
 sprite_frames = SubResource("SpriteFrames_6ya21")
-animation = &"Shield"
+animation = &"Hat"
 autoplay = "Regular"
-frame_progress = 0.61574507
+frame_progress = 0.22820443
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1520182911]
 shape = SubResource("CapsuleShape2D_1tbak")

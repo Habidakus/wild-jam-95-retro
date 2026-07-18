@@ -40,6 +40,7 @@ var _difficulty: int = 0
 var _player_bullet_speed_multiple: float = 1.0
 var _primary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 var _secondary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
+var _master_difficulty_list: Array[Array] = []
 
 
 func _ready() -> void:
@@ -83,28 +84,48 @@ func initialize(difficulty: int) -> void:
 
 func _initialize_difficulty(difficulty: int) -> void:
 	_difficulty = difficulty
-	_primary_alien_type = AlienShip.ShipType.Regular
-	_secondary_alien_type = AlienShip.ShipType.Regular
-	_alien_speed_multiple = 1.0 + floor(difficulty / 4.0) * 0.33
-	match difficulty % 4:
-		0:
-			_primary_alien_type = AlienShip.ShipType.Regular
-		1:
-			_primary_alien_type = AlienShip.ShipType.Thin
-		2:
-			_primary_alien_type = AlienShip.ShipType.Acid
-		3:
-			_primary_alien_type = AlienShip.ShipType.Shield
-	if difficulty > 8:
-		match _primary_alien_type:
-			AlienShip.ShipType.Regular:
-				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Acid
-			AlienShip.ShipType.Shield:
-				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Acid
-			AlienShip.ShipType.Acid:
-				_secondary_alien_type = AlienShip.ShipType.Thin if difficulty % 2 == 0 else AlienShip.ShipType.Shield
-			AlienShip.ShipType.Thin:
-				_secondary_alien_type = AlienShip.ShipType.Acid if difficulty % 2 == 0 else AlienShip.ShipType.Shield
+	if _master_difficulty_list.is_empty():
+		_build_master_difficulty_list()
+	var index: int = min(difficulty, _master_difficulty_list.size() - 1)
+	_primary_alien_type = _master_difficulty_list[index][0]
+	_secondary_alien_type = _master_difficulty_list[index][1]
+	_alien_speed_multiple = _master_difficulty_list[index][2]
+
+
+func _build_master_difficulty_list() -> void:
+	assert(_master_difficulty_list.is_empty())
+	for speed: int in range(0, 6):
+		var asm: float = 1.0 + speed * 0.3333
+		for primary: AlienShip.ShipType in AlienShip.ShipType.values():
+			for secondary: AlienShip.ShipType in AlienShip.ShipType.values():
+				if primary == secondary and primary != AlienShip.ShipType.Regular:
+					continue # Never let two shields cover each other
+				if primary == AlienShip.ShipType.Regular and secondary != AlienShip.ShipType.Regular and speed > 0:
+					continue
+				var prim_strength: float = AlienShip.get_strength(primary)
+				var sec_strength: float = AlienShip.get_strength(secondary)
+				if sec_strength < prim_strength:
+					continue
+				var strength: float = _calculate_wave_strength(primary, secondary, asm)
+				_master_difficulty_list.append([primary, secondary, asm, strength])
+	_master_difficulty_list.sort_custom(
+		func(a, b):
+			if a[2] != b[2]:
+				return a[2] < b[2]
+			if a[3] != b[3]:
+				return a[3] < b[3]
+			if a[1] != b[1]:
+				return a[1] < b[1]
+			return false
+	)
+	#var wave: int = 1
+	#for entry: Array in _master_difficulty_list:
+		#print("wave #%d: %s %s speed=%s" % [wave, AlienShip.ShipType.keys()[entry[0]], AlienShip.ShipType.keys()[entry[1]], entry[2]])
+		#wave += 1
+
+
+func _calculate_wave_strength(primary: AlienShip.ShipType, secondary: AlienShip.ShipType, speed: float) -> float:
+	return AlienShip.get_strength(primary) * sqrt(AlienShip.get_strength(secondary)) * speed
 
 
 func _create_bunkers() -> void:

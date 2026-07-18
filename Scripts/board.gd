@@ -75,10 +75,11 @@ func initialize(difficulty: int) -> void:
 	_create_starfield()
 	_create_player()
 	MusicPlayer.play_next_track()
-	%WaveNumber.modulate.a = 0
 	%WaveNumber.text = str("Wave %d" % [_difficulty + 1])
 	var tween: Tween = create_tween()
+	tween.tween_property(%WaveNumber, "modulate:a", 0.0, 0.2)
 	tween.tween_property(%WaveNumber, "modulate:a", 1.0, 0.2)
+	tween.tween_interval(1.0)
 	tween.tween_property(%WaveNumber, "modulate:a", 0.0, 0.8)
 
 

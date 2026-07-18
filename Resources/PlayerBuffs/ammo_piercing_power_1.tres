@@ -10,4 +10,5 @@ buff_type = 5
 strength = 3.0
 cost_minor = 200
 cost_major = 2
+post_purchase_tooltip = "To use in game - press the 1 key (or controller X button) to activate."
 metadata/_custom_type_script = "uid://drmwlmgaehrlr"

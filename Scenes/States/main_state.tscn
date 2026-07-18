@@ -289,6 +289,7 @@ grow_vertical = 0
 text = "(ESC to return)"
 
 [node name="Settings" type="Control" parent="." unique_id=885281664]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -444,7 +445,6 @@ text = "(ESC to return)"
 
 [node name="Upgrades" type="Control" parent="." unique_id=75370778]
 unique_name_in_owner = true
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -597,6 +597,72 @@ text = "(ESC to return)"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Upgrades" unique_id=1292384474]
 stream = SubResource("AudioStreamRandomizer_b0q1f")
+
+[node name="Tooltip" type="Panel" parent="Upgrades" unique_id=1900545542]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(504, 208)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Upgrades/Tooltip" unique_id=1098714682]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.78431374, 0.47058824, 0.3137255, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Upgrades/Tooltip" unique_id=1854427273]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ColorRect" type="ColorRect" parent="Upgrades/Tooltip/MarginContainer" unique_id=175817644]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Upgrades/Tooltip/MarginContainer" unique_id=245085799]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="TooltipLabel" type="Label" parent="Upgrades/Tooltip/MarginContainer/MarginContainer" unique_id=830043813]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(468, 172)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Press the 1 key (or controller X button) to activate."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Label" type="Label" parent="Upgrades/Tooltip/MarginContainer/MarginContainer" unique_id=987008960]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 12
+text = "(press ESC)"
+horizontal_alignment = 1
 
 [connection signal="button_up" from="MainMenu/VBoxContainer/PlayButton" to="MainMenu" method="_on_play_button_button_up"]
 [connection signal="button_up" from="MainMenu/VBoxContainer/UpgradeButton" to="MainMenu" method="_on_upgrade_button_button_up"]

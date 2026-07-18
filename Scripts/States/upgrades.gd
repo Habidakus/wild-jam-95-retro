@@ -5,6 +5,9 @@ const BUFF_DIR: String = "res://Resources/PlayerBuffs/"
 
 
 var _all_upgrades: Array[PlayerBuff] = []
+var _tooltip_stack: Array[String] = []
+
+
 @onready var _dummy_button: Button = %DummyButton
 
 
@@ -15,6 +18,7 @@ func _ready() -> void:
 	%MinorValue.text = ""
 	%MajorLabel.hide()
 	%MajorValue.text = ""
+	%Tooltip.hide()
 	_load_buffs_from_file()
 	_proc_gen_other_buffs()
 	call_deferred("_set_up_buttons")
@@ -124,7 +128,10 @@ func _set_up_buttons() -> void:
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		our_state_machine.switch_state("MainMenu")
+		if _tooltip_stack.is_empty():
+			our_state_machine.switch_state("MainMenu")
+		else:
+			_pop_tooltip()
 
 
 func has_upgrades_to_buy() -> bool:
@@ -139,8 +146,24 @@ func enter_state() -> void:
 	update_buttons()
 
 
+func _push_tooltip(text: String) -> void:
+	_tooltip_stack.push_back(text)
+	%TooltipLabel.text = _tooltip_stack.back()
+	%Tooltip.show()
+
+
+func _pop_tooltip() -> void:
+	_tooltip_stack.pop_back()
+	if _tooltip_stack.is_empty():
+		%Tooltip.hide()
+	else:
+		%Tooltiplabel.text = _tooltip_stack.back()
+
+
 func _on_button_up(buff: PlayerBuff) -> void:
 	PlayerStats.buy_buff(buff)
+	if not buff.post_purchase_tooltip.is_empty():
+		_push_tooltip(buff.post_purchase_tooltip)
 	update_buttons()
 
 

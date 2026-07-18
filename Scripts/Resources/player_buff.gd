@@ -39,6 +39,7 @@ enum HowVisible {
 @export var cost_minor: int
 @export var cost_major: int
 @export var diff_completed: int = -1
+@export var post_purchase_tooltip: String
 
 
 func has() -> bool:

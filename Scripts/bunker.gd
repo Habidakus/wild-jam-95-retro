@@ -40,7 +40,7 @@ func initialize(board: Board) -> void:
 		$CollisionPolygon2D.position = _image.get_size() / -2.0
 
 
-func _apply_damage(amount: int, impact_point: Vector2i) -> void:
+func _apply_damage(amount: int, impact_point: Vector2i, just_dist_from_x: bool) -> void:
 	var select_array: Array = []
 	var s: Vector2 = _bitmap.get_size()
 	var maxd: float = 0
@@ -49,7 +49,11 @@ func _apply_damage(amount: int, impact_point: Vector2i) -> void:
 		for y: int in range(s.y):
 			var bit_coord: Vector2i = Vector2i(x, y)
 			if _bitmap.get_bitv(bit_coord):
-				var dist: float = impact_point.distance_squared_to(bit_coord)
+				var dist: float
+				if just_dist_from_x:
+					dist = abs(impact_point.x - bit_coord.x)
+				else:
+					dist = impact_point.distance_squared_to(bit_coord)
 				maxd = max(maxd, dist)
 				select_array.append([bit_coord, dist])
 	if select_array.size() > amount:
@@ -64,13 +68,22 @@ func _apply_damage(amount: int, impact_point: Vector2i) -> void:
 	_calculate_image_and_collision()
 
 
+func on_particle_beam_impact(particle_beam_x: float) -> float:
+	var s: Vector2 = _bitmap.get_size()
+	var dx: int = int(s.x / 2.0 + particle_beam_x - position.x)
+	var dy: int = int(s.y / 2.0)
+	var damage: int = 3 * int(1.0 + _defense) * _bitmap.get_size().y
+	_apply_damage(damage, Vector2i(dx, dy), true)
+	return -1 # Value below zero implies the beam cuts right through it
+
+
 func on_ship_impact(alien: AlienShip) -> void:
 	if alien.is_dead():
 		return
 	var s: Vector2 = _bitmap.get_size()
 	var dx: int = int(s.x / 2.0 + alien.position.x - position.x)
 	var dy: int = int(s.y / 2.0 + alien.position.y - position.y)
-	_apply_damage(alien.get_impact_damage(), Vector2i(dx, dy))
+	_apply_damage(alien.get_impact_damage(), Vector2i(dx, dy), false)
 	alien.die()
 
 
@@ -94,7 +107,7 @@ func on_bullet_impact(bullet: Bullet, point: Vector2, velocity: Vector2) -> void
 			var impact: Vector2 = Vector2i(dx, dy)
 			var bit_set: bool = _bitmap.get_bitv(impact)
 			if bit_set:
-				_apply_damage(bullet.get_damage(), impact)
+				_apply_damage(bullet.get_damage(), impact, false)
 				var hit_offset: Vector2 = Vector2(dx - (s.x / 2.0), dy - (s.y / 2.0))
 				bullet.die_against_bunker(self, hit_offset)
 	else:
@@ -108,7 +121,7 @@ func on_bullet_impact(bullet: Bullet, point: Vector2, velocity: Vector2) -> void
 			var impact: Vector2 = Vector2i(dx, dy)
 			var bit_set: bool = _bitmap.get_bitv(impact)
 			if bit_set:
-				_apply_damage(bullet.get_damage(), impact)
+				_apply_damage(bullet.get_damage(), impact, false)
 				var hit_offset: Vector2 = Vector2(dx - (s.x / 2.0), dy - (s.y / 2.0))
 				bullet.die_against_bunker(self, hit_offset)
 

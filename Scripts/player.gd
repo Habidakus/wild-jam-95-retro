@@ -49,6 +49,10 @@ func initialize(board: Board) -> void:
 	_gun_cooldown_rate = BASE_GUN_COOLDOWN_RATE / (1.0 + cooldown_strength)
 
 
+func get_barrel_position() -> Vector2:
+	return Vector2(position.x, position.y + _cached_shape.get_rect().position.y)
+
+
 func _ready() -> void:
 	_cached_shape = ConvexPolygonShape2D.new()
 	_cached_shape.set_point_cloud(%CollisionPolygon2D.polygon)

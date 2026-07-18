@@ -41,6 +41,16 @@ func die_against_bunker(bunker: Bunker, hit_offset: Vector2) -> void:
 	queue_free()
 
 
+func on_particle_beam_impact(particle_beam_x: float) -> float:
+	if not _is_dead:
+		_is_dead = true
+		var explosion: CPUParticles2D = _create_explosion_vfx()
+		explosion.position = Vector2(particle_beam_x, position.y)
+		_board.add_child(explosion)
+		queue_free()
+	return -1 # negative value implies the beam cuts right through it
+
+
 # Called when a player's bullet hits our bullet
 func on_bullet_impact(player_bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
 	if _is_dead:

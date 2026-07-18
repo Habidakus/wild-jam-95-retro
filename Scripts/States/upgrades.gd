@@ -102,6 +102,10 @@ func _set_up_buttons() -> void:
 			description = buff.description
 			minor_cost = buff.cost_minor
 			major_cost = buff.cost_major
+			if major_cost > 0:
+				button.add_theme_color_override("font_color", Color(0xc87850ff))
+				button.add_theme_color_override("font_hover_color", Color(0xc87850ff))
+				button.add_theme_color_override("font_pressed_color", Color(0xc87850ff))
 		if buff.can_be_bought():
 			button.disabled = false
 		parent.add_child(button)

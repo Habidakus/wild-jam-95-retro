@@ -41,12 +41,92 @@ var _player_bullet_speed_multiple: float = 1.0
 var _primary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 var _secondary_alien_type: AlienShip.ShipType = AlienShip.ShipType.Regular
 var _master_difficulty_list: Array[Array] = []
+var _power_tracker: Array = []
+var _power_tracker_tween: Tween = null
 
 
 func _ready() -> void:
 	var first_wave: int = int(round(PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.SKIP_TO_LEVEL)))
 	initialize(first_wave)
 	_set_player_lives(3 + int(round(PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.LIVES_HIGHER_MAX))))
+	%PowerPBs.hide()
+	_register_power(%PB_Particle, "power_1", PlayerBuff.BuffType.AMMO_PIERCING_POWER, PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.AMMO_PIERCING_COOLDOWN))
+	_register_power(%PB_Shotgun, "power_2", PlayerBuff.BuffType.AMMO_SHOTGUN_AMOUNT, PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.AMMO_SHOTGUN_COOLDOWN))
+	_register_power(%PB_Tracking, "power_3", PlayerBuff.BuffType.AMMO_SEEKER_POWER, PlayerStats.get_max_strength_acquired(PlayerBuff.BuffType.AMMO_SEEKER_COOLDOWN))
+	if not _power_tracker.is_empty():
+		_pulse_power_trackers(true)
+
+
+func _pulse_power_trackers(play_sound: bool) -> void:
+	if _power_tracker_tween != null:
+		_power_tracker_tween.kill()
+	if play_sound:
+		%RechargeSound.play()
+	_power_tracker_tween = create_tween()
+	_power_tracker_tween.tween_property(%PowerPBs, "modulate:a", 1.0, 0.1)
+	_power_tracker_tween.tween_interval(0.1)
+	_power_tracker_tween.tween_property(%PowerPBs, "modulate:a", 0.5, 0.8)
+
+
+func _fire_power(power: PlayerBuff.BuffType, strength: float, tpb: TextureProgressBar) -> void:
+	tpb.value = 0
+	_pulse_power_trackers(false)
+	match power:
+		PlayerBuff.BuffType.AMMO_PIERCING_POWER:
+			_fire_piercing_power(strength)
+		_:
+			assert(false)
+
+
+func _fire_piercing_power(strength: float) -> void:
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	var shape: SegmentShape2D = SegmentShape2D.new()
+	var top_of_tank: Vector2 = _player.get_barrel_position()
+	shape.a = top_of_tank
+	shape.b = Vector2(top_of_tank.x, 0.0)
+	var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.collision_mask = 2 + 4 + 8 # 2=alien bullet, 4=bunker, 8=aliens
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	var hit_objects: Array = []
+	var results: Array[Dictionary] = space_state.intersect_shape(query)
+	if not results.is_empty():
+		for collision_data: Dictionary in results:
+			var hit_object = collision_data.collider
+			if not hit_objects.has(hit_object):
+				hit_objects.append(hit_object)
+	hit_objects.sort_custom(func(a,b): return shape.a.distance_squared_to(a.position) < shape.a.distance_squared_to(b.position))
+	var y_stopping_point: float
+	for hit_object in hit_objects:
+		if hit_object.has_method("on_particle_beam_impact"):
+			y_stopping_point = hit_object.on_particle_beam_impact(top_of_tank.x)
+			if y_stopping_point > 0:
+				break
+			strength -= 1.0
+			if strength <= 0.0:
+				y_stopping_point = hit_object.position.y
+				break
+	var height: float = top_of_tank.y - y_stopping_point
+	var beam_center: Vector2 = (top_of_tank + Vector2(top_of_tank.x, y_stopping_point)) / 2.0
+	%ParticleCannon_VFX.position = beam_center
+	%ParticleCannon_VFX.emission_rect_extents = Vector2(0.95, height)
+	%ParticleCannon_VFX.one_shot = true
+	%ParticleCannon_VFX.emitting = true
+	%ParticleCannon_Audio.play()
+
+
+func _register_power(tpb: TextureProgressBar, input: String, power: PlayerBuff.BuffType, cooldown: float) -> void:
+	var strength: float = PlayerStats.get_max_strength_acquired(power)
+	if strength <= 0.0:
+		tpb.hide()
+		return
+	%PowerPBs.show()
+	tpb.show()
+	tpb.max_value = 30.0 / (1.0 + cooldown)
+	tpb.step = 0.01
+	tpb.value = tpb.max_value
+	_power_tracker.append([input, power, strength, tpb])
 
 
 func _set_player_lives(amount: int) -> void:
@@ -386,6 +466,11 @@ func _process(delta: float) -> void:
 	_time_dilation_array = new_td
 	%Parallax2D.autoscroll = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
 	$Background.rotation += delta * _time_dilation * STAR_ROTATION_AMOUNT
+	for entry: Array in _power_tracker:
+		if Input.is_action_just_pressed(entry[0]):
+			var tpb: TextureProgressBar = entry[3]
+			if tpb.value == tpb.max_value:
+				_fire_power(entry[1], entry[2], entry[3])
 	if OS.has_feature("editor"):
 		if Input.is_key_pressed(KEY_P) and not _aliens.is_empty():
 			for alien: AlienShip in _aliens:
@@ -394,6 +479,12 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	var tdd: float = delta * _time_dilation
+	for entry: Array in _power_tracker:
+		var tpb: TextureProgressBar = entry[3]
+		if tpb.value < tpb.max_value:
+			tpb.value += delta
+			if tpb.value == tpb.max_value:
+				_pulse_power_trackers(true)
 	var min_x: float = 27 #* 3 / 4.0
 	var max_x: float = size.x - min_x
 	var max_alien_y: float = 0

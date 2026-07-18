@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://bpjn3aywkiv7y"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_tjnc3"]
+[ext_resource type="Resource" uid="uid://lt4jlmelhvkd" path="res://Resources/PlayerBuffs/ammo_piercing_power_1.tres" id="2_m0gts"]
+
+[resource]
+script = ExtResource("1_tjnc3")
+button_name = "Plasma Caster"
+description = "Particle beam improved to blast through more ships at once."
+buff_type = 5
+strength = 4.0
+prereq_buffs = Array[ExtResource("1_tjnc3")]([ExtResource("2_m0gts")])
+cost_minor = 200
+cost_major = 2
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

@@ -3,6 +3,13 @@
 [ext_resource type="Script" uid="uid://cx58dowhsbxwr" path="res://Scripts/board.gd" id="1_2wvcj"]
 [ext_resource type="AudioStream" uid="uid://d6p50lodrap8" path="res://Sounds/WinkOut002.wav" id="2_2wvcj"]
 [ext_resource type="Texture2D" uid="uid://cg5tuuoqdmu1w" path="res://Images/majorCurrency.svg" id="3_uh3b8"]
+[ext_resource type="Texture2D" uid="uid://bp1yoww8seuio" path="res://Images/rot_power_border.png.png" id="4_d8vyx"]
+[ext_resource type="Texture2D" uid="uid://ko6bjdgarqvs" path="res://Images/rot_power_particle_cannon.png.png" id="5_vw4oq"]
+[ext_resource type="Texture2D" uid="uid://j3bsu0yiq1te" path="res://Images/rot_power_fill_bar.png.png" id="6_vjsom"]
+[ext_resource type="Texture2D" uid="uid://c5kmvhcpbuj38" path="res://Images/rot_power_shotgun.png.png" id="7_upw65"]
+[ext_resource type="Texture2D" uid="uid://dktchpmedhrvi" path="res://Images/rot_power_tracking_shot.png.png" id="8_d7frl"]
+[ext_resource type="AudioStream" uid="uid://c1a0w1xrof7x4" path="res://Sounds/WinkOut001.wav" id="9_vw4oq"]
+[ext_resource type="AudioStream" uid="uid://cuxnsjknjfnwj" path="res://Sounds/Beam001.wav" id="10_vjsom"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tnbny"]
 font_size = 32
@@ -13,6 +20,14 @@ outline_color = Color(0, 0, 0, 1)
 font_size = 64
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Curve" id="Curve_vw4oq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.1401869, 0.2887811), -0.9487009, -0.9487009, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_vjsom"]
+offsets = PackedFloat32Array(0, 0.06483301, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.78431374, 0.47058824, 0.3137255, 1, 0.78431374, 0.47058824, 0.3137255, 0)
 
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
@@ -120,4 +135,77 @@ texture_progress = ExtResource("3_uh3b8")
 
 [node name="BunkerSound" type="AudioStreamPlayer2D" parent="." unique_id=1848101389]
 unique_name_in_owner = true
+bus = &"VFX"
+
+[node name="PowerPBs" type="Control" parent="." unique_id=1764133100]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 4.0
+offset_bottom = 4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PowerPBs" unique_id=2127532378]
+layout_mode = 0
+offset_right = 197.0
+offset_bottom = 27.0
+theme_override_constants/separation = 16
+
+[node name="PB_Particle" type="TextureProgressBar" parent="PowerPBs/HBoxContainer" unique_id=2135790412]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+texture_under = ExtResource("4_d8vyx")
+texture_over = ExtResource("5_vw4oq")
+texture_progress = ExtResource("6_vjsom")
+
+[node name="PB_Shotgun" type="TextureProgressBar" parent="PowerPBs/HBoxContainer" unique_id=51899675]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+texture_under = ExtResource("4_d8vyx")
+texture_over = ExtResource("7_upw65")
+texture_progress = ExtResource("6_vjsom")
+
+[node name="PB_Tracking" type="TextureProgressBar" parent="PowerPBs/HBoxContainer" unique_id=871066030]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+texture_under = ExtResource("4_d8vyx")
+texture_over = ExtResource("8_d7frl")
+texture_progress = ExtResource("6_vjsom")
+
+[node name="RechargeSound" type="AudioStreamPlayer2D" parent="PowerPBs" unique_id=485909873]
+unique_name_in_owner = true
+stream = ExtResource("9_vw4oq")
+bus = &"UI"
+
+[node name="ParticleCannon_VFX" type="CPUParticles2D" parent="." unique_id=750319192]
+unique_name_in_owner = true
+position = Vector2(519, 415)
+emitting = false
+amount = 400
+lifetime = 0.5
+explosiveness = 1.0
+lifetime_randomness = 0.1
+emission_shape = 3
+emission_rect_extents = Vector2(0.5, 200)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 150.0
+initial_velocity_max = 300.0
+damping_min = 100.0
+damping_max = 200.0
+scale_amount_min = 0.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_vw4oq")
+color_ramp = SubResource("Gradient_vjsom")
+
+[node name="ParticleCannon_Audio" type="AudioStreamPlayer2D" parent="ParticleCannon_VFX" unique_id=2122799072]
+unique_name_in_owner = true
+stream = ExtResource("10_vjsom")
 bus = &"VFX"

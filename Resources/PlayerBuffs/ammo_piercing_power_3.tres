@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://bx2pe3wlkt483"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_glmjw"]
+[ext_resource type="Resource" uid="uid://bpjn3aywkiv7y" path="res://Resources/PlayerBuffs/ammo_piercing_power_2.tres" id="2_glmjw"]
+
+[resource]
+script = ExtResource("1_glmjw")
+button_name = "Focused Plasma"
+description = "Pinacle achievement - destroying all ships above the cannon."
+buff_type = 5
+strength = 10.0
+prereq_buffs = Array[ExtResource("1_glmjw")]([ExtResource("2_glmjw")])
+cost_minor = 500
+cost_major = 3
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

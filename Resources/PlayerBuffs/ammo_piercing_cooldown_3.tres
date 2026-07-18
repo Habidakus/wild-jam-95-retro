@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://cx0lthqld47vv"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_clxxj"]
+[ext_resource type="Resource" uid="uid://hsoevgthgsqc" path="res://Resources/PlayerBuffs/ammo_piercing_cooldown_2.tres" id="2_clxxj"]
+
+[resource]
+script = ExtResource("1_clxxj")
+button_name = "Plasma Turbines"
+description = "Recharge the particle cannon batteries even faster."
+buff_type = 6
+strength = 1.0
+prereq_buffs = Array[ExtResource("1_clxxj")]([ExtResource("2_clxxj")])
+cost_minor = 350
+cost_major = 2
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

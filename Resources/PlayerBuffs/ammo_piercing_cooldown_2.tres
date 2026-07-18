@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://hsoevgthgsqc"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_cg0sq"]
+[ext_resource type="Resource" uid="uid://djrvqnx8d1fe4" path="res://Resources/PlayerBuffs/ammo_piercing_cooldown_1.tres" id="2_nxspk"]
+
+[resource]
+script = ExtResource("1_cg0sq")
+button_name = "Bigger Batteries"
+description = "Increased batteries allow the particle cannon to fire more often - reduces cooldown."
+buff_type = 6
+strength = 0.666
+prereq_buffs = Array[ExtResource("1_cg0sq")]([ExtResource("2_nxspk")])
+cost_minor = 250
+cost_major = 2
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

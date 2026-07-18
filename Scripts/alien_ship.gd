@@ -102,6 +102,17 @@ func power_up_weapon(power_up_length: float) -> void:
 	_weapon_cooldown = (1 + WEAPON_COOLDOWN_TIME * power_up_length) * _weapon_speed_multiple
 
 
+func on_particle_beam_impact(_particle_beam_x: float) -> float:
+	if is_dead():
+		return -1
+	var shield_dir: int = _board.get_ship_shielded_dir(self)
+	if shield_dir != 0:
+		var shield_y: float = _spawn_shield(shield_dir)
+		return shield_y
+	die()
+	return -1
+
+
 func on_bullet_impact(bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
 	if bullet.is_dead():
 		return

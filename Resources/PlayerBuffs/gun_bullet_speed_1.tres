@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_py7w1")
 button_name = "More Powder"
-description = "More gun powder means more speed means more dead aliens, right?"
+description = "More gun powder means more bullet speed, and that means more dead aliens, right?"
 buff_type = 12
 strength = 0.333
 cost_minor = 100

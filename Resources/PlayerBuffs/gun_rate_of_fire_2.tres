@@ -6,9 +6,9 @@
 [resource]
 script = ExtResource("1_abuue")
 button_name = "Liquid Cooling"
-description = "The science boffins say that if we keep the barrels cooler, we can fire faster."
+description = "The science boffins say that if we keep the barrels cooler, we can fire more bullets per minute."
 buff_type = 12
 strength = 0.5
 prereq_buffs = Array[ExtResource("1_abuue")]([ExtResource("2_r8ju1")])
-cost_minor = 150
+cost_minor = 400
 metadata/_custom_type_script = "uid://drmwlmgaehrlr"

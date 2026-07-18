@@ -5,10 +5,10 @@
 
 [resource]
 script = ExtResource("1_nuheq")
-button_name = "Four Barrels"
-description = "What about four barrels, that's a lot of bullets, right?"
+button_name = "Gattling Barrels"
+description = "Revolving barrels means more bullets per minute. Groovy."
 buff_type = 12
 strength = 1.0
 prereq_buffs = Array[ExtResource("1_nuheq")]([ExtResource("2_nuheq")])
-cost_minor = 450
+cost_minor = 800
 metadata/_custom_type_script = "uid://drmwlmgaehrlr"

@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_py7w1")
 button_name = "Even More Powder"
-description = "You can really feel the boom!"
+description = "You barely need to lead the aliens now."
 buff_type = 12
 strength = 0.666
 prereq_buffs = Array[ExtResource("1_py7w1")]([ExtResource("2_owdbs")])

@@ -63,8 +63,11 @@ Juice:
   - planets & galaxies for the starmap
 
 TODO:
+  + add alien rapid fire alien
+  + add accelleration to player tank
+  + sort enemy difficulty
+  + fix name of gun rate-of-fire upgrades
   - adjust galaxy placement
-  - add alien rapid fire alien
   - update acid alien body
   - add alien wall shield
   - add ability to control menu via controller
@@ -73,6 +76,3 @@ TODO:
   - add explosive shells
   - add piercing shot
   - add pause (ESC in action)
-  + add accelleration to player tank
-  - sort enemy difficulty
-  - fix name of gun rate-of-fire upgrades

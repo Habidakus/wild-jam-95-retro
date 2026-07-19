@@ -2,6 +2,7 @@ class_name Board extends Control
 
 const BUNKER_SCENE = preload("res://Scenes/bunker_wide.tscn")
 const PLAYER_BULLET = preload("res://Scenes/player_bullet.tscn")
+const SHOTGUN_BULLET = preload("res://Scenes/shotgun_bullet.tscn")
 const ALIEN_BULLET = preload("res://Scenes/alien_bullet.tscn")
 const DROP_BULLET = preload("res://Scenes/alien_flame_bullet.tscn")
 const ALIEN_SHIP = preload("res://Scenes/alien_ship.tscn")
@@ -74,8 +75,28 @@ func _fire_power(power: PlayerBuff.BuffType, strength: float, tpb: TextureProgre
 	match power:
 		PlayerBuff.BuffType.AMMO_PIERCING_POWER:
 			_fire_piercing_power(strength)
+		PlayerBuff.BuffType.AMMO_SHOTGUN_AMOUNT:
+			_fire_shotgun_power(strength)
 		_:
 			assert(false)
+
+
+func _fire_shotgun_power(strength: float) -> void:
+	var top_of_tank: Vector2 = _player.get_barrel_position()
+	%Shotgun_VFX.position = top_of_tank
+	%Shotgun_VFX.one_shot = true
+	%Shotgun_VFX.emitting = true
+	%Shotgun_Audio.play()
+	for i: int in range(strength):
+		var bullet: ShotgunBullet = SHOTGUN_BULLET.instantiate()
+		bullet.position = top_of_tank
+		var direction: Vector2 = Vector2.DOWN
+		for j: int in range(3):
+			var v: Vector2 = Vector2(_rnd.randf() * 2.0 - 1.0, 0 - (_rnd.randf() + 0.1)).normalized()
+			if v.distance_squared_to(Vector2.UP) < direction.distance_squared_to(Vector2.UP):
+				direction = v
+		bullet.initialize(self, direction)
+		add_child(bullet)
 
 
 func _fire_piercing_power(strength: float) -> void:

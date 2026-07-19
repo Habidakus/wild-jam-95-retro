@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://bfe4fch010l5l"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_r2wi8"]
+[ext_resource type="Resource" uid="uid://s0xqf0o1ciy" path="res://Resources/PlayerBuffs/ammo_shotgun_power_1.tres" id="2_r2wi8"]
+
+[resource]
+script = ExtResource("1_r2wi8")
+button_name = "Mechanised Reloaders"
+description = "Mechanized reloaders speed langrage launching - reduces cooldown."
+buff_type = 8
+strength = 0.3
+prereq_buffs = Array[ExtResource("1_r2wi8")]([ExtResource("2_r2wi8")])
+cost_minor = 150
+cost_major = 1
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

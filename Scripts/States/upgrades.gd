@@ -157,7 +157,7 @@ func _pop_tooltip() -> void:
 	if _tooltip_stack.is_empty():
 		%Tooltip.hide()
 	else:
-		%Tooltiplabel.text = _tooltip_stack.back()
+		%TooltipLabel.text = _tooltip_stack.back()
 
 
 func _on_button_up(buff: PlayerBuff) -> void:

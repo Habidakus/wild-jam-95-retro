@@ -114,6 +114,8 @@ func on_particle_beam_impact(_particle_beam_x: float) -> float:
 
 
 func on_bullet_impact(bullet: Bullet, point: Vector2, _velocity: Vector2) -> void:
+	if is_dead():
+		return
 	if bullet.is_dead():
 		return
 	var shield_dir: int = _board.get_ship_shielded_dir(self)

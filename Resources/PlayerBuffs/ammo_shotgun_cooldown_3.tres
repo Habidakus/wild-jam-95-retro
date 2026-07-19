@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://cntp3prmpg1s5"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_hnouc"]
+[ext_resource type="Resource" uid="uid://c2mluddklwhgk" path="res://Resources/PlayerBuffs/ammo_shotgun_cooldown_2.tres" id="2_hnouc"]
+
+[resource]
+script = ExtResource("1_hnouc")
+button_name = "Synchronized Reloaders"
+description = "Synchronized reloaders enable increased langrage launching - reduces cooldown."
+buff_type = 8
+strength = 0.9
+prereq_buffs = Array[ExtResource("1_hnouc")]([ExtResource("2_hnouc")])
+cost_minor = 250
+cost_major = 1
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

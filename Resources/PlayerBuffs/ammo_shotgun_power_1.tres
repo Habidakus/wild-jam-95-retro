@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://s0xqf0o1ciy"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_b1whd"]
+
+[resource]
+script = ExtResource("1_b1whd")
+button_name = "Langrage Launcher"
+description = "Eject a barage of shrapnel at the enemy. Requires recharge."
+buff_type = 7
+strength = 5.0
+cost_minor = 200
+cost_major = 2
+post_purchase_tooltip = "To use in game - press the 2 key (or controller A button) to activate."
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

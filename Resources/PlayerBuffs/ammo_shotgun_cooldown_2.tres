@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://c2mluddklwhgk"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_dro1s"]
+[ext_resource type="Resource" uid="uid://bfe4fch010l5l" path="res://Resources/PlayerBuffs/ammo_shotgun_cooldown_1.tres" id="2_dro1s"]
+
+[resource]
+script = ExtResource("1_dro1s")
+button_name = "Automated Reloaders"
+description = "Automated reloaders further increase langrage launching - reduces cooldown."
+buff_type = 8
+strength = 0.6
+prereq_buffs = Array[ExtResource("1_dro1s")]([ExtResource("2_dro1s")])
+cost_minor = 200
+cost_major = 1
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

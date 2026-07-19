@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c0nrioknxwhnn"]
+
+[ext_resource type="Script" uid="uid://bxyspjdpx5j2e" path="res://Scripts/shotgun_bullet.gd" id="1_33lv6"]
+[ext_resource type="Texture2D" uid="uid://cutbcdf5ougkq" path="res://Images/shotgun_pellet.png" id="2_7jc5q"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j1783"]
+radius = 3.0
+
+[node name="ShotgunBullet" type="AnimatableBody2D" unique_id=1325468317]
+collision_layer = 32
+collision_mask = 14
+script = ExtResource("1_33lv6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1304755846]
+texture = ExtResource("2_7jc5q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1496079350]
+shape = SubResource("CircleShape2D_j1783")

@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://dktchpmedhrvi" path="res://Images/rot_power_tracking_shot.png.png" id="8_d7frl"]
 [ext_resource type="AudioStream" uid="uid://c1a0w1xrof7x4" path="res://Sounds/WinkOut001.wav" id="9_vw4oq"]
 [ext_resource type="AudioStream" uid="uid://cuxnsjknjfnwj" path="res://Sounds/Beam001.wav" id="10_vjsom"]
+[ext_resource type="Texture2D" uid="uid://ui3eswvwacmd" path="res://Images/smoke.png" id="11_upw65"]
+[ext_resource type="AudioStream" uid="uid://dkpginyetmsu3" path="res://Sounds/Explosion003.wav" id="12_d7frl"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tnbny"]
 font_size = 32
@@ -28,6 +30,16 @@ point_count = 3
 [sub_resource type="Gradient" id="Gradient_vjsom"]
 offsets = PackedFloat32Array(0, 0.06483301, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.78431374, 0.47058824, 0.3137255, 1, 0.78431374, 0.47058824, 0.3137255, 0)
+
+[sub_resource type="Curve" id="Curve_d7frl"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.30228525), 0.0, 0.0, 0, 0, Vector2(0.3, 2.4), 0.0, 0.0, 0, 0, Vector2(1, 3), 0.0, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_enabled = true
+
+[sub_resource type="Gradient" id="Gradient_vjyv8"]
+offsets = PackedFloat32Array(0, 0.115913555, 1)
+colors = PackedColorArray(0.8666667, 0.8666667, 0.8666667, 1, 0.6666667, 0.6666667, 0.6666667, 0.6, 0.6666667, 0.6666667, 0.6666667, 0)
 
 [node name="Control" type="Control" unique_id=1823573970]
 layout_mode = 3
@@ -208,4 +220,32 @@ color_ramp = SubResource("Gradient_vjsom")
 [node name="ParticleCannon_Audio" type="AudioStreamPlayer2D" parent="ParticleCannon_VFX" unique_id=2122799072]
 unique_name_in_owner = true
 stream = ExtResource("10_vjsom")
+volume_db = 10.0
+bus = &"VFX"
+
+[node name="Shotgun_VFX" type="CPUParticles2D" parent="." unique_id=1531138648]
+unique_name_in_owner = true
+position = Vector2(564, 447)
+emitting = false
+amount = 20
+texture = ExtResource("11_upw65")
+lifetime = 1.1
+explosiveness = 0.95
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, -40)
+initial_velocity_min = 50.0
+initial_velocity_max = 300.0
+damping_min = 90.0
+damping_max = 200.0
+scale_amount_max = 2.5
+scale_amount_curve = SubResource("Curve_d7frl")
+color_ramp = SubResource("Gradient_vjyv8")
+
+[node name="Shotgun_Audio" type="AudioStreamPlayer2D" parent="Shotgun_VFX" unique_id=459234805]
+unique_name_in_owner = true
+position = Vector2(519, 415)
+stream = ExtResource("12_d7frl")
+volume_db = 10.0
+pitch_scale = 0.3
 bus = &"VFX"

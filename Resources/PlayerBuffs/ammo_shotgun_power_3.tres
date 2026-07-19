@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerBuff" format=3 uid="uid://dhik1ei8ytref"]
+
+[ext_resource type="Script" uid="uid://drmwlmgaehrlr" path="res://Scripts/Resources/player_buff.gd" id="1_ejlvb"]
+[ext_resource type="Resource" uid="uid://cfxxo0ikdikep" path="res://Resources/PlayerBuffs/ammo_shotgun_power_2.tres" id="2_ejlvb"]
+
+[resource]
+script = ExtResource("1_ejlvb")
+button_name = "Denser Canisters"
+description = "Even more projectiles in the Langrage launcher."
+buff_type = 7
+strength = 11.0
+prereq_buffs = Array[ExtResource("1_ejlvb")]([ExtResource("2_ejlvb")])
+cost_minor = 200
+cost_major = 1
+metadata/_custom_type_script = "uid://drmwlmgaehrlr"

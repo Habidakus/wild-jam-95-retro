@@ -67,12 +67,12 @@ TODO:
   + add accelleration to player tank
   + sort enemy difficulty
   + fix name of gun rate-of-fire upgrades
+  + add BIG GUN UI/UX elements
+  + add shotgun
+  + add piercing shot
   - adjust galaxy placement
   - update acid alien body
   - add alien wall shield
   - add ability to control menu via controller
-  - add BIG GUN UI/UX elements
-  - add shotgun
   - add explosive shells
-  - add piercing shot
   - add pause (ESC in action)

@@ -70,7 +70,7 @@ TODO:
   + add BIG GUN UI/UX elements
   + add shotgun
   + add piercing shot
-  - adjust galaxy placement
+  + adjust galaxy placement
   - update acid alien body
   - add alien wall shield
   - add ability to control menu via controller

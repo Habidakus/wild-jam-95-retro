@@ -574,14 +574,15 @@ func _move_all_aliens(velocity: Vector2, watch_margin: bool, min_x: float, max_x
 	for alien: AlienShip in _aliens:
 		alien.position += mod_vel
 		if watch_margin:
-			if alien.position.x < min_x:
-				_alien_dir = AlienMovement.DOWN
-				_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
-				watch_margin = false
-			elif alien.position.x > max_x:
-				_alien_dir = AlienMovement.DOWN
-				_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
-				watch_margin = false
+			if _alien_dir != AlienMovement.DOWN:
+				if alien.position.x < min_x:
+					_alien_dir = AlienMovement.DOWN
+					_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
+					watch_margin = false
+				elif alien.position.x > max_x:
+					_alien_dir = AlienMovement.DOWN
+					_alien_downward_goal = max_alien_y + ALIEN_DROP_DISTANCE
+					watch_margin = false
 		if alien.position.y > _player.position.y:
 			if not _game_over:
 				_on_game_over()

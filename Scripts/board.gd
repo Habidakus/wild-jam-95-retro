@@ -129,13 +129,26 @@ func _fire_piercing_power(strength: float) -> void:
 			if strength <= 0.0:
 				y_stopping_point = hit_object.position.y
 				break
-	var height: float = top_of_tank.y - y_stopping_point
+	var height: float = (10 + top_of_tank.y) - y_stopping_point
+	height /= 2.0
 	var beam_center: Vector2 = (top_of_tank + Vector2(top_of_tank.x, y_stopping_point)) / 2.0
 	%ParticleCannon_VFX.position = beam_center
 	%ParticleCannon_VFX.emission_rect_extents = Vector2(0.95, height)
 	%ParticleCannon_VFX.one_shot = true
 	%ParticleCannon_VFX.emitting = true
 	%ParticleCannon_Audio.play()
+
+
+static var _screenshot_number: int = 1
+var _screenshot_cooldown: float = 0
+func _take_screenshot() -> void:
+	if _screenshot_cooldown > 0:
+		return
+	var filename: String = "user://screenshot_%d.png" % [_screenshot_number]
+	get_viewport().get_texture().get_image().save_png(filename)
+	_screenshot_number += 1
+	_screenshot_cooldown += 0.5
+	print("Saved screenshot to %s" % [ProjectSettings.globalize_path(filename)])
 
 
 func _register_power(tpb: TextureProgressBar, input: String, power: PlayerBuff.BuffType, cooldown: float) -> void:
@@ -529,9 +542,12 @@ func _process(delta: float) -> void:
 			if tpb.value == tpb.max_value:
 				_fire_power(entry[1], entry[2], entry[3])
 	if OS.has_feature("editor"):
+		_screenshot_cooldown -= delta
 		if Input.is_key_pressed(KEY_P) and not _aliens.is_empty():
 			for alien: AlienShip in _aliens:
 				alien.die()
+		if Input.is_key_pressed(KEY_Y):
+			_take_screenshot()
 
 
 func _physics_process(delta: float) -> void:

@@ -16,6 +16,14 @@ streams_count = 2
 stream_0/stream = ExtResource("4_k5sv7")
 stream_1/stream = ExtResource("6_56qlx")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b0q1f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fpawr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k5sv7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7rs8o"]
+
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_b0q1f"]
 streams_count = 2
 stream_0/stream = ExtResource("4_k5sv7")
@@ -422,6 +430,10 @@ custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_b0q1f")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_fpawr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_k5sv7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7rs8o")
 
 [node name="UseAccelerationValue" type="Label" parent="Settings/GridContainer" unique_id=1092031004]
 custom_minimum_size = Vector2(64, 23)

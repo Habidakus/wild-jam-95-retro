@@ -13,6 +13,7 @@ const SAD_BUNKER_SOUND = preload("res://Sounds/AlienYell002.wav")
 const ALIEN_SPEED: float = 40
 const ALIEN_DROP_DISTANCE: float = 40
 const STAR_ROTATION_AMOUNT: float = 0.0015
+const STAR_ROTATION_DIFF_DELTA: float = 0.0003
 const STAR_SCROLL_AMOUNT: float = 10#0.003
 
 
@@ -259,8 +260,10 @@ func _create_aliens() -> void:
 func _create_starfield() -> void:
 	var starfield_image: Image = Image.create_empty(int(size.x * 2), int(size.y), false, Image.FORMAT_RGB8)
 	starfield_image.fill(Color.BLACK)
-	for i: int in range(3):
-		_add_galaxy(starfield_image, 500 + _rnd.randi() % 2500, _rnd)
+	var placed_galaxies: Array[Vector2] = []
+	for i: int in range(6):
+		var gv: Vector2 = _find_galaxy_center(placed_galaxies, _rnd)
+		_add_galaxy(starfield_image, 500 + _rnd.randi() % 2500, _rnd, gv)
 	for i: int in range(7):
 		_add_stars(starfield_image, 100 * i, _rnd.randf() * starfield_image.get_size().x, _rnd.randf() * starfield_image.get_size().y, true, _rnd)
 	_add_stars(starfield_image, 1000, 0, 0, false, _rnd)
@@ -268,6 +271,36 @@ func _create_starfield() -> void:
 	%StarfieldImage.texture = starfield_texture
 	%Parallax2D.repeat_size = starfield_image.get_size()
 	#%Parallax2D.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
+
+static func _get_galaxy_closeness(a: Vector2, b: Vector2) -> float:
+	var c: float = min(a.distance_squared_to(b), a.distance_squared_to(Vector2(-b.x, b.y)))
+	var d: float = min(a.distance_squared_to(Vector2(b.x, -b.y)), a.distance_squared_to(Vector2(-b.x, -b.y)))
+	return min(c, d)
+
+
+static func _find_galaxy_center(previous: Array[Vector2], rnd: RandomNumberGenerator) -> Vector2:
+	var initial: Vector2 = Vector2(rnd.randf(), rnd.randf())
+	if previous.is_empty():
+		previous.append(initial)
+		return initial
+	var iclose: float = 100.0
+	for entry: Vector2 in previous:
+		var tclose: float = _get_galaxy_closeness(entry, initial)
+		if tclose < iclose:
+			iclose = tclose
+	var other: Vector2 = Vector2(rnd.randf(), rnd.randf())
+	var oclose: float = 100.0
+	for entry: Vector2 in previous:
+		var tclose: float = _get_galaxy_closeness(entry, other)
+		if tclose < oclose:
+			oclose = tclose
+	if iclose < oclose:
+		previous.append(initial)
+		return initial
+	else:
+		previous.append(other)
+		return other
 
 
 func register_menu_scene(menu_state_machine: StateMachine) -> void:
@@ -297,19 +330,22 @@ func _find_lowest_alien_in_row(col: int) -> AlienShip:
 	return ret_val
 
 
-static func _add_galaxy(image: Image, count: int, rnd: RandomNumberGenerator) -> void:
+static func _add_galaxy(image: Image, count: int, rnd: RandomNumberGenerator, galaxy_center: Vector2) -> void:
 	var isize: Vector2 = image.get_size()
-	var cx: int = rnd.randi() % int(isize.x)
-	var cy: int = rnd.randi() % int(isize.y)
+	var cx: int = int(galaxy_center.x * isize.x)
+	var cy: int = int(galaxy_center.y * isize.y)
+	assert(cx >= 0 and cx < isize.x)
+	assert(cy >= 0 and cy < isize.y)
 	var tilt_x: float = rnd.randf() * PI / 3.0
 	var tilt_y: float = rnd.randf() * PI / 3.0
 	#var galaxy_angle: float = rnd.randf() * TAU
 	#var galaxy_vector: Vector2 = Vector2(sin(galaxy_angle), cos(galaxy_angle))
-	var max_dist: float = rnd.randf() * 100.0 + 50.0
-	var spiral_offset: float = rnd.randf() * TAU
+	var max_dist: float = rnd.randf() * 200.0 + 50.0
+	var spiral_offset: float = rnd.randf() * PI
 	var spiral_dir: bool = (rnd.randi() % 2) == 1
 	for i: int in range(count):
-		var dist: float = rnd.randf() * max_dist
+		var dist: float = rnd.randf()
+		dist = dist * dist * max_dist
 		var radian: float = rnd.randf()
 		for j: int in range(dist / 5):
 			var nrad: float = rnd.randf()
@@ -486,7 +522,7 @@ func _process(delta: float) -> void:
 		new_td.append([tuple[0], remaining, tuple[2]])
 	_time_dilation_array = new_td
 	%Parallax2D.autoscroll = Vector2(STAR_SCROLL_AMOUNT * _time_dilation, 0.0)
-	$Background.rotation += delta * _time_dilation * STAR_ROTATION_AMOUNT
+	$Background.rotation += delta * _time_dilation * (STAR_ROTATION_AMOUNT + STAR_ROTATION_DIFF_DELTA * _difficulty)
 	for entry: Array in _power_tracker:
 		if Input.is_action_just_pressed(entry[0]):
 			var tpb: TextureProgressBar = entry[3]
